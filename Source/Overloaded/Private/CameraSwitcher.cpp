@@ -14,7 +14,7 @@ ACameraSwitcher::ACameraSwitcher()
 
 	//Initializing all the camera components
 	MainCamera = CreateDefaultSubobject<UCameraComponent>("MainCamera");
-	RootComponent = MainCamera;
+	MainCamera->SetupAttachment(RootComponent);
 
 	SecondCamera = CreateDefaultSubobject<UCameraComponent>("SecondCamera");
 	SecondCamera->SetupAttachment(RootComponent);
