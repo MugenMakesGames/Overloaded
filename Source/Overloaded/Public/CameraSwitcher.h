@@ -33,42 +33,7 @@ protected:
 	UCameraComponent* ThirdCamera;
 	UPROPERTY(EditAnywhere, Category = "Cameras")
 	UCameraComponent* FourthCamera;
-	
-	//Creating all the collision boxes
-	UPROPERTY(EditAnywhere, Category = "Collision Zones")
-	UBoxComponent* MainCameraSwitchArea;
-	UPROPERTY(EditAnywhere, Category = "Collision Zones")
-	UBoxComponent* SecondCameraSwitchArea;
-	
-	//Creating the overlap functions for the collision
-	UFUNCTION(blueprintCallable)
-	void OnOverlapSwitchToMainCam(UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult);	
-	
-	//Creating the overlap functions for the collision
-	UFUNCTION(blueprintCallable)
-	void OnOverlapSwitchToSecondCam(UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor,
-		UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex,
-		bool bFromSweep,
-		const FHitResult& SweepResult);	
-	
-	UFUNCTION(blueprintCallable)
-	void SetMainCamActive();
-	UFUNCTION(blueprintCallable)
-	void SetSecondCamActive();
-	
-	
-	/*UFUNCTION(blueprintCallable)
-	void SetThirdCamActive();
-	UFUNCTION(blueprintCallable)
-	void SetFourthCamActive();*/
-	
+
 
 public:	
 	// Called every frame
