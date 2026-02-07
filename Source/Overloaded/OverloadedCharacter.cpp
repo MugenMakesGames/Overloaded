@@ -1,15 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "OverloadedCharacter.h"
+
+#include "Blueprint/UserWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
-#include "Components/DecalComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
+#include "Widgets/CameraSwitchingUI.h"
 
 AOverloadedCharacter::AOverloadedCharacter()
 {
@@ -50,7 +52,7 @@ AOverloadedCharacter::AOverloadedCharacter()
 void AOverloadedCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// stub
 }
 

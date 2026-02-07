@@ -7,6 +7,8 @@
 #include "Components/Button.h"
 #include "CameraSwitchingUI.generated.h"
 
+class ACameraSwitcher;
+
 /**
  * 
  */
@@ -16,6 +18,12 @@ class OVERLOADED_API UCameraSwitchingUI : public UUserWidget
 	GENERATED_BODY()
 	
 	virtual void NativeConstruct() override;
+	
+private:
+	
+	ACameraSwitcher* CameraSwitcherActorRef;
+	
+	int CamID;
 	
 public:
 	

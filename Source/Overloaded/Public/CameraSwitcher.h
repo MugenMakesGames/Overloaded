@@ -18,11 +18,10 @@ public:
 	// Sets default values for this actor's properties
 	ACameraSwitcher();
 	
-	AOverloadedCharacter* OverloadedCharacterActorRef;
-
-protected:
-	// Called when the game starts or when spawnedf
-	virtual void BeginPlay() override;
+	
+	//Function to set correct camera active
+	UFUNCTION()
+	void SetCorrectCamActive(int CameraID);
 	
 	//Creating cameras components
 	UPROPERTY(EditAnywhere, Category = "Cameras")
@@ -34,6 +33,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Cameras")
 	UCameraComponent* FourthCamera;
 
+protected:
+	// Called when the game starts or when spawnedf
+	virtual void BeginPlay() override;
+	
+	AOverloadedCharacter* OverloadedCharacterActorRef;
 
 public:	
 	// Called every frame

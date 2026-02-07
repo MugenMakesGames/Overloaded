@@ -25,10 +25,6 @@ ACameraSwitcher::ACameraSwitcher()
 	FourthCamera = CreateDefaultSubobject<UCameraComponent>("FourthCamera");
 	FourthCamera->SetupAttachment(RootComponent);
 	
-	
-	//Automatic camera switching (No longer needed)
-	
-	
 	//Getting actor refs
 	OverloadedCharacterActorRef = Cast<AOverloadedCharacter>(UGameplayStatics::GetActorOfClass(
 		GetWorld(),
@@ -46,6 +42,39 @@ void ACameraSwitcher::BeginPlay()
 void ACameraSwitcher::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void ACameraSwitcher::SetCorrectCamActive(int CameraID)
+{
+	if (CameraID == 1)
+	{
+		MainCamera->SetActive(true);
+		SecondCamera->SetActive(false);
+		ThirdCamera->SetActive(false);
+		FourthCamera->SetActive(false);
+		
+	}else if (CameraID == 2)
+	{
+		MainCamera->SetActive(false);
+		SecondCamera->SetActive(true);
+		ThirdCamera->SetActive(false);
+		FourthCamera->SetActive(false);
+		
+	}else if (CameraID == 3)
+	{
+		MainCamera->SetActive(false);
+		SecondCamera->SetActive(false);
+		ThirdCamera->SetActive(true);
+		FourthCamera->SetActive(false);
+		
+	}else if (CameraID == 4)
+	{
+		MainCamera->SetActive(false);
+		SecondCamera->SetActive(false);
+		ThirdCamera->SetActive(false);
+		FourthCamera->SetActive(true);
+	}
+
 }
 
 

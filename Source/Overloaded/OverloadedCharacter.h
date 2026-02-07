@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "OverloadedCharacter.generated.h"
 
+class UCameraSwitchingUI;
+
 /**
  *  A controllable top-down perspective character
  */
@@ -25,7 +27,7 @@ private:
 	class USpringArmComponent* CameraBoom;
 
 public:
-
+	
 	/** Constructor */
 	AOverloadedCharacter();
 
