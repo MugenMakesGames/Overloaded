@@ -2,8 +2,6 @@
 
 
 #include "CameraSwitcher.h"
-
-#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -14,6 +12,7 @@ ACameraSwitcher::ACameraSwitcher()
 
 	//Initializing all the camera components
 	MainCamera = CreateDefaultSubobject<UCameraComponent>("MainCamera");
+	RootComponent = MainCamera;
 	MainCamera->SetupAttachment(RootComponent);
 
 	SecondCamera = CreateDefaultSubobject<UCameraComponent>("SecondCamera");
@@ -36,6 +35,12 @@ ACameraSwitcher::ACameraSwitcher()
 void ACameraSwitcher::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	//Setting maincamera to active by default
+	MainCamera->SetActive(true);
+	SecondCamera->SetActive(false);
+	ThirdCamera->SetActive(false);
+	FourthCamera->SetActive(false);
 }
 
 // Called every frame

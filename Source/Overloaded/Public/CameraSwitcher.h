@@ -38,6 +38,8 @@ protected:
 	virtual void BeginPlay() override;
 	
 	AOverloadedCharacter* OverloadedCharacterActorRef;
+	
+	
 
 public:	
 	// Called every frame
