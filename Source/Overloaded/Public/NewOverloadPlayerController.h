@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "NewOverloadPlayerController.generated.h"
 
+class UInputMappingContext;
+class UInputAction;
+
 /**
  * 
  */
@@ -14,17 +17,23 @@ class OVERLOADED_API ANewOverloadPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputMappingContext* OverloadCharMappingContext;
-	
 public:
 	
 	ANewOverloadPlayerController();
 	
-	protected:
+	/** MappingContext */
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputMappingContext* OverloadCharMappingContext;
+	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* LeftMouseButtonAction;
+
+protected:
 	
 	/** Initialize input bindings */
 	virtual void SetupInputComponent() override;
+	
+	UFUNCTION(blueprintCallable, Category = "Input")
+	void OnLeftMouseButtonClicked();
 	
 };
