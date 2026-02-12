@@ -8,8 +8,9 @@
 
 ANewOverloadPlayerController::ANewOverloadPlayerController()
 {
-	//Setting inout mode to game and UI only
+	//Setting inout mode to game and UI only and showing mouse cursor
 	FInputModeGameAndUI();
+	SetShowMouseCursor(true);
 }
 
 void ANewOverloadPlayerController::SetupInputComponent()
