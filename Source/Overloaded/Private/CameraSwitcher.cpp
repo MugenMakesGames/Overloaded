@@ -2,7 +2,7 @@
 
 
 #include "CameraSwitcher.h"
-#include "Kismet/GameplayStatics.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ACameraSwitcher::ACameraSwitcher()
@@ -11,24 +11,19 @@ ACameraSwitcher::ACameraSwitcher()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Initializing all the camera components
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	
 	MainCamera = CreateDefaultSubobject<UCameraComponent>("MainCamera");
-	RootComponent = MainCamera;
 	MainCamera->SetupAttachment(RootComponent);
 
 	SecondCamera = CreateDefaultSubobject<UCameraComponent>("SecondCamera");
-	SecondCamera->SetupAttachment(RootComponent);
+	SecondCamera->SetupAttachment(MainCamera);
 
 	ThirdCamera = CreateDefaultSubobject<UCameraComponent>("ThirdCamera");
-	ThirdCamera->SetupAttachment(RootComponent);
+	ThirdCamera->SetupAttachment(MainCamera);
 
 	FourthCamera = CreateDefaultSubobject<UCameraComponent>("FourthCamera");
-	FourthCamera->SetupAttachment(RootComponent);
-	
-	//Getting actor refs
-	OverloadedCharacterActorRef = Cast<AOverloadedCharacter>(UGameplayStatics::GetActorOfClass(
-		GetWorld(),
-		AOverloadedCharacter::StaticClass()
-	));
+	FourthCamera->SetupAttachment(MainCamera);
 }
 
 // Called when the game starts or when spawned

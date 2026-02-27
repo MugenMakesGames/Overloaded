@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "OverloadedCharacter.h"
-#include "Camera/CameraComponent.h"
-#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "CameraSwitcher.generated.h"
 
@@ -36,10 +34,6 @@ public:
 protected:
 	// Called when the game starts or when spawnedf
 	virtual void BeginPlay() override;
-	
-	AOverloadedCharacter* OverloadedCharacterActorRef;
-	
-	
 
 public:	
 	// Called every frame

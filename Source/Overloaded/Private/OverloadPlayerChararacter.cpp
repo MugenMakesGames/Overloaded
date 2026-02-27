@@ -17,17 +17,17 @@ AOverloadPlayerChararacter::AOverloadPlayerChararacter()
 	MainPlayerCamera = CreateDefaultSubobject<UCameraComponent>("MainPlayerCamera");
 	MainPlayerCamera->SetupAttachment(RootComponent);
 	
-	CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(
-		GetWorld(),
-		ACameraSwitcher::StaticClass()
-	));
-	
 }
 
 // Called when the game starts or when spawned
 void AOverloadPlayerChararacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	AActor* CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(
+		GetWorld(),
+		ACameraSwitcher::StaticClass()
+	));
 	
 	//Creating the widget
 	CameraSwitchingUI = CreateWidget(GetWorld(), CameraSwitchingUIClass);

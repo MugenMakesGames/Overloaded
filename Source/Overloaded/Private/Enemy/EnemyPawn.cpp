@@ -3,6 +3,11 @@
 
 #include "Enemy/EnemyPawn.h"
 
+#include "VectorTypes.h"
+#include "Enemy/EnemySplinePath.h"
+#include "Kismet/GameplayStatics.h"
+
+
 // Sets default values
 AEnemyPawn::AEnemyPawn()
 {
@@ -12,9 +17,6 @@ AEnemyPawn::AEnemyPawn()
 	//Initializing all components 
 	EnemyStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("EnemyStaticMesh"));
 	EnemyStaticMesh->SetupAttachment(RootComponent);
-	
-	MoveEnemyTimelineComp = CreateDefaultSubobject<UTimelineComponent>(FName("MoveToSplineEnd"));
-	
 
 }
 
@@ -23,26 +25,14 @@ void AEnemyPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Binding timeline functions
-	MoveEnemyTimelineFinished.BindUFunction(this, FName("MoveEnemyEnd"));
-	MoveEnemyTimelineUpdate.BindUFunction(this, FName("MoveEnemyUpdate"));
-	
-	MoveEnemyTimelineComp->SetTimelinePostUpdateFunc(MoveEnemyTimelineUpdate);
-	MoveEnemyTimelineComp->SetTimelineFinishedFunc(MoveEnemyTimelineFinished);
-	
-	EnemySplineActorRef->
-	
+	/*
+	AEnemySplinePath* EnemySplinePathActor = Cast<AEnemySplinePath>(UGameplayStatics::GetActorOfClass(
+		GetWorld(),
+		AEnemySplinePath::StaticClass()
+	));*/
 }
 
-void AEnemyPawn::MoveEnemyEnd()
-{
-	
-}
 
-void AEnemyPawn::MoveEnemyUpdate()
-{
-	
-}
 
 // Called every frame
 void AEnemyPawn::Tick(float DeltaTime)

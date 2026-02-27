@@ -8,6 +8,8 @@
 #include "EnemyPawn.generated.h"
 
 
+class CurveFloat;
+
 UCLASS()
 class OVERLOADED_API AEnemyPawn : public APawn
 {
@@ -20,10 +22,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	FOnTimelineEvent MoveEnemyTimelineFinished;
-	
-	FOnTimelineEvent MoveEnemyTimelineUpdate;
 
 public:	
 	// Called every frame
@@ -32,23 +30,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-	TSubclassOf<AActor> EnemySplineActorRef;
-	
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
-	
-	//Timeline variables
-	UPROPERTY(EditAnywhere, Category = "Timeline", BlueprintReadWrite)
-	UTimelineComponent* MoveEnemyTimelineComp;
-	
-	UFUNCTION(BlueprintCallable)
-	void MoveEnemyEnd();
-	
-	UFUNCTION(BlueprintCallable)
-	void MoveEnemyUpdate();
-
-	
 	
 
 };
