@@ -47,7 +47,6 @@ void AOverloadPlayerChararacter::BeginPlay()
 void AOverloadPlayerChararacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

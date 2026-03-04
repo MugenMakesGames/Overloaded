@@ -8,6 +8,7 @@
 #include "CameraSwitchingUI.generated.h"
 
 class ACameraSwitcher;
+class AEnemyPawn;
 
 /**
  * 
@@ -21,6 +22,7 @@ class OVERLOADED_API UCameraSwitchingUI : public UUserWidget
 	
 private:
 	
+	UPROPERTY()
 	ACameraSwitcher* CameraSwitcherActorRef;
 	
 	int CamID;

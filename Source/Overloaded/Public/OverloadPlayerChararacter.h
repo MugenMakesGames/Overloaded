@@ -26,9 +26,10 @@ public:
 	TSubclassOf<UUserWidget> CameraSwitchingUIClass;
 
 	//The widget instance that we are using
+	UPROPERTY()
 	UUserWidget* CameraSwitchingUI;
-
-
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -8,9 +8,7 @@
 
 ANewOverloadPlayerController::ANewOverloadPlayerController()
 {
-	//Setting inout mode to game and UI only and showing mouse cursor
-	FInputModeGameAndUI();
-	SetShowMouseCursor(true);
+	
 }
 
 void ANewOverloadPlayerController::SetupInputComponent()
@@ -32,11 +30,22 @@ void ANewOverloadPlayerController::SetupInputComponent()
 			//Left mouse button clicked
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnLeftMouseButtonClicked);
 		}
+		
+		// Add input action mappings
+		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+		{
+			EnhancedInputComponent->BindAction(SpawnEnemyAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnSpawnEnemyPressed);
+		}
 	}
-	
 }
 
 void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "It's Working");
+	
+}
+
+void ANewOverloadPlayerController::OnSpawnEnemyPressed()
+{
+	
+	
 }

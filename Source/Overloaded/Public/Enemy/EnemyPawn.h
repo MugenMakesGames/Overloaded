@@ -10,6 +10,7 @@
 
 class CurveFloat;
 
+
 UCLASS()
 class OVERLOADED_API AEnemyPawn : public APawn
 {
@@ -23,11 +24,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	//Creating a spline component to get a ref to the enemy spline component and length
-	USplineComponent* EnemySplineComponent;
-	
 	float EnemySplineLength;
-	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -52,6 +49,17 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Timeline")
 	void FinishedTimeline();
+	
+	UPROPERTY(editAnywhere, Category = "Timeline")
+	float StartingDistance = 0.f;
+	
+	FVector NewEnemyLocation;  
+	FRotator NewEnemyRotation;
+	
+	//Creating a spline component to get a ref to the enemy spline component and length
+	UPROPERTY()
+	USplineComponent* EnemySplineComponent;
+	
 	
 
 };

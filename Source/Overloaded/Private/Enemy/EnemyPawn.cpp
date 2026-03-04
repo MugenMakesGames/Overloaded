@@ -70,9 +70,11 @@ void AEnemyPawn::BeginPlay()
 		
 		TimelineComponent->SetLooping(false);
 		
+		//Starting the time at 1.25 second to space out enemies
+		TimelineComponent->SetNewTime((StartingDistance / EnemySplineLength) * TimelineComponent->GetTimelineLength());
+		
 		//PLay the timeline, call where ended, likely from a widget
 		TimelineComponent->PlayFromStart();
-		
 	}
 }
 
@@ -82,30 +84,29 @@ void AEnemyPawn::BeginPlay()
 void AEnemyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void AEnemyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
+
 
 void AEnemyPawn::UpdateTimeline(float CompletionPercent)
 {
 	if (EnemySplineComponent)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
 		
 		float Distance = CompletionPercent * EnemySplineLength;
 		
 		//Getting the new transform (Location, rotation and scale) for the enemy to go to along the spline
-		FVector NewEnemyLocation = EnemySplineComponent->GetLocationAtDistanceAlongSpline(
+		NewEnemyLocation = EnemySplineComponent->GetLocationAtDistanceAlongSpline(
 			Distance,
 			ESplineCoordinateSpace::World);
 		
-		FRotator NewEnemyRotation = EnemySplineComponent->GetRotationAtDistanceAlongSpline(
+		NewEnemyRotation = EnemySplineComponent->GetRotationAtDistanceAlongSpline(
 			Distance,
 			ESplineCoordinateSpace::World);
 		

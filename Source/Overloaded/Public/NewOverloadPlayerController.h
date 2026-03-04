@@ -8,6 +8,7 @@
 
 class UInputMappingContext;
 class UInputAction;
+class AEnemyPawn;
 
 /**
  * 
@@ -27,6 +28,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* LeftMouseButtonAction;
+	
+	UPROPERTY(editAnywhere, Category = "Input")
+	UInputAction* SpawnEnemyAction;
 
 protected:
 	
@@ -35,5 +39,8 @@ protected:
 	
 	UFUNCTION(blueprintCallable, Category = "Input")
 	void OnLeftMouseButtonClicked();
+	
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnSpawnEnemyPressed();
 	
 };

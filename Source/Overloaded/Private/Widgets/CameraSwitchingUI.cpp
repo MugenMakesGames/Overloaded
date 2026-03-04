@@ -2,7 +2,6 @@
 
 
 #include "Widgets/CameraSwitchingUI.h"
-
 #include "CameraSwitcher.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -20,6 +19,7 @@ void UCameraSwitchingUI::NativeConstruct()
 		ACameraSwitcher::StaticClass()
 	));
 }
+
 
 void UCameraSwitchingUI::OnMainCamButtonclicked()
 {
