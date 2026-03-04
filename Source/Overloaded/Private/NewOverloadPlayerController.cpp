@@ -38,5 +38,5 @@ void ANewOverloadPlayerController::SetupInputComponent()
 
 void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "It's Working");
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "It's Working");
 }

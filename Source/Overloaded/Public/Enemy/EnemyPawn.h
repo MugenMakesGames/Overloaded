@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SplineComponent.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Pawn.h"
 #include "EnemyPawn.generated.h"
-
 
 class CurveFloat;
 
@@ -22,7 +22,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
+	//Creating a spline component to get a ref to the enemy spline component and length
+	USplineComponent* EnemySplineComponent;
+	
+	float EnemySplineLength;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,6 +37,21 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
+	
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UTimelineComponent* TimelineComponent;
+	
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UCurveFloat* MovementCurve;
+	
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	float SetPlayRate;
+	
+	UFUNCTION(BlueprintCallable, Category = "Timeline")
+	void UpdateTimeline(float Value);
+	
+	UFUNCTION(BlueprintCallable, Category = "Timeline")
+	void FinishedTimeline();
 	
 
 };
