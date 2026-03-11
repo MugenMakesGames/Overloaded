@@ -60,6 +60,13 @@ public:
 	UPROPERTY()
 	USplineComponent* EnemySplineComponent;
 	
+	//Enemy spawning
+	//Adding a map to store the enemy actors and their active status
+	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
+	TMap<AActor*, bool> EnemiesToSpawn;
+	
+	UFUNCTION(BlueprintCallable)
+	void SetEnemiesToSpawn(AActor* ActorToSpawn);
 	
 
 };

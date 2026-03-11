@@ -120,6 +120,10 @@ void AEnemyPawn::FinishedTimeline()
 	//sdsdsadasd
 }
 
-
+void AEnemyPawn::SetEnemiesToSpawn(AActor* ActorToSpawn)
+{
+	//Spawning the enemy actor
+	ActorToSpawn = GetWorld()->SpawnActor<AEnemyPawn>();
+}
 
 
