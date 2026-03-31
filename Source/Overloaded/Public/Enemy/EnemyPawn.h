@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "Components/SplineComponent.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Pawn.h"
@@ -10,8 +11,6 @@
 
 class CurveFloat;
 
-//Creating an event/delegate to call to despawn the enemy actor in the enemy spawner manager
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPooledObjectDespawnDelegate, AEnemyPawn*, PooledEnemy);
 
 UCLASS()
 class OVERLOADED_API AEnemyPawn : public APawn
@@ -35,10 +34,25 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	//Object Pooling variables
-	
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
+	
+	UPROPERTY(EditAnywhere, Category = "Collision")
+	UBoxComponent* EnemyCollision;
+	
+	UFUNCTION(BlueprintCallable, Category = "Collision")
+	void TakeDamage();
+	
+	//Enemy health variables
+	float CurrentHealth;
+	
+	UPROPERTY(EditAnywhere, Category = "Enemy Health")
+	float MaxHealth;
+	
+	
+	
+	//Object Pooling variables
+	
 	
 	//Timeline variables/functions
 	UPROPERTY(EditAnywhere, Category = "Timeline")
@@ -66,8 +80,5 @@ public:
 	//Creating a spline component to get a ref to the enemy spline component and length
 	UPROPERTY()
 	USplineComponent* EnemySplineComponent;
-	
-	
-	
 
 };

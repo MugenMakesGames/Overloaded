@@ -18,6 +18,9 @@ AEnemyPawn::AEnemyPawn()
 	EnemyStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("EnemyStaticMesh"));
 	EnemyStaticMesh->SetupAttachment(RootComponent);
 	TimelineComponent = CreateDefaultSubobject<UTimelineComponent>(FName("TimelineComponent"));
+	
+	EnemyCollision = CreateDefaultSubobject<UBoxComponent>("EnemyCollison");
+	EnemyCollision->SetupAttachment(RootComponent);
 
 }
 
