@@ -10,6 +10,8 @@
 
 class CurveFloat;
 
+//Creating an event/delegate to call to despawn the enemy actor in the enemy spawner manager
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPooledObjectDespawnDelegate, AEnemyPawn*, PooledEnemy);
 
 UCLASS()
 class OVERLOADED_API AEnemyPawn : public APawn
@@ -25,16 +27,20 @@ protected:
 	virtual void BeginPlay() override;
 	
 	float EnemySplineLength;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	//Object Pooling variables
 	
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
 	
+	//Timeline variables/functions
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UTimelineComponent* TimelineComponent;
 	
@@ -55,18 +61,13 @@ public:
 	
 	FVector NewEnemyLocation;  
 	FRotator NewEnemyRotation;
+	//Timeline variables/functions
 	
 	//Creating a spline component to get a ref to the enemy spline component and length
 	UPROPERTY()
 	USplineComponent* EnemySplineComponent;
 	
-	//Enemy spawning
-	//Adding a map to store the enemy actors and their active status
-	UPROPERTY(EditAnywhere, Category = "Enemy Spawning")
-	TMap<AActor*, bool> EnemiesToSpawn;
 	
-	UFUNCTION(BlueprintCallable)
-	void SetEnemiesToSpawn(AActor* ActorToSpawn);
 	
 
 };

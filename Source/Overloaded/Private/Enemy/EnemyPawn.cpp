@@ -2,8 +2,10 @@
 
 
 #include "Enemy/EnemyPawn.h"
+
 #include "Enemy/EnemySplinePath.h"
 #include "Kismet/GameplayStatics.h"
+
 
 
 // Sets default values
@@ -73,12 +75,11 @@ void AEnemyPawn::BeginPlay()
 		//Starting the time at 1.25 second to space out enemies
 		TimelineComponent->SetNewTime((StartingDistance / EnemySplineLength) * TimelineComponent->GetTimelineLength());
 		
-		//PLay the timeline, call where ended, likely from a widget
+		//PLay the timeline, call where ended
 		TimelineComponent->PlayFromStart();
+		
 	}
 }
-
-
 
 // Called every frame
 void AEnemyPawn::Tick(float DeltaTime)
@@ -117,13 +118,8 @@ void AEnemyPawn::UpdateTimeline(float CompletionPercent)
 
 void AEnemyPawn::FinishedTimeline()
 {
-	//sdsdsadasd
 }
 
-void AEnemyPawn::SetEnemiesToSpawn(AActor* ActorToSpawn)
-{
-	//Spawning the enemy actor
-	ActorToSpawn = GetWorld()->SpawnActor<AEnemyPawn>();
-}
+
 
 
