@@ -24,11 +24,6 @@ void AOverloadPlayerChararacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	AActor* CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(
-		GetWorld(),
-		ACameraSwitcher::StaticClass()
-	));
-	
 	//Creating the widget
 	CameraSwitchingUI = CreateWidget(GetWorld(), CameraSwitchingUIClass);
 	

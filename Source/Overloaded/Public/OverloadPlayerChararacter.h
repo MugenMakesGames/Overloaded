@@ -7,8 +7,6 @@
 #include "GameFramework/Pawn.h"
 #include "OverloadPlayerChararacter.generated.h"
 
-class UcameraSwitcher;
-
 UCLASS()
 class OVERLOADED_API AOverloadPlayerChararacter : public APawn
 {
@@ -29,12 +27,12 @@ public:
 	UPROPERTY()
 	UUserWidget* CameraSwitchingUI;
 	
+	UPROPERTY(editAnywhere, Category = "Camera Switcher Actor Ref")
+	class ACameraSwitcher* CameraSwitcherActorRef;
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	
 
 public:	
 	// Called every frame

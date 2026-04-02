@@ -2,10 +2,9 @@
 
 
 #include "Enemy/EnemyPawn.h"
-
 #include "Enemy/EnemySplinePath.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Towers/TowerBullet.h"
 
 
 // Sets default values
@@ -28,6 +27,14 @@ AEnemyPawn::AEnemyPawn()
 void AEnemyPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	//Assigning the delegate function to TakeDamage
+	if (TowerBulletRef != nullptr)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
+		
+		TowerBulletRef->OnEnemyDamaged.AddDynamic(this, &AEnemyPawn::TakeDamage);
+	}
 	
 	AEnemySplinePath* EnemySplinePathActor = Cast<AEnemySplinePath>(UGameplayStatics::GetActorOfClass(
 		GetWorld(),
@@ -123,6 +130,9 @@ void AEnemyPawn::FinishedTimeline()
 {
 }
 
-
+void AEnemyPawn::TakeDamage(AActor* DamagedActor)
+{
+	//Reduce health
+}
 
 

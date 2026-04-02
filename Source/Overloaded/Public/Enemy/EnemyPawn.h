@@ -10,7 +10,7 @@
 #include "EnemyPawn.generated.h"
 
 class CurveFloat;
-
+class ATowerBullet;
 
 UCLASS()
 class OVERLOADED_API AEnemyPawn : public APawn
@@ -27,6 +27,9 @@ protected:
 	
 	float EnemySplineLength;
 	
+	UPROPERTY(EditInstanceOnly, Category = "TowerBullet Actor Ref")
+	ATowerBullet* TowerBulletRef;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -39,6 +42,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Collision")
 	UBoxComponent* EnemyCollision;
+	
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage(AActor* DamagedActor);
 	
 	//Enemy health variables
 	float CurrentHealth;
