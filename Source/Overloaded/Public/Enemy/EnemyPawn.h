@@ -40,9 +40,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Collision")
 	UBoxComponent* EnemyCollision;
 	
-	UFUNCTION(BlueprintCallable, Category = "Collision")
-	void TakeDamage();
-	
 	//Enemy health variables
 	float CurrentHealth;
 	
