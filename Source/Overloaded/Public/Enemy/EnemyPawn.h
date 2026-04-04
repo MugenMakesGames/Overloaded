@@ -12,6 +12,9 @@
 class CurveFloat;
 class ATowerBullet;
 
+//Creating a delegate to track when the enemy pawn is destroyed
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDestoryedDelegate, AEnemyPawn*, Actor);
+
 UCLASS()
 class OVERLOADED_API AEnemyPawn : public APawn
 {
@@ -37,51 +40,24 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	//Components
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
 	
 	UPROPERTY(EditAnywhere, Category = "Collision")
 	UBoxComponent* EnemyCollision;
 	
-	UFUNCTION(BlueprintCallable)
-	void TakeDamage(AActor* DamagedActor);
+	//Enemy Health / Functions
+	void TakeDamage(AActor* DamagedActor, float DamageAmount);
 	
-	//Enemy health variables
 	float CurrentHealth;
 	
 	UPROPERTY(EditAnywhere, Category = "Enemy Health")
 	float MaxHealth;
 	
+	//Object Pooling variables / Functions / Delegates
+	FOnEnemyDestoryedDelegate OnEnemyDestoryed;
 	
-	
-	//Object Pooling variables
-	
-	
-	//Timeline variables/functions
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	UTimelineComponent* TimelineComponent;
-	
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	UCurveFloat* MovementCurve;
-	
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	float SetPlayRate;
-	
-	UFUNCTION(BlueprintCallable, Category = "Timeline")
-	void UpdateTimeline(float Value);
-	
-	UFUNCTION(BlueprintCallable, Category = "Timeline")
-	void FinishedTimeline();
-	
-	UPROPERTY(editAnywhere, Category = "Timeline")
-	float StartingDistance = 0.f;
-	
-	FVector NewEnemyLocation;  
-	FRotator NewEnemyRotation;
-	//Timeline variables/functions
-	
-	//Creating a spline component to get a ref to the enemy spline component and length
-	UPROPERTY()
-	USplineComponent* EnemySplineComponent;
+	void ResetActor();
 
 };

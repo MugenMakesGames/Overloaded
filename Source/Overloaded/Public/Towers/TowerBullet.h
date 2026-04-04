@@ -8,7 +8,7 @@
 #include "TowerBullet.generated.h"
 
 //Creating a delegate to apply damage to the enemy when they are hit by a bullet
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDamagedDelegate, AActor*, DamagedEnemy);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyDamagedDelegate, AActor*, DamagedEnemy, float, DamageAmount);
 
 UCLASS
 ()
@@ -24,13 +24,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "Enemy Pawn Actor Ref")
+	UPROPERTY(EditInstanceOnly, Category = "Enemy Pawn Actor")
 	class AEnemyPawn* EnemyPawnRef;
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+	UPROPERTY(BlueprintCallable)
 	FOnEnemyDamagedDelegate OnEnemyDamaged;
 
 	UPROPERTY(EditAnywhere)

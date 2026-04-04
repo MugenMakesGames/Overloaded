@@ -2,8 +2,6 @@
 
 
 #include "Enemy/EnemyPawn.h"
-#include "Enemy/EnemySplinePath.h"
-#include "Kismet/GameplayStatics.h"
 #include "Towers/TowerBullet.h"
 
 
@@ -16,7 +14,6 @@ AEnemyPawn::AEnemyPawn()
 	//Initializing all components 
 	EnemyStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("EnemyStaticMesh"));
 	EnemyStaticMesh->SetupAttachment(RootComponent);
-	TimelineComponent = CreateDefaultSubobject<UTimelineComponent>(FName("TimelineComponent"));
 	
 	EnemyCollision = CreateDefaultSubobject<UBoxComponent>("EnemyCollison");
 	EnemyCollision->SetupAttachment(RootComponent);
@@ -28,66 +25,13 @@ void AEnemyPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	ResetActor();
+	
 	//Assigning the delegate function to TakeDamage
 	if (TowerBulletRef != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
-		
 		TowerBulletRef->OnEnemyDamaged.AddDynamic(this, &AEnemyPawn::TakeDamage);
-	}
-	
-	AEnemySplinePath* EnemySplinePathActor = Cast<AEnemySplinePath>(UGameplayStatics::GetActorOfClass(
-		GetWorld(),
-		AEnemySplinePath::StaticClass()
-	));
-
-	if (EnemySplinePathActor)
-	{
-		//Setting the spline component in this actor to the original enemy spline component
-		EnemySplineComponent = EnemySplinePathActor->FindComponentByClass<USplineComponent>();
-	}
-
-	if (EnemySplineComponent)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,'VALID');
-		
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "SPLINE ACTOR IS VALID");
-		
-		//Getting the length of the spline component
-		EnemySplineLength = EnemySplineComponent->GetSplineLength();
-	}
-	
-	MovementCurve = NewObject<UCurveFloat>(this);
-	
-	if (MovementCurve)
-	{
-		//Adding the float keys like using a time and value like in the blueprint float track
-		MovementCurve->FloatCurve.AddKey(0.f, 0.f);
-		MovementCurve->FloatCurve.AddKey(1.f, 1.f);
-		
-		//Bind the timeline events like in blueprints, this is the update function
-		FOnTimelineFloat UpdateFunction;
-		UpdateFunction.BindUFunction(this, FName("UpdateTimeline"));
-		
-		FOnTimelineEvent FinishedFunction;
-		FinishedFunction.BindUFunction(this, FName("FinishedTimeline"));
-		
-		//Telling the timeline comp to start at 0 with a value of 0 and finished the timeline at 1 with a value of 1 
-		//(Use blueprint node to understand better)
-		TimelineComponent->AddInterpFloat(MovementCurve, UpdateFunction);
-		
-		TimelineComponent->SetTimelineFinishedFunc(FinishedFunction);
-		
-		TimelineComponent->SetPlayRate(SetPlayRate);
-		
-		TimelineComponent->SetLooping(false);
-		
-		//Starting the time at 1.25 second to space out enemies
-		TimelineComponent->SetNewTime((StartingDistance / EnemySplineLength) * TimelineComponent->GetTimelineLength());
-		
-		//PLay the timeline, call where ended
-		TimelineComponent->PlayFromStart();
-		
 	}
 }
 
@@ -104,35 +48,25 @@ void AEnemyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 }
 
 
-void AEnemyPawn::UpdateTimeline(float CompletionPercent)
+void AEnemyPawn::TakeDamage(AActor* DamagedActor, float DamageAmount)
 {
-	if (EnemySplineComponent)
+	CurrentHealth -= DamageAmount;
+	
+	if (CurrentHealth <= 0.f)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
 		
-		float Distance = CompletionPercent * EnemySplineLength;
-		
-		//Getting the new transform (Location, rotation and scale) for the enemy to go to along the spline
-		NewEnemyLocation = EnemySplineComponent->GetLocationAtDistanceAlongSpline(
-			Distance,
-			ESplineCoordinateSpace::World);
-		
-		NewEnemyRotation = EnemySplineComponent->GetRotationAtDistanceAlongSpline(
-			Distance,
-			ESplineCoordinateSpace::World);
-		
-		SetActorLocation(NewEnemyLocation);
-		SetActorRotation(NewEnemyRotation);
+		//Binding the on enemy destroyed delegate to this function
+		OnEnemyDestoryed.Broadcast(this);
 	}
 }
 
-void AEnemyPawn::FinishedTimeline()
+void AEnemyPawn::ResetActor()
 {
+	CurrentHealth = MaxHealth;
+	
+	//Resetting the actor to not hidden in game and collision to enabled to be re-used when needed
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
 }
-
-void AEnemyPawn::TakeDamage(AActor* DamagedActor)
-{
-	//Reduce health
-}
-
-

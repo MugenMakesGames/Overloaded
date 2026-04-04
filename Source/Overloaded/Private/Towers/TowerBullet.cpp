@@ -42,7 +42,7 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 {
 	if (OtherActor && OtherActor == EnemyPawnRef)
 	{
-		//Apply damage
-		OnEnemyDamaged.Broadcast(this);
+		//Binding he OnEnemyDamaged delegate
+		OnEnemyDamaged.Broadcast(this, 10);
 	}
 }
