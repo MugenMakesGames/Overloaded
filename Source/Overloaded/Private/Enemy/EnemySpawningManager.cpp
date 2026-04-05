@@ -111,7 +111,14 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 	}
 }
 
-void AEnemySpawningManager::OnEnemyReturned(AEnemyPawn* Enemy)
+void AEnemySpawningManager::OnEnemyReturned(AEnemyPawn* CurrentEnemy)
 {
+	if (!CurrentEnemy) return;
 	
+	CurrentEnemy->SetActorHiddenInGame(true);
+	CurrentEnemy->SetActorEnableCollision(false);
+	
+	//Removing the current enemy pawn from the active pawns 
+	ActiveEnemyPawns.Remove(CurrentEnemy);
+	EnemyPawnPool.Add(CurrentEnemy);
 }

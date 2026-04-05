@@ -19,7 +19,6 @@ AEnemySplinePath::AEnemySplinePath()
 void AEnemySplinePath::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
