@@ -65,7 +65,6 @@ void AEnemyPawn::TakeDamage(AActor* DamagedActor, float DamageAmount)
 void AEnemyPawn::ResetActor()
 {
 	CurrentHealth = MaxHealth;
-	
 	//Resetting the actor to not hidden in game and collision to enabled to be re-used when needed
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);

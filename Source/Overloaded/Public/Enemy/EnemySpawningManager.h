@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnemySplinePath.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Actor.h"
 #include "EnemySpawningManager.generated.h"
@@ -26,15 +25,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	//Getting ref the spline actor / spline variables
-	UPROPERTY(EditInstanceOnly, Category = "Enemy Spline Path")
-	class AEnemySplinePath* EnemySpineActorRef;
+	UPROPERTY(EditAnywhere, Category = "Enemy")
+	class AEnemySplinePath* EnemySplineActorRef;
 	
 	//Getting the enemy spline path
 	UPROPERTY()
 	USplineComponent* EnemySpline;
 	
 	//Getting ref to EnemyPawn
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Enemy")
 	TSubclassOf<class AEnemyPawn> EnemyPawnClass;
 	
 	//Creating a pool of enemy pawns 
@@ -49,11 +48,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 EnemyPoolSize = 10;
 	
-	//Creating a timeline with the component
+	//Creating a timeline using tick
 	float TimelineAlpha = 0.f;
 	
-	UPROPERTY(EditAnywhere)
-	float MoveDuration = 0.f;
+	//Creating variables to controll enemy speed and spacing
+	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
+	float MoveDuration = 10.f;
+	
+	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
+	int32 EnemySpacing = 200;
 	
 	UFUNCTION()
 	void OnEnemyReturned(AEnemyPawn* Enemy);
