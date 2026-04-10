@@ -3,6 +3,7 @@
 
 #include "Towers/TowerBullet.h"
 #include "Enemy/EnemyPawn.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 
 // Sets default values
@@ -12,7 +13,7 @@ ATowerBullet::ATowerBullet()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Setting up collision
-	BulletCollision = CreateDefaultSubobject<UBoxComponent>(FName("BulletCollision"));
+	BulletCollision = CreateDefaultSubobject<USphereComponent>(FName("BulletCollision"));
 	BulletCollision->SetupAttachment(RootComponent);
 
 	BulletCollision->SetGenerateOverlapEvents(true);
@@ -20,6 +21,8 @@ ATowerBullet::ATowerBullet()
 
 	BulletCollision->OnComponentBeginOverlap.AddDynamic(this, &ATowerBullet::OnEnemyHit);
 
+	BulletProjectile = CreateDefaultSubobject<UProjectileMovementComponent>(FName("BulletProjectile"));
+	
 	BulletMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("BulletMesh"));
 	BulletMesh->SetupAttachment(RootComponent);
 }
@@ -46,3 +49,4 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 		OnEnemyDamaged.Broadcast(this, 10);
 	}
 }
+

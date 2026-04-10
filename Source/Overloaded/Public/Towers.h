@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Towers.generated.h"
 
+
 UCLASS()
 class OVERLOADED_API ATowers : public AActor
 {
@@ -19,8 +20,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
+	//Object Pooling 
+	UPROPERTY(EditAnywhere, Category = "Bullet")
+	TSubclassOf<class ATowerBullet>BulletClass;
+	
+	UPROPERTY()
+	TArray<ATowerBullet*> BulletPool;
+	
+	UPROPERTY()
+	TArray<ATowerBullet*> ActiveBulletPool;
+	
+	UPROPERTY(EditAnywhere)
+	int32 BulletPoolAmount = 10;
+	
+	UFUNCTION()
+	void InitializeBulletPool();
 };

@@ -24,7 +24,7 @@ void AEnemySpawningManager::BeginPlay()
 
 		if (EnemySpline)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("SPLINE IS WORKING AT BEGINNING"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("SPLINE IS WORKING AT BEGINNING"));
 		}
 	}
 	
@@ -115,7 +115,7 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 	//Looping until active all enemies in enemy pawn are in active enemy pawns
 	while (ActiveEnemyPawns.Num() < EnemyPoolSize && EnemyPawnPool.Num() > 0)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Enemy spawned"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Enemy spawned"));
 		
 		AEnemyPawn* CurrentEnemy = EnemyPawnPool[0];
 		EnemyPawnPool.RemoveAt(0);

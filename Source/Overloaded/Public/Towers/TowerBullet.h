@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "TowerBullet.generated.h"
+
 
 //Creating a delegate to apply damage to the enemy when they are hit by a bullet
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyDamagedDelegate, AActor*, DamagedEnemy, float, DamageAmount);
@@ -24,24 +25,28 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditInstanceOnly, Category = "Enemy Pawn Actor")
-	class AEnemyPawn* EnemyPawnRef;
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(EditInstanceOnly, Category = "Enemy Pawn Actor")
+	class AEnemyPawn* EnemyPawnRef;
 	
 	UPROPERTY(BlueprintCallable)
 	FOnEnemyDamagedDelegate OnEnemyDamaged;
 
 	UPROPERTY(EditAnywhere)
-	UBoxComponent* BulletCollision;
+	USphereComponent* BulletCollision;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* BulletMesh;
+	
+	UPROPERTY()
+	class UProjectileMovementComponent* BulletProjectile;
 	
 	UFUNCTION()
 	void OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
 	                class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 	                const FHitResult& SweepResult);
+	
 };

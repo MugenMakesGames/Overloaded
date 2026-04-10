@@ -3,6 +3,8 @@
 
 #include "Towers.h"
 
+#include "Towers/TowerBullet.h"
+
 // Sets default values
 ATowers::ATowers()
 {
@@ -16,6 +18,9 @@ void ATowers::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InitializeBulletPool();
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("SPLINE IS WORKING AT BEGINNING"));
 	
 }
 
@@ -24,7 +29,28 @@ void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	
+}
 
+void ATowers::InitializeBulletPool()
+{
+	if (BulletClass) 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Bullet Pool Spawned"));
+		
+		for (int i = 0; i < BulletPoolAmount; ++i)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		
+			ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, SpawnParams);
+		
+			if (CurrentBullet != nullptr)
+			{
+				BulletPool.Add(CurrentBullet);
+			
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Bullet Pool Spawned"));
+			}
+		}
+	};
 }
 
