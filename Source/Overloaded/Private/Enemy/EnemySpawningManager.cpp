@@ -21,11 +21,6 @@ void AEnemySpawningManager::BeginPlay()
 	if (EnemySplineActorRef)
 	{
 		EnemySpline = EnemySplineActorRef->FindComponentByClass<USplineComponent>();
-
-		if (EnemySpline)
-		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("SPLINE IS WORKING AT BEGINNING"));
-		}
 	}
 	
 	InitializeEnemyPool();

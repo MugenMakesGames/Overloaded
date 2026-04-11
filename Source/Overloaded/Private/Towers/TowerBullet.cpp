@@ -17,9 +17,9 @@ ATowerBullet::ATowerBullet()
 	//Setting up the collision
 	BulletCollision = CreateDefaultSubobject<USphereComponent>(TEXT("BulletCollision"));
 	RootComponent = BulletCollision;
-
 	BulletCollision->SetGenerateOverlapEvents(true);
 	BulletCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+	
 	BulletCollision->OnComponentBeginOverlap.AddDynamic(this, &ATowerBullet::OnEnemyHit);
 	
 	BulletMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BulletMeshComponent"));
@@ -27,7 +27,7 @@ ATowerBullet::ATowerBullet()
 	
 	BulletProjectile = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("BulletProjectile"));
 	//Setting up the projectile speed
-	BulletProjectile->InitialSpeed = 2000.f;
+	BulletProjectile->InitialSpeed = 1500.f;
 	BulletProjectile->MaxSpeed = 2000.f;
 	BulletProjectile->bRotationFollowsVelocity = true;
 }
@@ -54,13 +54,17 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
                               class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                               const FHitResult& SweepResult)
 {
-	if (OtherActor && OtherActor == EnemyPawnClass)
+	//Getting the ref to the enemy pawn
+	AEnemyPawn* EnemyPawn = Cast<AEnemyPawn>(OtherActor);
+	
+	if (EnemyPawn)
 	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("BulletDestroyed"));
+		
 		//Binding he OnEnemyDamaged delegate
 		OnEnemyDamaged.Broadcast(this, 10);
 		
 		//Tracking if the bullet has hit the enemy
-		bHasBulletHitEnemy = true;
 	}
 }
 
@@ -68,9 +72,11 @@ void ATowerBullet::BulletDestoryed(ATowerBullet* CurrentBullet)
 {
 	if (bHasBulletHitEnemy == true)
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("BulletDestroyed"));
+		
 		//Setting the actor hidden in game and disabling collision instead of destroying for performance
-		//CurrentBullet->SetActorHiddenInGame(true);
-		//CurrentBullet->SetActorEnableCollision(false);
+		CurrentBullet->SetActorHiddenInGame(true);
+		CurrentBullet->SetActorEnableCollision(false);
 		
 		bHasBulletHitEnemy = false;
 	}

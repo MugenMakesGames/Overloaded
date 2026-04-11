@@ -16,6 +16,8 @@ AEnemyPawn::AEnemyPawn()
 	EnemyStaticMesh->SetupAttachment(RootComponent);
 	
 	EnemyCollision = CreateDefaultSubobject<UBoxComponent>("EnemyCollison");
+	EnemyCollision->SetGenerateOverlapEvents(true);
+	EnemyCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
 	EnemyCollision->SetupAttachment(RootComponent);
 
 }
@@ -28,11 +30,13 @@ void AEnemyPawn::BeginPlay()
 	ResetActor();
 	
 	//Assigning the delegate function to TakeDamage
-	if (TowerBulletRef != nullptr)
+	if (TowerBulletClass != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
-		TowerBulletRef->OnEnemyDamaged.AddDynamic(this, &AEnemyPawn::TakeDamage);
+		TowerBulletClass->OnEnemyDamaged.AddDynamic(this, &AEnemyPawn::TakeDamage);
 	}
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("IT EXISTS"));
 }
 
 // Called every frame
@@ -69,3 +73,4 @@ void AEnemyPawn::ResetActor()
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
 }
+

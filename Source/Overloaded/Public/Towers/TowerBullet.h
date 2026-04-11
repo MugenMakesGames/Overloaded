@@ -29,9 +29,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(EditInstanceOnly, Category = "Enemy Pawn")
-	class AEnemyPawn* EnemyPawnClass;
-	
 	UPROPERTY(EditInstanceOnly, Category = "Tower")
 	class ATowers* TowerClass;
 	

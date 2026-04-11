@@ -30,8 +30,8 @@ protected:
 	
 	float EnemySplineLength;
 	
-	UPROPERTY(EditInstanceOnly, Category = "TowerBullet Actor Ref")
-	ATowerBullet* TowerBulletRef;
+	UPROPERTY(EditInstanceOnly, Category = "Bullet")
+	ATowerBullet* TowerBulletClass;
 	
 public:	
 	// Called every frame
@@ -48,6 +48,7 @@ public:
 	UBoxComponent* EnemyCollision;
 	
 	//Enemy Health / Functions
+	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float DamageAmount);
 	
 	float CurrentHealth;
