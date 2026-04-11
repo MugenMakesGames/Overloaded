@@ -32,7 +32,6 @@ public:
 	UPROPERTY(editAnywhere, Category = "Input")
 	UInputAction* SpawnEnemyAction;
 
-
 protected:
 	
 	/** Initialize input bindings */

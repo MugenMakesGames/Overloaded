@@ -2,7 +2,6 @@
 
 
 #include "Towers.h"
-
 #include "Towers/TowerBullet.h"
 
 // Sets default values
@@ -10,7 +9,13 @@ ATowers::ATowers()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
+	TowerMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TowerMeshComponent"));
+	TowerMeshComponent->SetupAttachment(RootComponent);
+	
+	//Creating an arrow component create a point in which the bullet can shoot from
+	TowerShootingPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootingPoint"));
+	TowerShootingPoint->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -18,39 +23,33 @@ void ATowers::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	InitializeBulletPool();
-	
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("SPLINE IS WORKING AT BEGINNING"));
-	
+	ShootBullet();
 }
 
 // Called every frame
 void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
-void ATowers::InitializeBulletPool()
+void ATowers::ShootBullet()
 {
-	if (BulletClass) 
+	if (BulletClass)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Bullet Pool Spawned"));
+		FVector GetShootingPointLocation = TowerShootingPoint->GetComponentLocation();
+		const FRotator GetShootingPointRotation = TowerShootingPoint->GetComponentRotation();
 		
-		for (int i = 0; i < BulletPoolAmount; ++i)
+		//Making sure collision doesn't block the enemy spawning
+		FActorSpawnParameters Params;
+		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, GetShootingPointLocation, GetShootingPointRotation, Params);
+		
+		if (CurrentBullet)
 		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-			ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, SpawnParams);
-		
-			if (CurrentBullet != nullptr)
-			{
-				BulletPool.Add(CurrentBullet);
-			
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Bullet Pool Spawned"));
-			}
-		}
+			//Passing the ref to the current bullet actor
+			OnBulletDestroyed.Broadcast(CurrentBullet);
+		};
 	};
 }
 

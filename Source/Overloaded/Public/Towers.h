@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
 #include "Towers.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBulletDestroyed, ATowerBullet*, CurrentBullet);
 
 UCLASS()
 class OVERLOADED_API ATowers : public AActor
@@ -25,19 +27,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+	UPROPERTY()
+	UStaticMeshComponent* TowerMeshComponent;
+	
+	UPROPERTY()
+	UArrowComponent* TowerShootingPoint;
+	
+	FOnBulletDestroyed OnBulletDestroyed;
+	
 	//Object Pooling 
-	UPROPERTY(EditAnywhere, Category = "Bullet")
-	TSubclassOf<class ATowerBullet>BulletClass;
-	
-	UPROPERTY()
-	TArray<ATowerBullet*> BulletPool;
-	
-	UPROPERTY()
-	TArray<ATowerBullet*> ActiveBulletPool;
-	
-	UPROPERTY(EditAnywhere)
-	int32 BulletPoolAmount = 10;
+	UPROPERTY(EditInstanceOnly, Category = "Bullet")
+	TSubclassOf<ATowerBullet> BulletClass;
 	
 	UFUNCTION()
-	void InitializeBulletPool();
+	void ShootBullet();
 };

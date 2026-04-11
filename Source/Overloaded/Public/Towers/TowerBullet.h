@@ -29,17 +29,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(EditInstanceOnly, Category = "Enemy Pawn Actor")
-	class AEnemyPawn* EnemyPawnRef;
+	UPROPERTY(EditInstanceOnly, Category = "Enemy Pawn")
+	class AEnemyPawn* EnemyPawnClass;
+	
+	UPROPERTY(EditInstanceOnly, Category = "Tower")
+	class ATowers* TowerClass;
 	
 	UPROPERTY(BlueprintCallable)
 	FOnEnemyDamagedDelegate OnEnemyDamaged;
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* BulletCollision;
-
+	
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* BulletMesh;
+	UStaticMeshComponent* BulletMeshComponent;
 	
 	UPROPERTY()
 	class UProjectileMovementComponent* BulletProjectile;
@@ -48,5 +51,10 @@ public:
 	void OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
 	                class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 	                const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void BulletDestoryed(ATowerBullet* CurrentBullet);
+	
+	bool bHasBulletHitEnemy = false;
 	
 };
