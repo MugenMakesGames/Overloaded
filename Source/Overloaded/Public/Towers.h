@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Towers.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBulletDestroyed, ATowerBullet*, CurrentBullet);
+
 
 UCLASS()
 class OVERLOADED_API ATowers : public AActor
@@ -33,7 +33,6 @@ public:
 	UPROPERTY()
 	UArrowComponent* TowerShootingPoint;
 	
-	FOnBulletDestroyed OnBulletDestroyed;
 	
 	//Object Pooling 
 	UPROPERTY(EditInstanceOnly, Category = "Bullet")

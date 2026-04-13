@@ -49,9 +49,4 @@ public:
 	                class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 	                const FHitResult& SweepResult);
 	
-	UFUNCTION()
-	void BulletDestoryed(ATowerBullet* CurrentBullet);
-	
-	bool bHasBulletHitEnemy = false;
-	
 };

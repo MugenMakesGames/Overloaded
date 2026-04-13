@@ -37,10 +37,7 @@ void ATowerBullet::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (TowerClass)
-	{
-		TowerClass->OnBulletDestroyed.AddDynamic(this, &ATowerBullet::BulletDestoryed);
-	}
+	
 }
 
 // Called every frame
@@ -63,21 +60,5 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 		
 		//Binding he OnEnemyDamaged delegate
 		OnEnemyDamaged.Broadcast(this, 10);
-		
-		//Tracking if the bullet has hit the enemy
-	}
-}
-
-void ATowerBullet::BulletDestoryed(ATowerBullet* CurrentBullet)
-{
-	if (bHasBulletHitEnemy == true)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("BulletDestroyed"));
-		
-		//Setting the actor hidden in game and disabling collision instead of destroying for performance
-		CurrentBullet->SetActorHiddenInGame(true);
-		CurrentBullet->SetActorEnableCollision(false);
-		
-		bHasBulletHitEnemy = false;
 	}
 }
