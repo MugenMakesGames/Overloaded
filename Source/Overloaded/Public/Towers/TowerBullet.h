@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
+#include "Interface/InteractionInterface.h"
 #include "TowerBullet.generated.h"
 
 
@@ -13,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyDamagedDelegate, AActor*, D
 
 UCLASS
 ()
-class OVERLOADED_API ATowerBullet : public AActor
+class OVERLOADED_API ATowerBullet : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -48,5 +49,18 @@ public:
 	void OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
 	                class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 	                const FHitResult& SweepResult);
+	
+	UPROPERTY(EditAnywhere)
+	float BulletSpeed = 2000.f;
+	
+	UFUNCTION()
+	void DeactivateBullet();
+	
+	bool bIsBulletActive;
+	
+	//Interface functions
+	virtual void ActivateBullet_Implementation(const FVector& BulletLocation, const FRotator& BulletRotation) override;
+	
+	
 	
 };

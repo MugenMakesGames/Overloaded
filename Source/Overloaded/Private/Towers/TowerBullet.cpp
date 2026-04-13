@@ -36,8 +36,6 @@ ATowerBullet::ATowerBullet()
 void ATowerBullet::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 // Called every frame
@@ -47,18 +45,51 @@ void ATowerBullet::Tick(float DeltaTime)
 	
 }
 
-void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
-                              class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-                              const FHitResult& SweepResult)
+void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//Getting the ref to the enemy pawn
 	AEnemyPawn* EnemyPawn = Cast<AEnemyPawn>(OtherActor);
 	
 	if (EnemyPawn)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("BulletDestroyed"));
-		
 		//Binding he OnEnemyDamaged delegate
 		OnEnemyDamaged.Broadcast(this, 10);
+		
+		//When the bullet hits the enemy it should de-activate
+		DeactivateBullet();
+		
+		
 	}
 }
+
+void ATowerBullet::ActivateBullet_Implementation(const FVector& BulletLocation, const FRotator& BulletRotation)
+{
+	//Setting the shooting point of the bullet actor
+	SetActorLocation(BulletLocation);
+	SetActorRotation(BulletRotation);
+	
+	SetActorEnableCollision(true);
+	SetActorHiddenInGame(false);
+	
+	//Shooting the bullet 
+	BulletProjectile->Velocity = GetActorForwardVector() * BulletSpeed;
+	BulletProjectile->Activate();
+	
+	bIsBulletActive = true;
+}
+
+void ATowerBullet::DeactivateBullet()
+{
+	//Resetting the bullet actor by setting collision disabled and hiding it in game
+	SetActorEnableCollision(false);
+	SetActorHiddenInGame(true);
+	
+	//Stopping bullet's movement 
+	BulletProjectile->StopMovementImmediately();
+	BulletProjectile->Deactivate();
+	
+	bIsBulletActive = false;
+}
+
+
+

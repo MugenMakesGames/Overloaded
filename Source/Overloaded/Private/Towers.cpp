@@ -23,7 +23,9 @@ void ATowers::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ShootBullet();
+	CreateBulletPool();
+	
+	//ShootBullet();
 }
 
 // Called every frame
@@ -34,22 +36,35 @@ void ATowers::Tick(float DeltaTime)
 
 void ATowers::ShootBullet()
 {
-	if (BulletClass)
+	for (int i = 0; i < BulletPool.Num(); ++i)
 	{
-		FVector GetShootingPointLocation = TowerShootingPoint->GetComponentLocation();
-		const FRotator GetShootingPointRotation = TowerShootingPoint->GetComponentRotation();
+		ATowerBullet* Bullet = BulletPool[i];
 		
-		//Making sure collision doesn't block the enemy spawning
-		FActorSpawnParameters Params;
-		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		//Adding the bullets to the active bullet pool when they need to be shot
+		ActiveBulletPool.Add(Bullet);
+	}
+}
 
-		ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, GetShootingPointLocation, GetShootingPointRotation, Params);
+void ATowers::CreateBulletPool()
+{
+	for (int i = 0; i < BulletPoolAmount; ++i)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		
+		ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, SpawnParams);
 		
 		if (CurrentBullet)
 		{
-			//Passing the ref to the current bullet actor
-			OnBulletDestroyed.Broadcast(CurrentBullet);
-		};
-	};
+			CurrentBullet->SetActorEnableCollision(false);
+			CurrentBullet->SetActorHiddenInGame(true);
+			
+			BulletPool.Add(CurrentBullet);
+		}
+	}
 }
 
+void ATowers::RefillBulletPool_Implementation(TArray<ATowerBullet*> ActiveBulletPoolRef, TArray<ATowerBullet*> BulletPoolRef)
+{
+	
+}
