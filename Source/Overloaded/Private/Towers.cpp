@@ -2,6 +2,8 @@
 
 
 #include "Towers.h"
+
+#include "Particles/ParticleSystem.h"
 #include "Towers/TowerBullet.h"
 
 // Sets default values
@@ -25,7 +27,7 @@ void ATowers::BeginPlay()
 	
 	CreateBulletPool();
 	
-	//ShootBullet();
+	AddToActiveBulletPool();
 }
 
 // Called every frame
@@ -34,14 +36,30 @@ void ATowers::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ATowers::ShootBullet()
+void ATowers::AddToActiveBulletPool()
 {
-	for (int i = 0; i < BulletPool.Num(); ++i)
-	{
-		ATowerBullet* Bullet = BulletPool[i];
+	ATowerBullet* Bullet = BulletPool[BulletCount];
+	
+	//Checking if bullet count is a valid index
+	if (!BulletPool.IsValidIndex(BulletCount)) return;
+	
+	if (!Bullet) return;
+	
+	//Adding the bullets to the active bullet pool when they need to be shot
+	ActiveBulletPool.Add(Bullet);
+	//Remove swap is safer than .Remove
+	BulletPool.RemoveSwap(Bullet);
 		
-		//Adding the bullets to the active bullet pool when they need to be shot
-		ActiveBulletPool.Add(Bullet);
+	if (Bullet->Implements<UInteractionInterface>())
+	{
+		//Getting the in game time
+		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+			
+		//You have to turn the ShootBullet function into a delegate to be used in the timer as it has parameters
+		FTimerDelegate TimerDelegate;
+		TimerDelegate.BindUFunction(this, FName("ShootBullet"), Bullet);
+			
+		TimerManager.SetTimer(BulletShootingFrequency, TimerDelegate, 2, false, -1);
 	}
 }
 
@@ -56,15 +74,38 @@ void ATowers::CreateBulletPool()
 		
 		if (CurrentBullet)
 		{
-			CurrentBullet->SetActorEnableCollision(false);
-			CurrentBullet->SetActorHiddenInGame(true);
+			CurrentBullet->DeactivateBullet(CurrentBullet);
 			
 			BulletPool.Add(CurrentBullet);
 		}
 	}
 }
 
-void ATowers::RefillBulletPool_Implementation(TArray<ATowerBullet*> ActiveBulletPoolRef, TArray<ATowerBullet*> BulletPoolRef)
+
+void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 {
-	
+	if (CurrentBulletToShoot && CurrentBulletToShoot->Implements<UInteractionInterface>())
+	{
+		
+		FVector Location = TowerShootingPoint->GetComponentLocation();
+		FRotator Rotation = TowerShootingPoint->GetComponentRotation();
+		
+		Execute_ActivateBullet(CurrentBulletToShoot, Location, Rotation);
+		
+		//Deactivating the bullet before adding back to the bullet-pool
+		//CurrentBulletToShoot->DeactivateBullet(CurrentBulletToShoot);
+		
+		ActiveBulletPool.Remove(CurrentBulletToShoot);
+		BulletPool.Add(CurrentBulletToShoot);
+		
+		BulletCount++;
+		
+		if (BulletCount >= BulletPool.Num())
+		{
+			//Resetting the bullet count
+			BulletCount = 0;
+		}
+		
+		AddToActiveBulletPool();
+	}
 }

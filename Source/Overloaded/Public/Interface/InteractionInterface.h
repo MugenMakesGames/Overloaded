@@ -19,7 +19,4 @@ class OVERLOADED_API IInteractionInterface
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ActivateBullet(const FVector& BulletLocation, const FRotator& BulletRotation);
-	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void RefillBulletPool(TArray<ATowerBullet*> ActiveBulletPoolRef, TArray<ATowerBullet*> BulletPoolRef);
 };

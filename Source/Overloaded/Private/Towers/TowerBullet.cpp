@@ -54,16 +54,11 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 	{
 		//Binding he OnEnemyDamaged delegate
 		OnEnemyDamaged.Broadcast(this, 10);
-		
-		//When the bullet hits the enemy it should de-activate
-		DeactivateBullet();
-		
-		
 	}
 }
 
 void ATowerBullet::ActivateBullet_Implementation(const FVector& BulletLocation, const FRotator& BulletRotation)
-{
+{ 
 	//Setting the shooting point of the bullet actor
 	SetActorLocation(BulletLocation);
 	SetActorRotation(BulletRotation);
@@ -75,20 +70,17 @@ void ATowerBullet::ActivateBullet_Implementation(const FVector& BulletLocation, 
 	BulletProjectile->Velocity = GetActorForwardVector() * BulletSpeed;
 	BulletProjectile->Activate();
 	
-	bIsBulletActive = true;
 }
 
-void ATowerBullet::DeactivateBullet()
+void ATowerBullet::DeactivateBullet(ATowerBullet* CurrentBullet)
 {
 	//Resetting the bullet actor by setting collision disabled and hiding it in game
-	SetActorEnableCollision(false);
-	SetActorHiddenInGame(true);
+	CurrentBullet->SetActorEnableCollision(false);
+	CurrentBullet->SetActorHiddenInGame(true);
 	
 	//Stopping bullet's movement 
-	BulletProjectile->StopMovementImmediately();
-	BulletProjectile->Deactivate();
-	
-	bIsBulletActive = false;
+	CurrentBullet->BulletProjectile->StopMovementImmediately();
+	CurrentBullet->BulletProjectile->Deactivate();
 }
 
 

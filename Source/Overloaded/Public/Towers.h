@@ -21,10 +21,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	bool bHasBulletHitEnemy;
+	FTimerHandle BulletShootingFrequency;
 	
-	UPROPERTY()
-	ATowerBullet* GetCurrentBullet;
+	int32 BulletCount = 0;
 
 public:	
 	// Called every frame
@@ -34,11 +33,14 @@ public:
 	UStaticMeshComponent* TowerMeshComponent;
 	
 	UPROPERTY()
+	bool bHasBulletHitEnemy;
+	
+	UPROPERTY()
 	UArrowComponent* TowerShootingPoint;
 	
 	//Object Pooling 
 	UPROPERTY(EditInstanceOnly, Category = "Bullet")
-	TSubclassOf<ATowerBullet> BulletClass;
+	TSubclassOf<class ATowerBullet> BulletClass;
 	
 	UPROPERTY()
 	TArray<ATowerBullet*> BulletPool; 
@@ -49,14 +51,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 BulletPoolAmount = 20;
 	
+	
 	UFUNCTION()
 	void CreateBulletPool();
 	
 	UFUNCTION()
-	void ShootBullet();
+	void AddToActiveBulletPool();
 	
-	//Interface functions
-	virtual void RefillBulletPool_Implementation(TArray<ATowerBullet*> ActiveBulletPoolRef, TArray<ATowerBullet*> BulletPoolRef) override;
-	
+	UFUNCTION()
+	void ShootBullet(ATowerBullet* CurrentBulletToShoot);
 };
 
