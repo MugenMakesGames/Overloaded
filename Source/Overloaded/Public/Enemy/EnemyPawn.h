@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
-#include "Components/SplineComponent.h"
-#include "Components/TimelineComponent.h"
 #include "GameFramework/Pawn.h"
 #include "EnemyPawn.generated.h"
 
@@ -33,6 +31,8 @@ protected:
 	UPROPERTY(EditInstanceOnly, Category = "Bullet")
 	ATowerBullet* TowerBulletClass;
 	
+	int32 CurrentHealth;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -49,12 +49,10 @@ public:
 	
 	//Enemy Health / Functions
 	UFUNCTION()
-	void TakeDamage(AActor* DamagedActor, float DamageAmount);
-	
-	float CurrentHealth;
+	void TakeDamage(AActor* DamagedActor, int32 DamageAmount);
 	
 	UPROPERTY(EditAnywhere, Category = "Enemy Health")
-	float MaxHealth;
+	int32 MaxHealth = 100;
 	
 	//Object Pooling variables / Functions / Delegates
 	FOnEnemyDestoryedDelegate OnEnemyDestoryed;

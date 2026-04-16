@@ -2,8 +2,6 @@
 
 
 #include "Towers.h"
-
-#include "Particles/ParticleSystem.h"
 #include "Towers/TowerBullet.h"
 
 // Sets default values
@@ -86,17 +84,28 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 {
 	if (CurrentBulletToShoot && CurrentBulletToShoot->Implements<UInteractionInterface>())
 	{
-		
 		FVector Location = TowerShootingPoint->GetComponentLocation();
 		FRotator Rotation = TowerShootingPoint->GetComponentRotation();
 		
 		Execute_ActivateBullet(CurrentBulletToShoot, Location, Rotation);
 		
-		//Deactivating the bullet before adding back to the bullet-pool
-		//CurrentBulletToShoot->DeactivateBullet(CurrentBulletToShoot);
-		
 		ActiveBulletPool.Remove(CurrentBulletToShoot);
 		BulletPool.Add(CurrentBulletToShoot);
+		
+		FTimerHandle DeactivateBullet;
+		
+		//Setting a timer and using lambda functions (function only to be used in the timer) to deactivate the bullet after it is shot
+		GetWorldTimerManager().SetTimer(DeactivateBullet,[this, CurrentBulletToShoot]()
+			{
+				//Deactivating the bullet before adding back to the bullet-pool
+				CurrentBulletToShoot->DeactivateBullet(CurrentBulletToShoot);
+		
+				ActiveBulletPool.Remove(CurrentBulletToShoot);
+				BulletPool.Add(CurrentBulletToShoot);
+			},
+			3.0f, 
+			false
+		);
 		
 		BulletCount++;
 		

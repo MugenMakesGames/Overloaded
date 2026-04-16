@@ -2,8 +2,6 @@
 
 
 #include "Towers/TowerBullet.h"
-
-#include "Towers.h"
 #include "Enemy/EnemyPawn.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -53,7 +51,10 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 	if (EnemyPawn)
 	{
 		//Binding he OnEnemyDamaged delegate
-		OnEnemyDamaged.Broadcast(this, 10);
+		OnEnemyDamaged.Broadcast(EnemyPawn, 10);
+		
+		//Deactivate the bullet if it hits the enemy
+		DeactivateBullet(this);
 	}
 }
 
@@ -69,7 +70,6 @@ void ATowerBullet::ActivateBullet_Implementation(const FVector& BulletLocation, 
 	//Shooting the bullet 
 	BulletProjectile->Velocity = GetActorForwardVector() * BulletSpeed;
 	BulletProjectile->Activate();
-	
 }
 
 void ATowerBullet::DeactivateBullet(ATowerBullet* CurrentBullet)
@@ -82,6 +82,3 @@ void ATowerBullet::DeactivateBullet(ATowerBullet* CurrentBullet)
 	CurrentBullet->BulletProjectile->StopMovementImmediately();
 	CurrentBullet->BulletProjectile->Deactivate();
 }
-
-
-

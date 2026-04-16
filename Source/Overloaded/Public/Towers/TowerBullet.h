@@ -10,7 +10,7 @@
 
 
 //Creating a delegate to apply damage to the enemy when they are hit by a bullet
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyDamagedDelegate, AActor*, DamagedEnemy, float, DamageAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyDamagedDelegate, AActor*, DamagedEnemy, int32, DamageAmount);
 
 UCLASS
 ()
@@ -29,9 +29,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	UPROPERTY(EditInstanceOnly, Category = "Tower")
-	class ATowers* TowerClass;
 	
 	UPROPERTY(BlueprintCallable)
 	FOnEnemyDamagedDelegate OnEnemyDamaged;

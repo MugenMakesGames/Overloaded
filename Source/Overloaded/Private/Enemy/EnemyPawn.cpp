@@ -52,9 +52,11 @@ void AEnemyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 }
 
 
-void AEnemyPawn::TakeDamage(AActor* DamagedActor, float DamageAmount)
+void AEnemyPawn::TakeDamage(AActor* DamagedActor, int32 DamageAmount)
 {
 	CurrentHealth -= DamageAmount;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("DamageTaken: %i"), CurrentHealth));
 	
 	if (CurrentHealth <= 0.f)
 	{
