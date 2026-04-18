@@ -42,6 +42,12 @@ public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Camera Switching")
 	UButton* SwitchFourthCamera;
 	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Start Round")
+	UButton* StartRound;
+	
+	UFUNCTION(BlueprintCallable)
+	void OnStartRoundButtonClicked();
+	
 	UFUNCTION(BlueprintCallable)
 	void OnMainCamButtonclicked();
 	

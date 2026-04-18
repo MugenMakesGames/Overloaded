@@ -13,6 +13,8 @@ void UCameraSwitchingUI::NativeConstruct()
 	SwitchThirdCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnThirdCamButtonClicked);
 	SwitchFourthCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnFourthCamButtonClicked);
 	
+	StartRound->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnStartRoundButtonClicked);
+	
 	//Getting actor refs
 	CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(
 		GetWorld(),
@@ -57,4 +59,9 @@ void UCameraSwitchingUI::OnFourthCamButtonClicked()
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
 	
 	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef);
+}
+
+void UCameraSwitchingUI::OnStartRoundButtonClicked()
+{
+	
 }
