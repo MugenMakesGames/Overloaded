@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
+#include "Interface/InteractionInterface.h"
 #include "EnemyPawn.generated.h"
 
 class CurveFloat;
 class ATowerBullet;
 
-//Creating a delegate to track when the enemy pawn is destroyed
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyDestoryedDelegate, AEnemyPawn*, Actor);
+
 
 UCLASS()
-class OVERLOADED_API AEnemyPawn : public APawn
+class OVERLOADED_API AEnemyPawn : public APawn, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -28,9 +28,6 @@ protected:
 	
 	float EnemySplineLength;
 	
-	UPROPERTY(EditInstanceOnly, Category = "Bullet")
-	ATowerBullet* TowerBulletClass;
-	
 	int32 CurrentHealth;
 	
 public:	
@@ -40,6 +37,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	UPROPERTY(EditInstanceOnly, Category = "Enemy Spawner")
+	class AEnemySpawningManager* EnemySpawningManagerClass;
+	
 	//Components
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
@@ -48,15 +48,11 @@ public:
 	UBoxComponent* EnemyCollision;
 	
 	//Enemy Health / Functions
-	UFUNCTION()
-	void TakeDamage(AActor* DamagedActor, int32 DamageAmount);
-	
 	UPROPERTY(EditAnywhere, Category = "Enemy Health")
 	int32 MaxHealth = 100;
 	
-	//Object Pooling variables / Functions / Delegates
-	FOnEnemyDestoryedDelegate OnEnemyDestoryed;
-	
 	void ResetActor();
-
+	
+	//Interface functions
+	virtual void EnemyTakeDamage_Implementation(int32 DamageAmount) override;
 };

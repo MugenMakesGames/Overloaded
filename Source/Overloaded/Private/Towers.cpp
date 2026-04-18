@@ -38,6 +38,7 @@ void ATowers::AddToActiveBulletPool()
 {
 	ATowerBullet* Bullet = BulletPool[BulletCount];
 	
+	
 	//Checking if bullet count is a valid index
 	if (!BulletPool.IsValidIndex(BulletCount)) return;
 	

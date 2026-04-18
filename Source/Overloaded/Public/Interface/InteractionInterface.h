@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "InteractionInterface.generated.h"
 
+
 UINTERFACE(BlueprintType)
 class OVERLOADED_API UInteractionInterface : public UInterface
 {
@@ -19,4 +20,10 @@ class OVERLOADED_API IInteractionInterface
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ActivateBullet(const FVector& BulletLocation, const FRotator& BulletRotation);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void EnemyTakeDamage(int32 DamageAmount);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void DestroyEnemy(class AEnemyPawn* CurrentEnemy);
 };

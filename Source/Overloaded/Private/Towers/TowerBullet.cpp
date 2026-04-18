@@ -40,7 +40,6 @@ void ATowerBullet::BeginPlay()
 void ATowerBullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
 void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -48,10 +47,10 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 	//Getting the ref to the enemy pawn
 	AEnemyPawn* EnemyPawn = Cast<AEnemyPawn>(OtherActor);
 	
-	if (EnemyPawn)
+	if (EnemyPawn && EnemyPawn->Implements<UInteractionInterface>())
 	{
-		//Binding he OnEnemyDamaged delegate
-		OnEnemyDamaged.Broadcast(EnemyPawn, 10);
+		//Applying damage to the enemy
+		Execute_EnemyTakeDamage(EnemyPawn, 10);
 		
 		//Deactivate the bullet if it hits the enemy
 		DeactivateBullet(this);
@@ -82,3 +81,5 @@ void ATowerBullet::DeactivateBullet(ATowerBullet* CurrentBullet)
 	CurrentBullet->BulletProjectile->StopMovementImmediately();
 	CurrentBullet->BulletProjectile->Deactivate();
 }
+
+

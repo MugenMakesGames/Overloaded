@@ -9,9 +9,6 @@
 #include "TowerBullet.generated.h"
 
 
-//Creating a delegate to apply damage to the enemy when they are hit by a bullet
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnemyDamagedDelegate, AActor*, DamagedEnemy, int32, DamageAmount);
-
 UCLASS
 ()
 class OVERLOADED_API ATowerBullet : public AActor, public IInteractionInterface
@@ -29,9 +26,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	UPROPERTY(BlueprintCallable)
-	FOnEnemyDamagedDelegate OnEnemyDamaged;
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* BulletCollision;

@@ -2,7 +2,7 @@
 
 
 #include "Enemy/EnemyPawn.h"
-#include "Towers/TowerBullet.h"
+#include "Enemy/EnemySpawningManager.h"
 
 
 // Sets default values
@@ -19,7 +19,6 @@ AEnemyPawn::AEnemyPawn()
 	EnemyCollision->SetGenerateOverlapEvents(true);
 	EnemyCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
 	EnemyCollision->SetupAttachment(RootComponent);
-
 }
 
 // Called when the game starts or when spawned
@@ -28,15 +27,6 @@ void AEnemyPawn::BeginPlay()
 	Super::BeginPlay();
 	
 	ResetActor();
-	
-	//Assigning the delegate function to TakeDamage
-	if (TowerBulletClass != nullptr)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Update func is working");
-		TowerBulletClass->OnEnemyDamaged.AddDynamic(this, &AEnemyPawn::TakeDamage);
-	}
-	
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("IT EXISTS"));
 }
 
 // Called every frame
@@ -52,22 +42,6 @@ void AEnemyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 }
 
 
-void AEnemyPawn::TakeDamage(AActor* DamagedActor, int32 DamageAmount)
-{
-	CurrentHealth -= DamageAmount;
-	
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("DamageTaken: %i"), CurrentHealth));
-	
-	if (CurrentHealth <= 0.f)
-	{
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
-		
-		//Binding the on enemy destroyed delegate to this function
-		OnEnemyDestoryed.Broadcast(this);
-	}
-}
-
 void AEnemyPawn::ResetActor()
 {
 	CurrentHealth = MaxHealth;
@@ -76,3 +50,20 @@ void AEnemyPawn::ResetActor()
 	SetActorEnableCollision(true);
 }
 
+void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount)
+{
+	CurrentHealth -= DamageAmount;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::Printf(TEXT("DamageDone: %i"), CurrentHealth));
+	
+	if (CurrentHealth <= 0.f)
+	{
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+		
+		if (EnemySpawningManagerClass && EnemySpawningManagerClass->Implements<UInteractionInterface>())
+		{
+			Execute_DestroyEnemy(EnemySpawningManagerClass, this);
+		}
+	}
+}

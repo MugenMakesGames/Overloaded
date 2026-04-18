@@ -32,7 +32,6 @@ public:
 	UPROPERTY()
 	UStaticMeshComponent* TowerMeshComponent;
 	
-	
 	//Creating a FVector variable to store where the bullet should go when deactivated
 	UPROPERTY(EditAnywhere, Category = "Bullet")
 	FVector ResetBulletLocation;

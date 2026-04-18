@@ -90,8 +90,7 @@ void AEnemySpawningManager::InitializeEnemyPool()
 			{
 				SpawnedEnemy->SetActorHiddenInGame(true);
 				SpawnedEnemy->SetActorEnableCollision(false);
-			
-				SpawnedEnemy->OnEnemyDestoryed.AddDynamic(this, &AEnemySpawningManager::OnEnemyReturned);
+				
 				EnemyPawnPool.Add(SpawnedEnemy);
 			}
 		}
@@ -110,10 +109,10 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 	//Looping until active all enemies in enemy pawn are in active enemy pawns
 	while (ActiveEnemyPawns.Num() < EnemyPoolSize && EnemyPawnPool.Num() > 0)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Enemy spawned"));
 		
 		AEnemyPawn* CurrentEnemy = EnemyPawnPool[0];
 		EnemyPawnPool.RemoveAt(0);
+		
 
 		if (!CurrentEnemy) continue;
 
@@ -136,12 +135,12 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 	}
 }
 
-void AEnemySpawningManager::OnEnemyReturned(AEnemyPawn* CurrentEnemy)
+
+void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy)
 {
 	if (!CurrentEnemy) return;
 	
-	CurrentEnemy->SetActorHiddenInGame(true);
-	CurrentEnemy->SetActorEnableCollision(false);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
 	
 	//Removing the current enemy pawn from the active pawns 
 	if (ActiveEnemyPawns.Contains(CurrentEnemy))

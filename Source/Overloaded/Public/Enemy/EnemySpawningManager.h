@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/Actor.h"
+#include "Interface/InteractionInterface.h"
 #include "EnemySpawningManager.generated.h"
 
 UCLASS()
-class OVERLOADED_API AEnemySpawningManager : public AActor
+class OVERLOADED_API AEnemySpawningManager : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -58,10 +59,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
 	int32 EnemySpacing = 200;
 	
-	UFUNCTION()
-	void OnEnemyReturned(AEnemyPawn* Enemy);
-	
 	void InitializeEnemyPool();
 	void SpawnFromEnemyPool();
+	
+	//Interface functions
+	virtual void DestroyEnemy_Implementation(class AEnemyPawn* CurrentEnemy) override;
 
 };
