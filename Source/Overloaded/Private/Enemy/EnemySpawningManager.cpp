@@ -24,8 +24,6 @@ void AEnemySpawningManager::BeginPlay()
 	{
 		EnemySpline = EnemySplineActorRef->FindComponentByClass<USplineComponent>();
 	}
-	
-	InitializeEnemyPool();
 }
 
 // Called every frame
@@ -72,30 +70,6 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 			CurrentEnemy->SetActorLocation(Location);
 		}
 	}
-}
-
-void AEnemySpawningManager::InitializeEnemyPool()
-{
-	//Adding enemy pawns to the pool until the enemypoolsize is reached
-	// for (int i = 0; i < EnemyPoolSize; ++i)
-	// {
-	// 	if (EnemyPawnClass)
-	// 	{
-	// 		//Making sure collision doesn't block the enemy spawning
-	// 		FActorSpawnParameters Params;
-	// 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	//
-	// 		AEnemyPawn* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyPawn>(EnemyPawnClass, Params);
-	//
-	// 		if (SpawnedEnemy)
-	// 		{
-	// 			SpawnedEnemy->SetActorHiddenInGame(true);
-	// 			SpawnedEnemy->SetActorEnableCollision(false);
-	// 			
-	// 			EnemyPawnPool.Add(SpawnedEnemy);
-	// 		}
-	// 	}
-	// }
 }
 
 void AEnemySpawningManager::SpawnFromEnemyPool()

@@ -59,7 +59,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
 	int32 EnemySpacing = 200;
 	
-	void InitializeEnemyPool();
 	void SpawnFromEnemyPool();
 	
 	//Interface functions
