@@ -76,26 +76,26 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 
 void AEnemySpawningManager::InitializeEnemyPool()
 {
-	 //Adding enemy pawns to the pool until the enemypoolsize is reached
-	for (int i = 0; i < EnemyPoolSize; ++i)
-	{
-		if (EnemyPawnClass)
-		{
-			//Making sure collision doesn't block the enemy spawning
-			FActorSpawnParameters Params;
-			Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-			AEnemyPawn* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyPawn>(EnemyPawnClass, Params);
-
-			if (SpawnedEnemy)
-			{
-				SpawnedEnemy->SetActorHiddenInGame(true);
-				SpawnedEnemy->SetActorEnableCollision(false);
-				
-				EnemyPawnPool.Add(SpawnedEnemy);
-			}
-		}
-	}
+	//Adding enemy pawns to the pool until the enemypoolsize is reached
+	// for (int i = 0; i < EnemyPoolSize; ++i)
+	// {
+	// 	if (EnemyPawnClass)
+	// 	{
+	// 		//Making sure collision doesn't block the enemy spawning
+	// 		FActorSpawnParameters Params;
+	// 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	//
+	// 		AEnemyPawn* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyPawn>(EnemyPawnClass, Params);
+	//
+	// 		if (SpawnedEnemy)
+	// 		{
+	// 			SpawnedEnemy->SetActorHiddenInGame(true);
+	// 			SpawnedEnemy->SetActorEnableCollision(false);
+	// 			
+	// 			EnemyPawnPool.Add(SpawnedEnemy);
+	// 		}
+	// 	}
+	// }
 }
 
 void AEnemySpawningManager::SpawnFromEnemyPool()
@@ -136,7 +136,6 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 	}
 }
 
-
 void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy)
 {
 	if (!CurrentEnemy) return;
@@ -155,3 +154,30 @@ void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy
 		EnemyPawnPool.Add(CurrentEnemy);
 	}
 }
+
+void AEnemySpawningManager::CreateEnemyPool_Implementation(int32 NumberOfEnemiesToSpawn)
+{
+	EnemyPoolSize = NumberOfEnemiesToSpawn;
+	
+	//Adding enemy pawns to the pool until the enemypoolsize is reached
+	for (int i = 0; i < NumberOfEnemiesToSpawn; ++i)
+	{
+		if (EnemyPawnClass)
+		{
+			//Making sure collision doesn't block the enemy spawning
+			FActorSpawnParameters Params;
+			Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+			AEnemyPawn* SpawnedEnemy = GetWorld()->SpawnActor<AEnemyPawn>(EnemyPawnClass, Params);
+
+			if (SpawnedEnemy)
+			{
+				SpawnedEnemy->SetActorHiddenInGame(true);
+				SpawnedEnemy->SetActorEnableCollision(false);
+				
+				EnemyPawnPool.Add(SpawnedEnemy);
+			}
+		}
+	}
+}
+

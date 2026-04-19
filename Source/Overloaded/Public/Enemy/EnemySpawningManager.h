@@ -47,7 +47,7 @@ public:
 	
 	//Creating max enemy pool size
 	UPROPERTY(EditAnywhere)
-	int32 EnemyPoolSize = 10;
+	int32 EnemyPoolSize;
 	
 	//Creating a timeline using tick
 	float TimelineAlpha = 0.f;
@@ -59,11 +59,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
 	int32 EnemySpacing = 200;
 	
-	
 	void InitializeEnemyPool();
 	void SpawnFromEnemyPool();
 	
 	//Interface functions
 	virtual void DestroyEnemy_Implementation(class AEnemyPawn* CurrentEnemy) override;
+	
+	virtual void CreateEnemyPool_Implementation(int32 NumberOfEnemiesToSpawn) override;
 
 };

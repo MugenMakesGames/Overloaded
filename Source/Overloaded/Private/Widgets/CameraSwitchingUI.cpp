@@ -75,10 +75,18 @@ void UCameraSwitchingUI::OnFourthCamButtonClicked()
 
 void UCameraSwitchingUI::OnStartRoundButtonClicked()
 {
-	if (!CameraSwitcherActorRef || !TowerClass)
+	if (!EnemySpawnerClass || !TowerClass)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("TOWER IS NOT PLACED INTO THE WORLD"));
+		
+		return;
 	};
+	
+	//Increasing number of enemies by 5 each round
+	NumberOfEnemiesPerRound += 5;
+	
+	//Increasing the number of enemies each round
+	Execute_CreateEnemyPool(EnemySpawnerClass, NumberOfEnemiesPerRound);
 	
 	//Start spawning enemies 
 	EnemySpawnerClass->SpawnFromEnemyPool();

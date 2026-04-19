@@ -38,6 +38,8 @@ private:
 	
 	int CamID;
 	
+	int32 NumberOfEnemiesPerRound;
+	
 public:
 	
 	//Creating all the camera switching buttons

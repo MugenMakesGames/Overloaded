@@ -2,8 +2,6 @@
 
 
 #include "Towers.h"
-
-#include "NewOverloadPlayerController.h"
 #include "Towers/TowerBullet.h"
 
 // Sets default values
@@ -119,4 +117,5 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 		AddToActiveBulletPool();
 	}
 }
+
 

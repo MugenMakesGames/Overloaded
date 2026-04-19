@@ -27,4 +27,7 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void DestroyEnemy(class AEnemyPawn* CurrentEnemy);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void CreateEnemyPool(int32 NumberOfEnemiesToSpawn);
 };
