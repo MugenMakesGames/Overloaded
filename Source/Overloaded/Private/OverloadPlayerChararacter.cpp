@@ -24,14 +24,6 @@ void AOverloadPlayerChararacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Creating the widget
-	CameraSwitchingUI = CreateWidget(GetWorld(), CameraSwitchingUIClass);
-	
-	if (CameraSwitchingUIClass && CameraSwitchingUI)
-	{
-		CameraSwitchingUI->AddToViewport();
-	}
-	
 	//Setting the camera to the main camera in camera switcher actor
 	APlayerController* PlayerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 	

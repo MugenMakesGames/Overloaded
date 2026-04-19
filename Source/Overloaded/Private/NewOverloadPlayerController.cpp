@@ -2,14 +2,26 @@
 
 
 #include "NewOverloadPlayerController.h"
-
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Towers.h"
+#include "Blueprint/UserWidget.h"
 
 ANewOverloadPlayerController::ANewOverloadPlayerController()
 {
 	
+}
+
+void ANewOverloadPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	//Creating the widget
+	CameraSwitchingUI = CreateWidget<UCameraSwitchingUI>(this, CameraSwitchingUIClass);
+	
+	if (CameraSwitchingUIClass && CameraSwitchingUI)
+	{
+		CameraSwitchingUI->AddToViewport();
+	}
 }
 
 void ANewOverloadPlayerController::SetupInputComponent()

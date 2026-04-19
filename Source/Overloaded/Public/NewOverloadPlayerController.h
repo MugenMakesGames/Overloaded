@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Widgets/CameraSwitchingUI.h"
 #include "NewOverloadPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -13,6 +14,7 @@ class AEnemyPawn;
 /**
  * 
  */
+
 UCLASS()
 class OVERLOADED_API ANewOverloadPlayerController : public APlayerController
 {
@@ -31,11 +33,21 @@ public:
 	
 	UPROPERTY(editAnywhere, Category = "Input")
 	UInputAction* SpawnEnemyAction;
+	
+	//Creating widget class
+	UPROPERTY(EditAnywhere, Category = "Camera Switching Widget")
+	TSubclassOf<UCameraSwitchingUI> CameraSwitchingUIClass;
+
+	//The widget instance that we are using
+	UPROPERTY()
+	UCameraSwitchingUI* CameraSwitchingUI;
 
 protected:
 	
 	/** Initialize input bindings */
 	virtual void SetupInputComponent() override;
+	
+	virtual void BeginPlay() override;
 	
 	UFUNCTION(blueprintCallable, Category = "Input")
 	void OnLeftMouseButtonClicked();

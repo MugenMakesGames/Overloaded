@@ -60,5 +60,6 @@ public:
 	
 	UFUNCTION()
 	void ShootBullet(ATowerBullet* CurrentBulletToShoot);
+	
 };
 

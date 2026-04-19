@@ -3,6 +3,8 @@
 
 #include "Widgets/CameraSwitchingUI.h"
 #include "CameraSwitcher.h"
+#include "Towers.h"
+#include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
 
 void UCameraSwitchingUI::NativeConstruct()
@@ -16,10 +18,14 @@ void UCameraSwitchingUI::NativeConstruct()
 	StartRound->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnStartRoundButtonClicked);
 	
 	//Getting actor refs
-	CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(
-		GetWorld(),
-		ACameraSwitcher::StaticClass()
-	));
+	CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(GetWorld(), 
+	ACameraSwitcher::StaticClass()));
+	
+	TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), 
+	ATowers::StaticClass()));
+	
+	EnemySpawnerClass = Cast<AEnemySpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
+	AEnemySpawningManager::StaticClass()));
 }
 
 
@@ -36,6 +42,8 @@ void UCameraSwitchingUI::OnMainCamButtonclicked()
 
 void UCameraSwitchingUI::OnSecondCamButtonClicked()
 {
+	if (!CameraSwitcherActorRef) return;
+	
 	CamID = 2;
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
@@ -45,6 +53,8 @@ void UCameraSwitchingUI::OnSecondCamButtonClicked()
 
 void UCameraSwitchingUI::OnThirdCamButtonClicked()
 {
+	if (!CameraSwitcherActorRef) return;
+	
 	CamID = 3;
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
@@ -54,6 +64,8 @@ void UCameraSwitchingUI::OnThirdCamButtonClicked()
 
 void UCameraSwitchingUI::OnFourthCamButtonClicked()
 {
+	if (!CameraSwitcherActorRef) return;
+	
 	CamID = 4;
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
@@ -63,5 +75,15 @@ void UCameraSwitchingUI::OnFourthCamButtonClicked()
 
 void UCameraSwitchingUI::OnStartRoundButtonClicked()
 {
+	if (!CameraSwitcherActorRef || !TowerClass)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("TOWER IS NOT PLACED INTO THE WORLD"));
+	};
 	
+	//Start spawning enemies 
+	EnemySpawnerClass->SpawnFromEnemyPool();
+	
+	//Start shooting bullets
+	TowerClass->AddToActiveBulletPool();
 }
+

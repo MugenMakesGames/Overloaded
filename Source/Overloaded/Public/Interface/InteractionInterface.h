@@ -18,6 +18,7 @@ class OVERLOADED_API IInteractionInterface
 	GENERATED_BODY()
 
 public:
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ActivateBullet(const FVector& BulletLocation, const FRotator& BulletRotation);
 	

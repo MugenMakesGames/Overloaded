@@ -2,6 +2,8 @@
 
 
 #include "Enemy/EnemySpawningManager.h"
+
+#include "OverloadedPlayerController.h"
 #include "Enemy/EnemyPawn.h"
 #include "Enemy/EnemySplinePath.h"
 
@@ -24,7 +26,6 @@ void AEnemySpawningManager::BeginPlay()
 	}
 	
 	InitializeEnemyPool();
-	SpawnFromEnemyPool();
 }
 
 // Called every frame
@@ -101,6 +102,8 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 {
 	float SplineLength = EnemySpline->GetSplineLength();
 	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
+	
 	//Tracking the spawn index 
 	int SpawnIndex = 0;
 	//Making sure the enemy pool size and enemy pawn pool values don't desync
@@ -109,11 +112,9 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 	//Looping until active all enemies in enemy pawn are in active enemy pawns
 	while (ActiveEnemyPawns.Num() < EnemyPoolSize && EnemyPawnPool.Num() > 0)
 	{
-		
 		AEnemyPawn* CurrentEnemy = EnemyPawnPool[0];
 		EnemyPawnPool.RemoveAt(0);
 		
-
 		if (!CurrentEnemy) continue;
 
 		float Distance = (SplineLength / TargetCount) * SpawnIndex;

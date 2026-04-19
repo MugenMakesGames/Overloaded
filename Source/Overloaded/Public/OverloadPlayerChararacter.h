@@ -19,14 +19,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	UCameraComponent* MainPlayerCamera;
 	
-	//Creating widget class
-	UPROPERTY(EditAnywhere, Category = "Camera Switching Widget")
-	TSubclassOf<UUserWidget> CameraSwitchingUIClass;
-
-	//The widget instance that we are using
-	UPROPERTY()
-	UUserWidget* CameraSwitchingUI;
-	
 	UPROPERTY(editAnywhere, Category = "Camera Switcher Actor Ref")
 	class ACameraSwitcher* CameraSwitcherActorRef;
 	

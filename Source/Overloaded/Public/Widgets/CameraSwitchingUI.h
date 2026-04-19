@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Interface/InteractionInterface.h"
 #include "CameraSwitchingUI.generated.h"
 
 class ACameraSwitcher;
@@ -13,8 +14,9 @@ class AEnemyPawn;
 /**
  * 
  */
+
 UCLASS()
-class OVERLOADED_API UCameraSwitchingUI : public UUserWidget
+class OVERLOADED_API UCameraSwitchingUI : public UUserWidget, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -23,7 +25,16 @@ class OVERLOADED_API UCameraSwitchingUI : public UUserWidget
 private:
 	
 	UPROPERTY()
+	AActor* TowerBulletClass;
+	
+	UPROPERTY()
 	ACameraSwitcher* CameraSwitcherActorRef;
+	
+	UPROPERTY()
+	class AEnemySpawningManager* EnemySpawnerClass;
+	
+	UPROPERTY()
+	class ATowers* TowerClass;
 	
 	int CamID;
 	
@@ -59,7 +70,4 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void OnFourthCamButtonClicked();
-	
-	
-	
 };

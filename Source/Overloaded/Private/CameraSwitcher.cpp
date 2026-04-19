@@ -74,7 +74,6 @@ void ACameraSwitcher::SetCorrectCamActive(int CameraID)
 		ThirdCamera->SetActive(false);
 		FourthCamera->SetActive(true);
 	}
-
 }
 
 

@@ -2,6 +2,8 @@
 
 
 #include "Towers.h"
+
+#include "NewOverloadPlayerController.h"
 #include "Towers/TowerBullet.h"
 
 // Sets default values
@@ -25,7 +27,7 @@ void ATowers::BeginPlay()
 	
 	CreateBulletPool();
 	
-	AddToActiveBulletPool();
+	//AddToActiveBulletPool();
 }
 
 // Called every frame
@@ -37,7 +39,6 @@ void ATowers::Tick(float DeltaTime)
 void ATowers::AddToActiveBulletPool()
 {
 	ATowerBullet* Bullet = BulletPool[BulletCount];
-	
 	
 	//Checking if bullet count is a valid index
 	if (!BulletPool.IsValidIndex(BulletCount)) return;
@@ -80,7 +81,6 @@ void ATowers::CreateBulletPool()
 	}
 }
 
-
 void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 {
 	if (CurrentBulletToShoot && CurrentBulletToShoot->Implements<UInteractionInterface>())
@@ -119,3 +119,4 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 		AddToActiveBulletPool();
 	}
 }
+
