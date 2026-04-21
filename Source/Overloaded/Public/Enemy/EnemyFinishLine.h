@@ -5,12 +5,13 @@
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "Interface/InteractionInterface.h"
 #include "EnemyFinishLine.generated.h"
 
 class AEnemyPawn;
 
 UCLASS()
-class OVERLOADED_API AEnemyFinishLine : public AActor
+class OVERLOADED_API AEnemyFinishLine : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -32,7 +33,12 @@ public:
 	UPROPERTY(EditInstanceOnly, Category = "Enemy Spawner")
 	class AEnemySpawningManager* EnemySpawnerClass;
 	
+	UPROPERTY()
+	TArray<AEnemyPawn*> FinishedEnemyPool;
+	
 	UFUNCTION()
-	void OnEnemyCrossedLine(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void OnEnemyCrossedLine(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
+					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+					const FHitResult& SweepResult);
 
 };

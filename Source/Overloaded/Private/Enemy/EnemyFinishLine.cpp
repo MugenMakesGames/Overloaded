@@ -18,7 +18,7 @@ AEnemyFinishLine::AEnemyFinishLine()
 	EnemyFinishPoint->SetupAttachment(RootComponent);
 	EnemyFinishPoint->SetGenerateOverlapEvents(true);
 	EnemyFinishPoint->SetCollisionResponseToAllChannels(ECR_Overlap);
-	EnemyFinishPoint->OnComponentEndOverlap.AddDynamic(this, &AEnemyFinishLine::OnEnemyCrossedLine);
+	EnemyFinishPoint->OnComponentBeginOverlap.AddDynamic(this, &AEnemyFinishLine::OnEnemyCrossedLine);
 	
 
 }
@@ -37,13 +37,16 @@ void AEnemyFinishLine::Tick(float DeltaTime)
 
 }
 
-void AEnemyFinishLine::OnEnemyCrossedLine(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void AEnemyFinishLine::OnEnemyCrossedLine(UPrimitiveComponent* ThisComp, class AActor* OtherActor,
+					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+					const FHitResult& SweepResult)
 {
-	AEnemyPawn* EnemyPawn = Cast<AEnemyPawn>(OtherActor);
+	AEnemyPawn* ActiveEnemyPawn = Cast<AEnemyPawn>(OtherActor);
 
-	if (EnemyPawn && EnemySpawnerClass)
+	if (ActiveEnemyPawn && EnemySpawnerClass)
 	{
-		//CLEAR POOL?
-		//EnemySpawnerClass->EnemyPawnPool.Empty();
+		Execute_EnemyCrossedFinishLine(EnemySpawnerClass, ActiveEnemyPawn, FinishedEnemyPool);
+		
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Active enemy pool is: %i "), FinishedEnemyPool.Num()));
 	}
 }

@@ -20,6 +20,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	//Creating a variable to control enemy speed
+	const float MoveDuration = 50.f;
 
 public:	
 	// Called every frame
@@ -52,12 +55,9 @@ public:
 	//Creating a timeline using tick
 	float TimelineAlpha = 0.f;
 	
-	//Creating variables to controll enemy speed and spacing
+	//Creating a variable to control enemy spacing
 	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
-	float MoveDuration = 10.f;
-	
-	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
-	int32 EnemySpacing = 200;
+	int32 EnemySpacing;
 	
 	void SpawnFromEnemyPool();
 	
@@ -65,5 +65,6 @@ public:
 	virtual void DestroyEnemy_Implementation(class AEnemyPawn* CurrentEnemy) override;
 	
 	virtual void CreateEnemyPool_Implementation(int32 NumberOfEnemiesToSpawn) override;
-
+	
+	virtual void EnemyCrossedFinishLine_Implementation(class AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool) override;
 };

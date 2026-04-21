@@ -30,4 +30,7 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void CreateEnemyPool(int32 NumberOfEnemiesToSpawn);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void EnemyCrossedFinishLine(class AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool);
 };

@@ -40,13 +40,13 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 			//Dividing by move duration (5) so that it takes 5 seconds for the timeline alpha to get from 0 to 1.0 instead of 1
 			TimelineAlpha += DeltaTime / MoveDuration;
 		}
-	
+		
 		//Looping the timeline 
 		if (TimelineAlpha >= 1.0f)
 		{
 			TimelineAlpha -= 1.0f;
 		}
-	
+		
 		float SplineLength  = EnemySpline->GetSplineLength();
 		
 		for (int i = 0; i < ActiveEnemyPawns.Num(); ++i)
@@ -76,7 +76,7 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 {
 	float SplineLength = EnemySpline->GetSplineLength();
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
+	//Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
 	
 	//Tracking the spawn index 
 	int SpawnIndex = 0;
@@ -114,7 +114,7 @@ void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy
 {
 	if (!CurrentEnemy) return;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
 	
 	//Removing the current enemy pawn from the active pawns 
 	if (ActiveEnemyPawns.Contains(CurrentEnemy))
@@ -152,6 +152,28 @@ void AEnemySpawningManager::CreateEnemyPool_Implementation(int32 NumberOfEnemies
 				EnemyPawnPool.Add(SpawnedEnemy);
 			}
 		}
+	}
+}
+
+void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool)
+{
+	//Removing the current enemy pawn from the active pawns when they cross the finish line
+	if (ActiveEnemyPawns.Contains(CurrentEnemy))
+	{
+		ActiveEnemyPawns.Remove(CurrentEnemy);
+
+		if (ActiveEnemyPawns.Num() <= 0)
+		{
+			TimelineAlpha = 1.f;
+		}
+		
+		CurrentEnemy->SetActorEnableCollision(false);
+		CurrentEnemy->SetActorHiddenInGame(true);
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Active enemy pool is: %i "), ActiveEnemyPawns.Num()));
+		
+		//Adding it to the finish pool
+		FinishedPool.Add(CurrentEnemy);
 	}
 }
 
