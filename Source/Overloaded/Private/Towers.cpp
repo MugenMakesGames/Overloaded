@@ -36,7 +36,6 @@ void ATowers::BeginPlay()
 	Super::BeginPlay();
 	
 	CreateBulletPool();
-	
 }
 
 // Called every frame
@@ -51,15 +50,15 @@ void ATowers::Tick(float DeltaTime)
 
 void ATowers::AddToActiveBulletPool()
 {
-	ATowerBullet* Bullet = BulletPool[BulletCount];
-	
 	//Checking if bullet count is a valid index
 	if (!BulletPool.IsValidIndex(BulletCount)) return;
 	
-	if (!Bullet) return;
+	//Don't shoot if there are no enemies in the radius
+	if (EnemiesInRadius.Num() == 0) return;
 	
-	//Checking if the enemies are the radius before shooting bullets
-	if (EnemiesInRadius.Num() <= 0) return;
+	ATowerBullet* Bullet = BulletPool[BulletCount];
+	
+	if (!Bullet) return;
 	
 	//Adding the bullets to the active bullet pool when they need to be shot
 	ActiveBulletPool.Add(Bullet);
@@ -68,15 +67,12 @@ void ATowers::AddToActiveBulletPool()
 		
 	if (Bullet->Implements<UInteractionInterface>())
 	{
-		//Getting the in game time
-		FTimerManager& TimerManager = GetWorld()->GetTimerManager();
-			
-		//You have to turn the ShootBullet function into a delegate to be used in the timer as it has parameters
-		FTimerDelegate TimerDelegate;
-		TimerDelegate.BindUFunction(this, FName("ShootBullet"), Bullet);
-			
-		TimerManager.SetTimer(BulletShootingFrequency, TimerDelegate, 2, false, -1);
+		ShootBullet(Bullet);
 	}
+	
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Yellow,
+	FString::Printf(TEXT("Tower %s | Enemies: %d"),
+	*GetName(), EnemiesInRadius.Num()));
 }
 
 void ATowers::CreateBulletPool()
@@ -131,8 +127,6 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 			//Resetting the bullet count
 			BulletCount = 0;
 		}
-		
-		AddToActiveBulletPool();
 	}
 }
 
@@ -142,6 +136,12 @@ void ATowers::OnEnemyInRadius(class UPrimitiveComponent* ThisComp, class AActor*
 	{
 		//Adding the current overlapping enemy to an actor pool
 		EnemiesInRadius.AddUnique(CurrentEnemy);
+		
+		//Running the timer as soon as the enemy is in the Tower radius
+		if (EnemiesInRadius.Num() == 1)
+		{
+			GetWorldTimerManager().SetTimer(BulletShootingFrequency, this, &ATowers::AddToActiveBulletPool, 2.f, true);	
+		}
 	}
 }
 
@@ -151,6 +151,12 @@ void ATowers::OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	{
 		//Adding the current overlapping enemy from the EnemiesInRadius pool when they leave the radius
 		EnemiesInRadius.Remove(CurrentEnemy);
+		
+		//Clearing timer if there are no enemies in the radius
+		if (EnemiesInRadius.Num() == 0)
+		{
+			GetWorldTimerManager().ClearTimer(BulletShootingFrequency);
+		}
 	}
 }
 
@@ -172,6 +178,11 @@ void ATowers::ChooseClosestEnemyInRadius()
 			ClosestDistance = Distance;
 			ClosestEnemy = CurrentActor;
 		}
+	}
+	
+	if (EnemiesInRadius.Num() == 0)
+	{
+		ClosestEnemy = nullptr;
 	}
 }
 

@@ -24,17 +24,18 @@ protected:
 	
 	FTimerHandle BulletShootingFrequency;
 	
+	
 	int32 BulletCount = 0;
-	
-	UPROPERTY()
-	TArray<AActor*> EnemiesInRadius;
-	
-	UPROPERTY()
-	AActor* ClosestEnemy;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(EditInstanceOnly)
+	TArray<AActor*> EnemiesInRadius;
+	
+	UPROPERTY(EditInstanceOnly)
+	AActor* ClosestEnemy;
 	
 	UPROPERTY()
 	UStaticMeshComponent* TowerMeshComponent;
