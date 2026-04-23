@@ -25,6 +25,7 @@ protected:
 	
 	int32 BulletCount = 0;
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -42,6 +43,9 @@ public:
 	//Object Pooling 
 	UPROPERTY(EditInstanceOnly, Category = "Bullet")
 	TSubclassOf<class ATowerBullet> BulletClass;
+	
+	UPROPERTY(EditAnywhere, Category = "Enemy")
+	AActor* TargetActor;
 	
 	UPROPERTY()
 	TArray<ATowerBullet*> BulletPool; 

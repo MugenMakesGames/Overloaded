@@ -2,6 +2,7 @@
 
 
 #include "Towers.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Towers/TowerBullet.h"
 
 // Sets default values
@@ -25,13 +26,29 @@ void ATowers::BeginPlay()
 	
 	CreateBulletPool();
 	
-	//AddToActiveBulletPool();
 }
 
 // Called every frame
 void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	if (!TargetActor) return;
+
+	//Getting the target actor's location
+	FVector TargetActorLocation = TargetActor->GetActorLocation();
+	
+	//Updating the target actor's rotation based on the actor's location
+	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActorLocation);;
+	
+	//Ignoring the pitch & roll
+	TargetRotation.Pitch = 0.f;
+	TargetRotation.Roll = 0.f;
+	
+	//Smoothing rotating this actor towards the target actor's location using tick and setting the speed
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, 2.0f);
+	
+	SetActorRotation(NewRotation);
 }
 
 void ATowers::AddToActiveBulletPool()

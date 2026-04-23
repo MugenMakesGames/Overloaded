@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "TowerSelectUI.generated.h"
 
 /**
@@ -14,6 +15,13 @@ class OVERLOADED_API UTowerSelectUI : public UUserWidget
 {
 	GENERATED_BODY()
 	
+	virtual void NativeConstruct() override;
 	
+public:
 	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Tower Slots")
+	UButton* TowerSlot1;
+	
+	UFUNCTION(BlueprintCallable)
+	void OnTowerSlot1Clicked();
 };
