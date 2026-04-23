@@ -2,6 +2,8 @@
 
 
 #include "Towers.h"
+
+#include "Enemy/EnemyPawn.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Towers/TowerBullet.h"
 
@@ -17,6 +19,15 @@ ATowers::ATowers()
 	//Creating an arrow component create a point in which the bullet can shoot from
 	TowerShootingPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootingPoint"));
 	TowerShootingPoint->SetupAttachment(RootComponent);
+	
+	EnemyDetectionRadius = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionRadius"));
+	EnemyDetectionRadius->SetupAttachment(TowerMeshComponent);
+	
+	EnemyDetectionRadius->SetGenerateOverlapEvents(true);
+	EnemyDetectionRadius->SetCollisionResponseToAllChannels(ECR_Overlap);
+	EnemyDetectionRadius->OnComponentBeginOverlap.AddDynamic(this, &ATowers::OnEnemyInRadius);
+	EnemyDetectionRadius->OnComponentEndOverlap.AddDynamic(this, &ATowers::OnEnemyOutOfRadius);
+	
 }
 
 // Called when the game starts or when spawned
@@ -33,22 +44,9 @@ void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (!TargetActor) return;
-
-	//Getting the target actor's location
-	FVector TargetActorLocation = TargetActor->GetActorLocation();
+	ChooseClosestEnemyInRadius();
 	
-	//Updating the target actor's rotation based on the actor's location
-	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActorLocation);;
-	
-	//Ignoring the pitch & roll
-	TargetRotation.Pitch = 0.f;
-	TargetRotation.Roll = 0.f;
-	
-	//Smoothing rotating this actor towards the target actor's location using tick and setting the speed
-	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, 2.0f);
-	
-	SetActorRotation(NewRotation);
+	RotateTowardsEnemy(ClosestEnemy, DeltaTime);
 }
 
 void ATowers::AddToActiveBulletPool()
@@ -59,6 +57,9 @@ void ATowers::AddToActiveBulletPool()
 	if (!BulletPool.IsValidIndex(BulletCount)) return;
 	
 	if (!Bullet) return;
+	
+	//Checking if the enemies are the radius before shooting bullets
+	if (EnemiesInRadius.Num() <= 0) return;
 	
 	//Adding the bullets to the active bullet pool when they need to be shot
 	ActiveBulletPool.Add(Bullet);
@@ -135,4 +136,62 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 	}
 }
 
+void ATowers::OnEnemyInRadius(class UPrimitiveComponent* ThisComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (AEnemyPawn* CurrentEnemy = Cast<AEnemyPawn>(OtherActor))
+	{
+		//Adding the current overlapping enemy to an actor pool
+		EnemiesInRadius.AddUnique(CurrentEnemy);
+	}
+}
 
+void ATowers::OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (AEnemyPawn* CurrentEnemy = Cast<AEnemyPawn>(OtherActor))
+	{
+		//Adding the current overlapping enemy from the EnemiesInRadius pool when they leave the radius
+		EnemiesInRadius.Remove(CurrentEnemy);
+	}
+}
+
+void ATowers::ChooseClosestEnemyInRadius()
+{
+	//Setting the closest distance to an infinite number initially
+	float ClosestDistance = FLT_MAX;
+	
+	for (AActor* CurrentActor : EnemiesInRadius)
+	{
+		//Running code even if CurrentActor is null
+		if (!CurrentActor) continue;
+		
+		//Getting the distance between the Tower and the Enemy (Using DistSquare because it's faster for comparison)
+		float Distance = FVector::DistSquared(GetActorLocation(), CurrentActor->GetActorLocation());
+		
+		if (Distance < ClosestDistance)
+		{
+			ClosestDistance = Distance;
+			ClosestEnemy = CurrentActor;
+		}
+	}
+}
+
+void ATowers::RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTime)
+{
+	if (TargetEnemy)
+	{
+		//Getting the target actor's location
+		FVector TargetActorLocation = TargetEnemy->GetActorLocation();
+	
+		//Updating the target actor's rotation based on the actor's location
+		FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActorLocation);;
+	
+		//Ignoring the pitch & roll
+		TargetRotation.Pitch = 0.f;
+		TargetRotation.Roll = 0.f;
+	
+		//Smoothing rotating this actor towards the target actor's location using tick and setting the speed
+		FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, 2.0f);
+	
+		SetActorRotation(NewRotation);
+	}
+}

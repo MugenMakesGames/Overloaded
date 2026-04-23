@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ArrowComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "Interface/InteractionInterface.h"
 #include "Towers.generated.h"
@@ -24,7 +25,12 @@ protected:
 	FTimerHandle BulletShootingFrequency;
 	
 	int32 BulletCount = 0;
-
+	
+	UPROPERTY()
+	TArray<AActor*> EnemiesInRadius;
+	
+	UPROPERTY()
+	AActor* ClosestEnemy;
 
 public:	
 	// Called every frame
@@ -32,6 +38,9 @@ public:
 	
 	UPROPERTY()
 	UStaticMeshComponent* TowerMeshComponent;
+	
+	UPROPERTY(EditAnywhere, Category = "Detection Radius")
+	USphereComponent* EnemyDetectionRadius;
 	
 	//Creating a FVector variable to store where the bullet should go when deactivated
 	UPROPERTY(EditAnywhere, Category = "Bullet")
@@ -43,9 +52,6 @@ public:
 	//Object Pooling 
 	UPROPERTY(EditInstanceOnly, Category = "Bullet")
 	TSubclassOf<class ATowerBullet> BulletClass;
-	
-	UPROPERTY(EditAnywhere, Category = "Enemy")
-	AActor* TargetActor;
 	
 	UPROPERTY()
 	TArray<ATowerBullet*> BulletPool; 
@@ -64,6 +70,23 @@ public:
 	
 	UFUNCTION()
 	void ShootBullet(ATowerBullet* CurrentBulletToShoot);
+	
+	UFUNCTION()
+	void OnEnemyInRadius(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
+					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+					const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+		int32 OtherBodyIndex);
+	
+	//Enemy Tracking
+	
+	UFUNCTION()
+	void ChooseClosestEnemyInRadius();
+	
+	UFUNCTION()
+	void RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTim);
 	
 };
 
