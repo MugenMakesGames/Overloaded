@@ -19,9 +19,10 @@ class OVERLOADED_API UTowerSelectUI : public UUserWidget
 	
 public:
 	
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Tower Slots")
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* TowerSlot1;
 	
 	UFUNCTION(BlueprintCallable)
 	void OnTowerSlot1Clicked();
+	
 };

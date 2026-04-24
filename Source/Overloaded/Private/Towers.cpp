@@ -27,7 +27,6 @@ ATowers::ATowers()
 	EnemyDetectionRadius->SetCollisionResponseToAllChannels(ECR_Overlap);
 	EnemyDetectionRadius->OnComponentBeginOverlap.AddDynamic(this, &ATowers::OnEnemyInRadius);
 	EnemyDetectionRadius->OnComponentEndOverlap.AddDynamic(this, &ATowers::OnEnemyOutOfRadius);
-	
 }
 
 // Called when the game starts or when spawned

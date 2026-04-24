@@ -24,7 +24,6 @@ protected:
 	
 	FTimerHandle BulletShootingFrequency;
 	
-	
 	int32 BulletCount = 0;
 
 public:	
