@@ -31,9 +31,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* LeftMouseButtonAction;
 	
-	UPROPERTY(editAnywhere, Category = "Input")
-	UInputAction* SpawnEnemyAction;
-	
 	//Creating widget class
 	UPROPERTY(EditAnywhere, Category = "Camera Switching Widget")
 	TSubclassOf<UCameraSwitchingUI> CameraSwitchingUIClass;
@@ -52,7 +49,5 @@ protected:
 	UFUNCTION(blueprintCallable, Category = "Input")
 	void OnLeftMouseButtonClicked();
 	
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnSpawnEnemyPressed();
 	
 };

@@ -44,11 +44,6 @@ void ANewOverloadPlayerController::SetupInputComponent()
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnLeftMouseButtonClicked);
 		}
 		
-		// Add input action mappings
-		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
-		{
-			EnhancedInputComponent->BindAction(SpawnEnemyAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnSpawnEnemyPressed);
-		}
 	}
 }
 
@@ -57,8 +52,3 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 	
 }
 
-void ANewOverloadPlayerController::OnSpawnEnemyPressed()
-{
-	
-	
-}

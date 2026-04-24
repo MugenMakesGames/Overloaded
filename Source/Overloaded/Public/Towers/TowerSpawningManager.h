@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "TowerSpawningManager.generated.h"
 
+class ATowers;
+
 UCLASS()
 class OVERLOADED_API ATowerSpawningManager : public AActor
 {
@@ -22,5 +24,22 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
+	UPROPERTY()
+	bool IsTowerInPlacementRadius = false;
+	
+	UPROPERTY(EditInstanceOnly)
+	ATowers* TowerClass;
+	
+	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
+	UBoxComponent* TowerSpawningArea;
+	
+	UFUNCTION()
+	void OnTowerInPlacementRadius(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
+					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+					const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnTowerOutOfPlacementRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+		int32 OtherBodyIndex);
 };
