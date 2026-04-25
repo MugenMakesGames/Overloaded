@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "TowerSpawningManager.generated.h"
 
@@ -25,11 +26,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY()
-	bool IsTowerInPlacementRadius = false;
+	UPROPERTY(EditAnywhere, Category = "Tower")
+	TSubclassOf<ATowers> TowerClass;
 	
-	UPROPERTY(EditInstanceOnly)
-	ATowers* TowerClass;
+	UPROPERTY()
+	TArray<ATowers*> ActiveTowers;
 	
 	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
 	UBoxComponent* TowerSpawningArea;
@@ -42,4 +43,10 @@ public:
 	UFUNCTION()
 	void OnTowerOutOfPlacementRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		int32 OtherBodyIndex);
+	
+	UFUNCTION()
+	void SpawnTowerAtMouseLocation();
+	
+	UFUNCTION()
+	void MoveTowerWithMouse();
 };

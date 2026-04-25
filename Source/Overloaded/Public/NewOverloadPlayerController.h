@@ -10,6 +10,7 @@
 class UInputMappingContext;
 class UInputAction;
 class AEnemyPawn;
+class ATowerSpawningManager;
 
 /**
  * 
@@ -24,9 +25,14 @@ public:
 	
 	ANewOverloadPlayerController();
 	
+	virtual void Tick(float DeltaSeconds) override;
+	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* OverloadCharMappingContext;
+	
+	UPROPERTY(editAnywhere, Category = "Tower Spawning")
+	ATowerSpawningManager* TowerSpawningClass;
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* LeftMouseButtonAction;
@@ -48,6 +54,9 @@ protected:
 	
 	UFUNCTION(blueprintCallable, Category = "Input")
 	void OnLeftMouseButtonClicked();
+	
+	UFUNCTION(blueprintCallable, Category = "Input")
+	void OnLeftMouseButtonReleased();
 	
 	
 };

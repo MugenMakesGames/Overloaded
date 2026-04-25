@@ -4,10 +4,21 @@
 #include "NewOverloadPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Towers.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Towers/TowerSpawningManager.h"
 
 ANewOverloadPlayerController::ANewOverloadPlayerController()
 {
+	
+}
+
+void ANewOverloadPlayerController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
 	
 }
 
@@ -42,6 +53,7 @@ void ANewOverloadPlayerController::SetupInputComponent()
 		{
 			//Left mouse button clicked
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnLeftMouseButtonClicked);
+			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Completed, this, &ANewOverloadPlayerController::OnLeftMouseButtonReleased);
 		}
 		
 	}
@@ -49,6 +61,16 @@ void ANewOverloadPlayerController::SetupInputComponent()
 
 void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 {
+	TowerSpawningClass = Cast<ATowerSpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
+	ATowerSpawningManager::StaticClass()));
 	
+	if (TowerSpawningClass)
+	{
+		TowerSpawningClass->SpawnTowerAtMouseLocation();
+	}
 }
 
+void ANewOverloadPlayerController::OnLeftMouseButtonReleased()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("OnLeftMouseButtonReleased"));
+}

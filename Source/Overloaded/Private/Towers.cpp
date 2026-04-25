@@ -101,9 +101,6 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 		
 		Execute_ActivateBullet(CurrentBulletToShoot, Location, Rotation);
 		
-		ActiveBulletPool.Remove(CurrentBulletToShoot);
-		BulletPool.Add(CurrentBulletToShoot);
-		
 		FTimerHandle DeactivateBullet;
 		
 		//Setting a timer and using lambda functions (function only to be used in the timer) to deactivate the bullet after it is shot

@@ -3,8 +3,10 @@
 
 #include "Towers/TowerSpawningManager.h"
 
+#include "OverloadedPlayerController.h"
 #include "Towers.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ATowerSpawningManager::ATowerSpawningManager()
@@ -13,7 +15,7 @@ ATowerSpawningManager::ATowerSpawningManager()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	TowerSpawningArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Tower Placement Area"));
-	TowerSpawningArea->SetupAttachment(RootComponent);
+	//owerSpawningArea->SetupAttachment(RootComponent);
 	
 	TowerSpawningArea->SetGenerateOverlapEvents(true);
 	TowerSpawningArea->SetCollisionResponseToAllChannels(ECR_Overlap);
@@ -41,7 +43,7 @@ void ATowerSpawningManager::OnTowerInPlacementRadius(class UPrimitiveComponent* 
 {
 	if (Cast<ATowers>(OtherActor))
 	{
-		IsTowerInPlacementRadius = true;
+		
 	}
 }
 
@@ -49,6 +51,43 @@ void ATowerSpawningManager::OnTowerOutOfPlacementRadius(UPrimitiveComponent* Ove
 {
 	if (Cast<ATowers>(OtherActor))
 	{
-		IsTowerInPlacementRadius = false;
+		
 	}
+}
+
+void ATowerSpawningManager::SpawnTowerAtMouseLocation()
+{
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	
+	if (!TowerClass) return;
+		
+	if (PC)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Tower Spawned"));
+		
+		FHitResult HitResult;
+		
+		//Getting the HisResult for whatever is under the mouse cursor and putting it in an if statement to see if the line trace was successful
+		if (PC->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true,  HitResult))
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		
+			//Getting the surface contact of the mouse cursor and adding an FVector to avoid clipping
+			FVector SpawnLocation = HitResult.ImpactPoint + FVector(0, 0, 20.f);
+		
+			//Spawning the tower at the hit location
+			ATowers* SpawnedTower = GetWorld()->SpawnActor<ATowers>(TowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);	
+			
+			if (SpawnedTower)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Tower Spawned"));
+			}
+		}
+	}
+}
+
+void ATowerSpawningManager::MoveTowerWithMouse()
+{
+	
 }
