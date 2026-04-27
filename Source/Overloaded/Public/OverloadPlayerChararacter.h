@@ -21,6 +21,7 @@ public:
 	
 	UPROPERTY(editAnywhere, Category = "Camera Switcher Actor Ref")
 	class ACameraSwitcher* CameraSwitcherActorRef;
+
 	
 protected:
 	// Called when the game starts or when spawned

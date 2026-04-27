@@ -5,12 +5,14 @@
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "Interface/InteractionInterface.h"
 #include "TowerSpawningManager.generated.h"
 
 class ATowers;
+class ATowerBullet;
 
 UCLASS()
-class OVERLOADED_API ATowerSpawningManager : public AActor
+class OVERLOADED_API ATowerSpawningManager : public AActor, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -29,24 +31,31 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Tower")
 	TSubclassOf<ATowers> TowerClass;
 	
-	UPROPERTY()
-	TArray<ATowers*> ActiveTowers;
-	
 	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
 	UBoxComponent* TowerSpawningArea;
 	
-	UFUNCTION()
-	void OnTowerInPlacementRadius(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
-					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-					const FHitResult& SweepResult);
+	UPROPERTY(editAnywhere, Category = "Bullet")
+	TSubclassOf<ATowerBullet> BulletClass;
+	
+	//Tower Bullet Pooling
+	UPROPERTY()
+	TArray<ATowerBullet*> BulletPool;
+	
+	UPROPERTY()
+	TArray<ATowerBullet*> ActiveBulletPool;
+	
+	UPROPERTY(EditAnywhere, Category = "Bullet")
+	int32 BulletPoolSize = 50;
 	
 	UFUNCTION()
-	void OnTowerOutOfPlacementRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
-		int32 OtherBodyIndex);
+	void CreateBulletPool();
 	
 	UFUNCTION()
-	void SpawnTowerAtMouseLocation();
+	void GetBullet(ATowerBullet*& GetBullet);
 	
 	UFUNCTION()
-	void MoveTowerWithMouse();
+	void ReturnBullet(ATowerBullet* CurrentBullet);
+	
+	//Interface functions
+	virtual void SpawnTowerAtMouseLocation_Implementation(APlayerController* PC, ATowers*& TowerToDrag) override;
 };

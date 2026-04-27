@@ -4,8 +4,10 @@
 #include "Towers.h"
 
 #include "Enemy/EnemyPawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Towers/TowerBullet.h"
+#include "Towers/TowerSpawningManager.h"
 
 // Sets default values
 ATowers::ATowers()
@@ -14,14 +16,13 @@ ATowers::ATowers()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	TowerMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TowerMeshComponent"));
-	TowerMeshComponent->SetupAttachment(RootComponent);
-	
-	//Creating an arrow component create a point in which the bullet can shoot from
+	RootComponent = TowerMeshComponent; 
+
 	TowerShootingPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("ShootingPoint"));
 	TowerShootingPoint->SetupAttachment(RootComponent);
-	
+
 	EnemyDetectionRadius = CreateDefaultSubobject<USphereComponent>(TEXT("DetectionRadius"));
-	EnemyDetectionRadius->SetupAttachment(TowerMeshComponent);
+	EnemyDetectionRadius->SetupAttachment(RootComponent);
 	
 	EnemyDetectionRadius->SetGenerateOverlapEvents(true);
 	EnemyDetectionRadius->SetCollisionResponseToAllChannels(ECR_Overlap);
@@ -34,7 +35,8 @@ void ATowers::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	CreateBulletPool();
+	TowerSpawnerClass = Cast<ATowerSpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
+	ATowerSpawningManager::StaticClass()));
 }
 
 // Called every frame
@@ -42,55 +44,58 @@ void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	if (bIsTowerBeingDragged) return;
+	
 	ChooseClosestEnemyInRadius();
 	
 	RotateTowardsEnemy(ClosestEnemy, DeltaTime);
 }
 
+void ATowers::IsTowerBeingDragged(bool bIsBeingDragged)
+{
+	bIsTowerBeingDragged = bIsBeingDragged;
+	
+	if (bIsBeingDragged)
+	{
+		SetActorEnableCollision(true);
+	}
+	else
+	{
+		SetActorEnableCollision(false);
+	}
+
+	if (EnemyDetectionRadius)
+	{
+		//Setting collision based on if the tower is being dragged or not
+		EnemyDetectionRadius->SetCollisionEnabled(bIsBeingDragged ? ECollisionEnabled::NoCollision : ECollisionEnabled::QueryOnly);
+	}
+}
+
 void ATowers::AddToActiveBulletPool()
 {
-	//Checking if bullet count is a valid index
-	if (!BulletPool.IsValidIndex(BulletCount)) return;
-	
 	//Don't shoot if there are no enemies in the radius
 	if (EnemiesInRadius.Num() == 0) return;
+
+	if (!TowerSpawnerClass)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Yellow, TEXT("TOWER SPAWNER IS NOT VALID"));
+		
+		return;
+	}
 	
-	ATowerBullet* Bullet = BulletPool[BulletCount];
+	ATowerBullet* Bullet = nullptr;
+	
+	TowerSpawnerClass->GetBullet(Bullet);
 	
 	if (!Bullet) return;
-	
-	//Adding the bullets to the active bullet pool when they need to be shot
-	ActiveBulletPool.Add(Bullet);
-	//Remove swap is safer than .Remove
-	BulletPool.RemoveSwap(Bullet);
 		
 	if (Bullet->Implements<UInteractionInterface>())
 	{
 		ShootBullet(Bullet);
 	}
-	
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Yellow,
-	FString::Printf(TEXT("Tower %s | Enemies: %d"),
-	*GetName(), EnemiesInRadius.Num()));
 }
 
-void ATowers::CreateBulletPool()
-{
-	for (int i = 0; i < BulletPoolAmount; ++i)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-		ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, SpawnParams);
-		
-		if (CurrentBullet)
-		{
-			CurrentBullet->DeactivateBullet(CurrentBullet);
-			
-			BulletPool.Add(CurrentBullet);
-		}
-	}
-}
+
 
 void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 {
@@ -107,22 +112,11 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 		GetWorldTimerManager().SetTimer(DeactivateBullet,[this, CurrentBulletToShoot]()
 			{
 				//Deactivating the bullet before adding back to the bullet-pool
-				CurrentBulletToShoot->DeactivateBullet(CurrentBulletToShoot);
-		
-				ActiveBulletPool.Remove(CurrentBulletToShoot);
-				BulletPool.Add(CurrentBulletToShoot);
+				TowerSpawnerClass->ReturnBullet(CurrentBulletToShoot);
 			},
 			3.0f, 
 			false
 		);
-		
-		BulletCount++;
-		
-		if (BulletCount >= BulletPool.Num())
-		{
-			//Resetting the bullet count
-			BulletCount = 0;
-		}
 	}
 }
 
@@ -151,7 +145,7 @@ void ATowers::OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		//Clearing timer if there are no enemies in the radius
 		if (EnemiesInRadius.Num() == 0)
 		{
-			GetWorldTimerManager().ClearTimer(BulletShootingFrequency);
+			//GetWorldTimerManager().ClearTimer(BulletShootingFrequency);
 		}
 	}
 }

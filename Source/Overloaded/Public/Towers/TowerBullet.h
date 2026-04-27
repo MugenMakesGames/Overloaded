@@ -45,7 +45,7 @@ public:
 	float BulletSpeed = 2000.f;
 	
 	UFUNCTION()
-	void DeactivateBullet(ATowerBullet* CurrentBullet);
+	void DeactivateBullet();
 	
 	//Interface functions
 	virtual void ActivateBullet_Implementation(const FVector& BulletLocation, const FRotator& BulletRotation) override;

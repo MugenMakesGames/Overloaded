@@ -30,6 +30,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Tower Spawner")
+	class ATowerSpawningManager* TowerSpawnerClass;
+	
 	UPROPERTY(EditInstanceOnly)
 	TArray<AActor*> EnemiesInRadius;
 	
@@ -50,20 +53,8 @@ public:
 	UArrowComponent* TowerShootingPoint;
 	
 	//Object Pooling 
-	UPROPERTY(EditInstanceOnly, Category = "Bullet")
+	UPROPERTY(EditDefaultsOnly, Category = "Bullet")
 	TSubclassOf<class ATowerBullet> BulletClass;
-	
-	UPROPERTY()
-	TArray<ATowerBullet*> BulletPool; 
-	
-	UPROPERTY()
-	TArray<ATowerBullet*> ActiveBulletPool;
-	
-	UPROPERTY(EditAnywhere)
-	int32 BulletPoolAmount = 20;
-	
-	UFUNCTION()
-	void CreateBulletPool();
 	
 	UFUNCTION()
 	void AddToActiveBulletPool();
@@ -80,8 +71,13 @@ public:
 	void OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		int32 OtherBodyIndex);
 	
-	//Enemy Tracking
+	UFUNCTION()
+	void IsTowerBeingDragged(bool bIsBeingDragged);
 	
+	UPROPERTY()
+	bool bIsTowerBeingDragged = false;
+	
+	//Enemy Tracking
 	UFUNCTION()
 	void ChooseClosestEnemyInRadius();
 	

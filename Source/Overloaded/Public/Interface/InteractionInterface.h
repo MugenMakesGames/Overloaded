@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/ArrowComponent.h"
 #include "UObject/Interface.h"
 #include "InteractionInterface.generated.h"
 
@@ -33,4 +34,8 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void EnemyCrossedFinishLine(class AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SpawnTowerAtMouseLocation(APlayerController* PC, class ATowers*& TowerToDrag);
+	
 };

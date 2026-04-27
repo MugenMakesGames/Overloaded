@@ -79,6 +79,8 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("TOWER IS NOT PLACED INTO THE WORLD"));
 		
+		TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowers::StaticClass()));
+		
 		return;
 	};
 	

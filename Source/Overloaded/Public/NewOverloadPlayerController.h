@@ -17,7 +17,7 @@ class ATowerSpawningManager;
  */
 
 UCLASS()
-class OVERLOADED_API ANewOverloadPlayerController : public APlayerController
+class OVERLOADED_API ANewOverloadPlayerController : public APlayerController, public IInteractionInterface
 {
 	GENERATED_BODY()
 	
@@ -34,6 +34,9 @@ public:
 	UPROPERTY(editAnywhere, Category = "Tower Spawning")
 	ATowerSpawningManager* TowerSpawningClass;
 	
+	UPROPERTY(EditAnywhere, Category = "Bullet Spawning")
+	TSubclassOf<class ATowerBullet> BulletClassTemp;
+	
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* LeftMouseButtonAction;
 	
@@ -44,6 +47,9 @@ public:
 	//The widget instance that we are using
 	UPROPERTY()
 	UCameraSwitchingUI* CameraSwitchingUI;
+	
+	UPROPERTY()
+	ATowers* TowerToDrag;
 
 protected:
 	
@@ -57,6 +63,4 @@ protected:
 	
 	UFUNCTION(blueprintCallable, Category = "Input")
 	void OnLeftMouseButtonReleased();
-	
-	
 };

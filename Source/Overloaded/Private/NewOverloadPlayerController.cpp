@@ -7,7 +7,6 @@
 #include "Towers.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Towers/TowerSpawningManager.h"
 
 ANewOverloadPlayerController::ANewOverloadPlayerController()
@@ -19,7 +18,24 @@ void ANewOverloadPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
+	if (TowerToDrag)
+	{
+		FVector WorldLocation;
+		FVector WorldDirection;
 	
+		if (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
+		{
+			// Define your ground plane (Z = 0 or whatever your map height is)
+			float PlaneZ = 31.f;
+	
+			float T = (PlaneZ - WorldLocation.Z) / WorldDirection.Z;
+			FVector NewLocation = WorldLocation + (WorldDirection * T);
+	
+			NewLocation.Z += 20.f;
+	
+			TowerToDrag->SetActorLocation(NewLocation);
+		}
+	}
 }
 
 void ANewOverloadPlayerController::BeginPlay()
@@ -55,22 +71,36 @@ void ANewOverloadPlayerController::SetupInputComponent()
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnLeftMouseButtonClicked);
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Completed, this, &ANewOverloadPlayerController::OnLeftMouseButtonReleased);
 		}
-		
 	}
 }
 
 void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 {
-	TowerSpawningClass = Cast<ATowerSpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
-	ATowerSpawningManager::StaticClass()));
+	TowerSpawningClass = Cast<ATowerSpawningManager>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ATowerSpawningManager::StaticClass()));
+
+	if (!TowerSpawningClass) return;
 	
-	if (TowerSpawningClass)
+	Execute_SpawnTowerAtMouseLocation(TowerSpawningClass, this, TowerToDrag);
+	
+	if (TowerToDrag)
 	{
-		TowerSpawningClass->SpawnTowerAtMouseLocation();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
+		
+		TowerToDrag->IsTowerBeingDragged(true);
+		TowerToDrag->SetActorEnableCollision(false);
 	}
 }
 
 void ANewOverloadPlayerController::OnLeftMouseButtonReleased()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("OnLeftMouseButtonReleased"));
+	if (TowerToDrag)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
+		
+		TowerToDrag->IsTowerBeingDragged(false);
+		TowerToDrag->SetActorEnableCollision(false);
+		//Releasing the tower to drag at the desired location
+		TowerToDrag = nullptr;
+	}
 }

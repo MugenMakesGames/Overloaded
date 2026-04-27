@@ -17,6 +17,7 @@ ATowerBullet::ATowerBullet()
 	RootComponent = BulletCollision;
 	BulletCollision->SetGenerateOverlapEvents(true);
 	BulletCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+	BulletCollision->SetSphereRadius(10.f);
 	
 	BulletCollision->OnComponentBeginOverlap.AddDynamic(this, &ATowerBullet::OnEnemyHit);
 	
@@ -24,6 +25,7 @@ ATowerBullet::ATowerBullet()
 	BulletMeshComponent->SetupAttachment(RootComponent);
 	
 	BulletProjectile = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("BulletProjectile"));
+	BulletProjectile->SetUpdatedComponent(RootComponent);
 	//Setting up the projectile speed
 	BulletProjectile->InitialSpeed = 1500.f;
 	BulletProjectile->MaxSpeed = 2000.f;
@@ -53,7 +55,7 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 		Execute_EnemyTakeDamage(EnemyPawn, 10);
 		
 		//Deactivate the bullet if it hits the enemy
-		DeactivateBullet(this);
+		DeactivateBullet();
 	}
 }
 
@@ -67,19 +69,21 @@ void ATowerBullet::ActivateBullet_Implementation(const FVector& BulletLocation, 
 	SetActorHiddenInGame(false);
 	
 	//Shooting the bullet 
-	BulletProjectile->Velocity = GetActorForwardVector() * BulletSpeed;
-	BulletProjectile->Activate();
+	BulletProjectile->SetVelocityInLocalSpace(FVector::ForwardVector * BulletSpeed);
+	BulletProjectile->Activate(true);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  IsHidden() ? "True" : "False");
 }
 
-void ATowerBullet::DeactivateBullet(ATowerBullet* CurrentBullet)
+void ATowerBullet::DeactivateBullet()
 {
 	//Resetting the bullet actor by setting collision disabled and hiding it in game
-	CurrentBullet->SetActorEnableCollision(false);
-	CurrentBullet->SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	SetActorHiddenInGame(true);
 	
 	//Stopping bullet's movement 
-	CurrentBullet->BulletProjectile->StopMovementImmediately();
-	CurrentBullet->BulletProjectile->Deactivate();
+	BulletProjectile->StopMovementImmediately();
+	BulletProjectile->Deactivate();
 }
 
 
