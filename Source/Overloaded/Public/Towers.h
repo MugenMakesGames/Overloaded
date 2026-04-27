@@ -71,12 +71,6 @@ public:
 	void OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		int32 OtherBodyIndex);
 	
-	UFUNCTION()
-	void IsTowerBeingDragged(bool bIsBeingDragged);
-	
-	UPROPERTY()
-	bool bIsTowerBeingDragged = false;
-	
 	//Enemy Tracking
 	UFUNCTION()
 	void ChooseClosestEnemyInRadius();

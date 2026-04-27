@@ -79,16 +79,24 @@ void ATowerSpawningManager::SpawnTowerAtMouseLocation_Implementation(APlayerCont
 {
 	if (PC)
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		FHitResult HitResult;
 		
-		//Spawning the tower at the hit location
-		TowerToDrag = GetWorld()->SpawnActor<ATowers>(TowerClass,FVector::ZeroVector,FRotator::ZeroRotator,
-		SpawnParams);
-			
-		if (TowerToDrag)
+		//Getting the HisResult for whatever is under the mouse cursor and putting it in an if statement to see if the line trace was successful
+		if (PC->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true,  HitResult))
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		
+			//Getting the surface contact of the mouse cursor and adding an FVector to avoid clipping
+			FVector SpawnLocation = HitResult.ImpactPoint + FVector(0, 0, 30.f);
+		
+			//Spawning the tower at the hit location
+			TowerToDrag = GetWorld()->SpawnActor<ATowers>(TowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+			
+			if (TowerToDrag)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
+			}
 		}
 	}
 }

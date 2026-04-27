@@ -18,25 +18,7 @@ void ANewOverloadPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	if (TowerToDrag)
-	{
-		FVector WorldLocation;
-		FVector WorldDirection;
-	
-		if (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
-		{
-			// Define your ground plane (Z = 0 or whatever your map height is)
-			float PlaneZ = 31.f;
-	
-			float T = (PlaneZ - WorldLocation.Z) / WorldDirection.Z;
-			FVector NewLocation = WorldLocation + (WorldDirection * T);
-	
-			NewLocation.Z += 20.f;
-	
-			TowerToDrag->SetActorLocation(NewLocation);
-		}
-	}
-}
+} 
 
 void ANewOverloadPlayerController::BeginPlay()
 {
@@ -86,9 +68,6 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 	if (TowerToDrag)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
-		
-		TowerToDrag->IsTowerBeingDragged(true);
-		TowerToDrag->SetActorEnableCollision(false);
 	}
 }
 
@@ -98,8 +77,6 @@ void ANewOverloadPlayerController::OnLeftMouseButtonReleased()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
 		
-		TowerToDrag->IsTowerBeingDragged(false);
-		TowerToDrag->SetActorEnableCollision(false);
 		//Releasing the tower to drag at the desired location
 		TowerToDrag = nullptr;
 	}

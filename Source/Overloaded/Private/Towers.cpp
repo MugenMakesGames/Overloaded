@@ -44,32 +44,12 @@ void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (bIsTowerBeingDragged) return;
 	
 	ChooseClosestEnemyInRadius();
 	
 	RotateTowardsEnemy(ClosestEnemy, DeltaTime);
 }
 
-void ATowers::IsTowerBeingDragged(bool bIsBeingDragged)
-{
-	bIsTowerBeingDragged = bIsBeingDragged;
-	
-	if (bIsBeingDragged)
-	{
-		SetActorEnableCollision(true);
-	}
-	else
-	{
-		SetActorEnableCollision(false);
-	}
-
-	if (EnemyDetectionRadius)
-	{
-		//Setting collision based on if the tower is being dragged or not
-		EnemyDetectionRadius->SetCollisionEnabled(bIsBeingDragged ? ECollisionEnabled::NoCollision : ECollisionEnabled::QueryOnly);
-	}
-}
 
 void ATowers::AddToActiveBulletPool()
 {
