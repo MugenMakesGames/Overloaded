@@ -39,7 +39,7 @@ public:
 	UPROPERTY(EditInstanceOnly)
 	AActor* ClosestEnemy;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* TowerMeshComponent;
 	
 	UPROPERTY(EditAnywhere, Category = "Detection Radius")

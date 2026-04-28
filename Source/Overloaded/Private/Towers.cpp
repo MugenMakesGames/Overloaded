@@ -44,7 +44,6 @@ void ATowers::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	
 	ChooseClosestEnemyInRadius();
 	
 	RotateTowardsEnemy(ClosestEnemy, DeltaTime);
@@ -74,8 +73,6 @@ void ATowers::AddToActiveBulletPool()
 		ShootBullet(Bullet);
 	}
 }
-
-
 
 void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 {
