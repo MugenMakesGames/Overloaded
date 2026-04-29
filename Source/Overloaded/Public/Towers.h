@@ -49,7 +49,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Bullet")
 	FVector ResetBulletLocation;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	UArrowComponent* TowerShootingPoint;
 	
 	//Object Pooling 
