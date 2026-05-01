@@ -9,6 +9,8 @@
 #include "Interface/InteractionInterface.h"
 #include "Towers.generated.h"
 
+class ATowerBulletHandler;
+
 UCLASS()
 class OVERLOADED_API ATowers : public AActor, public IInteractionInterface
 {
@@ -31,7 +33,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Tower Spawner")
-	class ATowerSpawningManager* TowerSpawnerClass;
+	ATowerBulletHandler* BulletPoolClass;
 	
 	UPROPERTY(EditInstanceOnly)
 	TArray<AActor*> EnemiesInRadius;

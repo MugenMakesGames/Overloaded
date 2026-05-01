@@ -3,22 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
-#include "Interface/InteractionInterface.h"
-#include "TowerSpawningManager.generated.h"
+#include "TowerBulletHandler.generated.h"
 
-class ATowers;
 class ATowerBullet;
-
 UCLASS()
-class OVERLOADED_API ATowerSpawningManager : public AActor, public IInteractionInterface
+class OVERLOADED_API ATowerBulletHandler : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATowerSpawningManager();
+	ATowerBulletHandler();
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,6 +33,23 @@ public:
 	UPROPERTY(editAnywhere, Category = "Bullet")
 	TSubclassOf<ATowerBullet> BulletClass;
 	
-	//Interface functions
-	virtual void SpawnTowerAtMouseLocation_Implementation(APlayerController* PC, ATowers*& TowerToDrag) override;
+	//Tower Bullet Pooling
+	UPROPERTY()
+	TArray<ATowerBullet*> BulletPool;
+	
+	UPROPERTY()
+	TArray<ATowerBullet*> ActiveBulletPool;
+	
+	UPROPERTY(EditAnywhere, Category = "Bullet")
+	int32 BulletPoolSize = 50;	
+	
+	UFUNCTION()
+	void CreateBulletPool();
+	
+	UFUNCTION()
+	void GetBullet(ATowerBullet*& GetBullet);
+	
+	UFUNCTION()
+	void ReturnBullet(ATowerBullet* CurrentBullet);
+
 };

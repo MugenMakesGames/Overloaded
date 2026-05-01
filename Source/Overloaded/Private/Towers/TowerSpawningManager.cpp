@@ -17,7 +17,6 @@ void ATowerSpawningManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	CreateBulletPool();
 }
 
 // Called every frame
@@ -26,79 +25,30 @@ void ATowerSpawningManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ATowerSpawningManager::CreateBulletPool()
-{
-	if (!BulletClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("BULLET CLASS IS NULL"));
-	}
-	
-	for (int i = 0; i < BulletPoolSize; ++i)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-		ATowerBullet* CurrentBullet = GetWorld()->SpawnActor<ATowerBullet>(BulletClass, SpawnParams);
-		
-		if (CurrentBullet)
-		{
-			//CurrentBullet->DeactivateBullet();
-			BulletPool.Add(CurrentBullet);
-		}
-	}
-}
-
-void ATowerSpawningManager::GetBullet(ATowerBullet*& GetBullet)
-{
-	GetBullet = nullptr;
-	
-	if (BulletPool.Num() == 0) return;
-	
-	GetBullet = BulletPool[0];
-	
-	if (!GetBullet)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("BULLET IS NOT VALID"));
-		return;
-	}
-	
-	BulletPool.RemoveAt(0);
-	ActiveBulletPool.Add(GetBullet);
-}
-
-void ATowerSpawningManager::ReturnBullet(ATowerBullet* CurrentBullet)
-{
-	CurrentBullet->DeactivateBullet();
-	
-	ActiveBulletPool.Remove(CurrentBullet);
-	BulletPool.Add(CurrentBullet);
-}
-
-
 void ATowerSpawningManager::SpawnTowerAtMouseLocation_Implementation(APlayerController* PC, ATowers*& TowerToDrag)
 {
-	if (PC)
-	{
-		FHitResult HitResult;
-		
-		//Getting the HisResult for whatever is under the mouse cursor and putting it in an if statement to see if the line trace was successful
-		if (PC->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true,  HitResult))
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		
-			//Getting the surface contact of the mouse cursor and adding an FVector to avoid clipping
-			FVector SpawnLocation = HitResult.ImpactPoint + FVector(0, 0, 30.f);
-		
-			//Spawning the tower at the hit location
-			TowerToDrag = GetWorld()->SpawnActor<ATowers>(TowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
-			
-			if (TowerToDrag)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
-			}
-		}
-	}
+	// if (PC)
+	// {
+	// 	FHitResult HitResult;
+	// 	
+	// 	//Getting the HisResult for whatever is under the mouse cursor and putting it in an if statement to see if the line trace was successful
+	// 	if (PC->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true,  HitResult))
+	// 	{
+	// 		FActorSpawnParameters SpawnParams;
+	// 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	// 	
+	// 		//Getting the surface contact of the mouse cursor and adding an FVector to avoid clipping
+	// 		FVector SpawnLocation = HitResult.ImpactPoint + FVector(0, 0, 30.f);
+	// 	
+	// 		//Spawning the tower at the hit location
+	// 		TowerToDrag = GetWorld()->SpawnActor<ATowers>(TowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+	// 		
+	// 		if (TowerToDrag)
+	// 		{
+	// 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
+	// 		}
+	// 	}
+	// }
 }
 
 

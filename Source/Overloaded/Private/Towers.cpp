@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Towers/TowerBullet.h"
-#include "Towers/TowerSpawningManager.h"
+#include "Towers/TowerBulletHandler.h"
 
 // Sets default values
 ATowers::ATowers()
@@ -35,8 +35,8 @@ void ATowers::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TowerSpawnerClass = Cast<ATowerSpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
-	ATowerSpawningManager::StaticClass()));
+	 BulletPoolClass = Cast<ATowerBulletHandler>(UGameplayStatics::GetActorOfClass(GetWorld(),
+	 ATowerBulletHandler::StaticClass()));
 }
 
 // Called every frame
@@ -55,7 +55,7 @@ void ATowers::AddToActiveBulletPool()
 	//Don't shoot if there are no enemies in the radius
 	if (EnemiesInRadius.Num() == 0) return;
 
-	if (!TowerSpawnerClass)
+	if (!BulletPoolClass)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Yellow, TEXT("TOWER SPAWNER IS NOT VALID"));
 		
@@ -64,7 +64,7 @@ void ATowers::AddToActiveBulletPool()
 	
 	ATowerBullet* Bullet = nullptr;
 	
-	TowerSpawnerClass->GetBullet(Bullet);
+	BulletPoolClass->GetBullet(Bullet);
 	
 	if (!Bullet) return;
 		
@@ -89,7 +89,7 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 		GetWorldTimerManager().SetTimer(DeactivateBullet,[this, CurrentBulletToShoot]()
 			{
 				//Deactivating the bullet before adding back to the bullet-pool
-				TowerSpawnerClass->ReturnBullet(CurrentBulletToShoot);
+				BulletPoolClass->ReturnBullet(CurrentBulletToShoot);
 			},
 			3.0f, 
 			false
