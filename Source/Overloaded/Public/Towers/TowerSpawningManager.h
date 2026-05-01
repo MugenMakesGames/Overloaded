@@ -45,7 +45,7 @@ public:
 	TArray<ATowerBullet*> ActiveBulletPool;
 	
 	UPROPERTY(EditAnywhere, Category = "Bullet")
-	int32 BulletPoolSize = 50;
+	int32 BulletPoolSize = 50;	
 	
 	UFUNCTION()
 	void CreateBulletPool();
