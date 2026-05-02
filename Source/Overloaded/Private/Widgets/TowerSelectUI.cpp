@@ -7,11 +7,32 @@ void UTowerSelectUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-	TowerSlot1->OnClicked.AddDynamic(this, &UTowerSelectUI::OnTowerSlot1Clicked);
+	UpgradeShootingAndDeactivationSpeed->OnClicked.AddDynamic(this, &UTowerSelectUI::ShootingAndDetectionSpeedUpgraded);
+	
+	UpgradeDetectionRadius->OnClicked.AddDynamic(this, &UTowerSelectUI::DetectionRadiusUpgraded);
+	
+	UpgradeDamageAmount->OnClicked.AddDynamic(this, &UTowerSelectUI::DamageAmountUpgraded);
+	
+	UpgradeRotationSpeed->OnClicked.AddDynamic(this, &UTowerSelectUI::RotationSpeedUpgraded);
 }
 
 
-void UTowerSelectUI::OnTowerSlot1Clicked()
+void UTowerSelectUI::ShootingAndDetectionSpeedUpgraded()
+{
+	
+}
+
+void UTowerSelectUI::DetectionRadiusUpgraded()
+{
+	
+}
+
+void UTowerSelectUI::DamageAmountUpgraded()
+{
+	
+}
+
+void UTowerSelectUI::RotationSpeedUpgraded()
 {
 	
 }

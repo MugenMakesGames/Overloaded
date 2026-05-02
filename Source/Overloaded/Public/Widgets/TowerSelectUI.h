@@ -19,10 +19,29 @@ class OVERLOADED_API UTowerSelectUI : public UUserWidget
 	
 public:
 	
+	//Tower Upgrades
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
-	UButton* TowerSlot1;
+	UButton* UpgradeShootingAndDeactivationSpeed;
+	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UButton* UpgradeDetectionRadius;
+	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UButton* UpgradeDamageAmount;
+	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UButton* UpgradeRotationSpeed;
 	
 	UFUNCTION(BlueprintCallable)
-	void OnTowerSlot1Clicked();
+	void ShootingAndDetectionSpeedUpgraded();
+	
+	UFUNCTION(blueprintCallable)
+	void DetectionRadiusUpgraded();
+	
+	UFUNCTION(BlueprintCallable)
+	void DamageAmountUpgraded();
+	
+	UFUNCTION(BlueprintCallable)
+	void RotationSpeedUpgraded();
 	
 };

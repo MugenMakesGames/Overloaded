@@ -38,6 +38,12 @@ public:
 	UPROPERTY()
 	float ShootingSpeed = 0.5;
 	
+	UPROPERTY()
+	float DeactivationSpeed = 1.f;
+	
+	UPROPERTY()
+	float RotationSpeed = 2.f;
+	
 	UPROPERTY(EditInstanceOnly)
 	TArray<AActor*> EnemiesInRadius;
 	

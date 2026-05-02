@@ -91,7 +91,7 @@ void ATowers::ShootBullet(ATowerBullet* CurrentBulletToShoot)
 				//Deactivating the bullet before adding back to the bullet-pool
 				BulletPoolClass->ReturnBullet(CurrentBulletToShoot);
 			},
-			3.0f, 
+			DeactivationSpeed, 
 			false
 		);
 	}
@@ -168,8 +168,9 @@ void ATowers::RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTime)
 		TargetRotation.Roll = 0.f;
 	
 		//Smoothing rotating this actor towards the target actor's location using tick and setting the speed
-		FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, 2.0f);
+		FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, RotationSpeed);
 	
 		SetActorRotation(NewRotation);
 	}
 }
+

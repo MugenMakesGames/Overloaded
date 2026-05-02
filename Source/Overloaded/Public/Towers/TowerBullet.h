@@ -44,6 +44,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float BulletSpeed = 2000.f;
 	
+	UPROPERTY()
+	int32 DamageAmount = 10;
+	
 	UFUNCTION()
 	void DeactivateBullet();
 	

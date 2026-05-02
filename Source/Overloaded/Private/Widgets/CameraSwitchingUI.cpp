@@ -97,3 +97,8 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	TowerClass->AddToActiveBulletPool();
 }
 
+void UCameraSwitchingUI::SetText(const FText& Text)
+{
+	//Text = FText::Format();
+	PlayerBudget->SetText(Text);
+}

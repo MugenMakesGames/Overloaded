@@ -41,11 +41,7 @@ void ATowerSpawningManager::SpawnTowerAtMouseLocation_Implementation(ATowers*& S
 	
 	SpawnedTower = GetWorld()->SpawnActor<ATowers>(TowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
 	
-	if (!SpawnedTower)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("TOWER IS NOT VALID"));
-	}
-	else
+	if (SpawnedTower)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("TOWER SPAWNED"));
 	}

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 #include "Interface/InteractionInterface.h"
 #include "CameraSwitchingUI.generated.h"
 
@@ -42,6 +43,9 @@ private:
 	
 public:
 	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* PlayerBudget;
+	
 	//Creating all the camera switching buttons
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Camera Switching")
 	UButton* SwitchMainCamera;
@@ -72,4 +76,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void OnFourthCamButtonClicked();
+	
+	void SetText(const FText& Text);
 };
