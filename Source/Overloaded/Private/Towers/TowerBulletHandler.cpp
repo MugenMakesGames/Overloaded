@@ -16,7 +16,7 @@ void ATowerBulletHandler::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	
+	CreateBulletPool();
 }
 
 // Called every frame

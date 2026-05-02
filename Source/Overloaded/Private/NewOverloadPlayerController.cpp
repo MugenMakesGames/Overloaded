@@ -4,7 +4,6 @@
 #include "NewOverloadPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Towers.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Towers/TowerSpawningManager.h"
@@ -51,33 +50,47 @@ void ANewOverloadPlayerController::SetupInputComponent()
 		{
 			//Left mouse button clicked
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnLeftMouseButtonClicked);
-			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Completed, this, &ANewOverloadPlayerController::OnLeftMouseButtonReleased);
 		}
 	}
 }
 
 void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 {
-	TowerSpawningClass = Cast<ATowerSpawningManager>(
-		UGameplayStatics::GetActorOfClass(GetWorld(), ATowerSpawningManager::StaticClass()));
-
+	TowerSpawningClass = Cast<ATowerSpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowerSpawningManager::StaticClass()));
+	
 	if (!TowerSpawningClass) return;
 	
-	Execute_SpawnTowerAtMouseLocation(TowerSpawningClass, this, TowerToDrag);
-	
-	if (TowerToDrag)
+	FHitResult HitResult;
+		
+	//Getting the HisResult for whatever is under the mouse cursor and putting it in an if statement to see if the line trace was successful
+	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), true,  HitResult))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		if (ATowerSpawningManager* Spawner = Cast<ATowerSpawningManager>(HitResult.GetActor()))
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,  HitResult.GetActor()->GetName();
+
+			if (!Spawner) return;
+			
+			if (TowerSpawners.Contains(Spawner) && TowerSpawners[Spawner] == true)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "TowerSpawner already exists");
+			}
+			else
+			{
+				//Getting spawning location
+				SpawnLocation = Spawner->TowerSpawnLocation->GetComponentLocation();
+				
+				Execute_SpawnTowerAtMouseLocation(TowerSpawningClass, TowerToUpgrade, SpawnLocation);
+				
+				Spawner->TowerSpawningArea->ShapeColor = FColor::Emerald;
+				
+				TowerSpawners.Add(Spawner, true);
+			}
+		}	
 	}
 }
 
-void ANewOverloadPlayerController::OnLeftMouseButtonReleased()
-{
-	if (TowerToDrag)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  TowerToDrag->GetName());
-		
-		//Releasing the tower to drag at the desired location
-		TowerToDrag = nullptr;
-	}
-}
+

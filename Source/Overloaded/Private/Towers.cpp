@@ -107,7 +107,7 @@ void ATowers::OnEnemyInRadius(class UPrimitiveComponent* ThisComp, class AActor*
 		//Running the timer as soon as the enemy is in the Tower radius
 		if (EnemiesInRadius.Num() == 1)
 		{
-			GetWorldTimerManager().SetTimer(BulletShootingFrequency, this, &ATowers::AddToActiveBulletPool, 2.f, true);	
+			GetWorldTimerManager().SetTimer(BulletShootingFrequency, this, &ATowers::AddToActiveBulletPool, ShootingSpeed, true);	
 		}
 	}
 }
@@ -122,7 +122,7 @@ void ATowers::OnEnemyOutOfRadius(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		//Clearing timer if there are no enemies in the radius
 		if (EnemiesInRadius.Num() == 0)
 		{
-			//GetWorldTimerManager().ClearTimer(BulletShootingFrequency);
+			GetWorldTimerManager().ClearTimer(BulletShootingFrequency);
 		}
 	}
 }

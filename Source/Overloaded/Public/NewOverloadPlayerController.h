@@ -34,6 +34,8 @@ public:
 	UPROPERTY(editAnywhere, Category = "Tower Spawning")
 	ATowerSpawningManager* TowerSpawningClass;
 	
+	
+	
 	UPROPERTY(EditAnywhere, Category = "Bullet Spawning")
 	TSubclassOf<class ATowerBullet> BulletClassTemp;
 	
@@ -49,7 +51,11 @@ public:
 	UCameraSwitchingUI* CameraSwitchingUI;
 	
 	UPROPERTY()
-	ATowers* TowerToDrag;
+	ATowers* TowerToUpgrade;
+	
+	UPROPERTY()
+	TMap<ATowerSpawningManager*, bool> TowerSpawners;
+	
 
 protected:
 	
@@ -60,7 +66,4 @@ protected:
 	
 	UFUNCTION(blueprintCallable, Category = "Input")
 	void OnLeftMouseButtonClicked();
-	
-	UFUNCTION(blueprintCallable, Category = "Input")
-	void OnLeftMouseButtonReleased();
 };

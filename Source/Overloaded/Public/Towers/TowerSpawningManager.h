@@ -31,12 +31,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Tower")
 	TSubclassOf<ATowers> TowerClass;
 	
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* SpawnerMesh;
+	
 	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
 	UBoxComponent* TowerSpawningArea;
+	
+	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
+	UArrowComponent* TowerSpawnLocation;
 	
 	UPROPERTY(editAnywhere, Category = "Bullet")
 	TSubclassOf<ATowerBullet> BulletClass;
 	
 	//Interface functions
-	virtual void SpawnTowerAtMouseLocation_Implementation(APlayerController* PC, ATowers*& TowerToDrag) override;
+	virtual void SpawnTowerAtMouseLocation_Implementation(ATowers*& SpawnedTower, const FVector& SpawnLocation) override;
+	
 };

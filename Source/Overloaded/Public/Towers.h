@@ -35,6 +35,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Tower Spawner")
 	ATowerBulletHandler* BulletPoolClass;
 	
+	UPROPERTY()
+	float ShootingSpeed = 0.5;
+	
 	UPROPERTY(EditInstanceOnly)
 	TArray<AActor*> EnemiesInRadius;
 	

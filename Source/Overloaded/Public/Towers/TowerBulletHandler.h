@@ -7,6 +7,8 @@
 #include "TowerBulletHandler.generated.h"
 
 class ATowerBullet;
+class ATowers;
+
 UCLASS()
 class OVERLOADED_API ATowerBulletHandler : public AActor
 {
@@ -26,9 +28,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Tower")
 	TSubclassOf<ATowers> TowerClass;
-	
-	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
-	UBoxComponent* TowerSpawningArea;
 	
 	UPROPERTY(editAnywhere, Category = "Bullet")
 	TSubclassOf<ATowerBullet> BulletClass;
