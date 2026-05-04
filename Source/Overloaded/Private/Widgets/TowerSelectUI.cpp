@@ -23,65 +23,28 @@ void UTowerSelectUI::NativeConstruct()
 
 void UTowerSelectUI::ShootingAndDetectionSpeedUpgraded()
 {
-	TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowers::StaticClass()));
+	ATowers* CurrentTower = nullptr;
 	
-	if (!TowerClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Tower class is not valid"));
-		
-		return;
-	}
+	Execute_GetCurrentTower(GetOwningPlayer(), CurrentTower);
 	
-	Execute_GetCurrentTower(GetOwningPlayer(), TowerClass);
+	if (!CurrentTower) return;
 	
-	Execute_UpgradeShootingSpeed(TowerClass, 0.1f, 1.f);
+	CurrentTower->TrackingUpgrades(CurrentTower, TEXT("ShootingUpgrades"));
+	
+	Execute_UpgradeShootingSpeed(CurrentTower, 0.1f, 1.f);
 }
 
 void UTowerSelectUI::DetectionRadiusUpgraded()
 {
-	if (!TowerClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Tower class is not valid"));
-		
-		return;
-	}
 	
-	// while (NumberOfUpgrades < 4)
-	// {
-	// 	NumberOfUpgrades++;
-	// 	
-	// }
 }
 
 void UTowerSelectUI::DamageAmountUpgraded()
 {
-	if (!TowerClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Tower class is not valid"));
-		
-		return;
-	}
 	
-	// while (NumberOfUpgrades < 4)
-	// {
-	// 	NumberOfUpgrades++;
-	// 	
-	// }
 }
 
 void UTowerSelectUI::RotationSpeedUpgraded()
 {
-	if (!TowerClass)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Tower class is not valid"));
-		
-		return;
-	}
 	
-	// while (NumberOfUpgrades < 4)
-	// {
-	// 	NumberOfUpgrades++;
-	//
-	// 	
-	// }
 }

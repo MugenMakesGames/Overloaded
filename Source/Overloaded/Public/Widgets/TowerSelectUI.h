@@ -44,8 +44,4 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();
-	
-	UPROPERTY()
-	class ATowers* TowerClass;
-	
 };

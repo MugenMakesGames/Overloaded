@@ -176,11 +176,32 @@ void ATowers::RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTime)
 
 void ATowers::UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Emerald, FString::Printf(TEXT("New Speed: %f"), ShootingSpeed));
+	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Emerald, FString::Printf(TEXT("New Speed: %f"), ShootingSpeed));
 	
 	//Setting new shooting and deactivation speeds
 	ShootingSpeed = NewShootingSpeed;
 	
 	DeactivationSpeed = NewDeactivationSpeed;
 }
+
+void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
+{
+	//Adding the current tower to the map or finding an already existing tower 
+	FNumberOfUpgradesPerType& UpgradesPerTower = NumberOfUpgradesPerTower.FindOrAdd(CurrentTower);
+
+	if (UpgradeType.IsEqual(TEXT("ShootingUpgrades")))
+	{
+		//Getting the decremented values
+		int32 NumberOfUpgrades = --UpgradesPerTower.NumberOfShootingSpeedUpgrades;
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Shooting Upgrades left: %i"), NumberOfUpgrades));
+
+		if (NumberOfUpgrades <= 0)
+		{
+			//Set text sold out
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("OUT OF SHOOTING UPGRADES"));
+		}
+	}
+}
+
 
