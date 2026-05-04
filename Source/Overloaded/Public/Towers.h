@@ -7,12 +7,24 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "Interface/InteractionInterface.h"
+#include "Interface/TowerUpgradesInterface.h"
 #include "Towers.generated.h"
 
 class ATowerBulletHandler;
 
+struct FNumberOfUpgradesPerType
+{
+	int32 NumberOfShootingSpeedUpgrades = 3;
+	
+	int32 NumberOfRotationSpeedUpgrades = 3;
+	
+	int32 NumberOfRadiusUpgrades = 3;
+	
+	int32 NumberOfDamageUpgrades = 3;
+};
+
 UCLASS()
-class OVERLOADED_API ATowers : public AActor, public IInteractionInterface
+class OVERLOADED_API ATowers : public AActor, public IInteractionInterface, public ITowerUpgradesInterface
 {
 	GENERATED_BODY()
 	
@@ -34,15 +46,6 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Tower Spawner")
 	ATowerBulletHandler* BulletPoolClass;
-	
-	UPROPERTY()
-	float ShootingSpeed = 0.5;
-	
-	UPROPERTY()
-	float DeactivationSpeed = 1.f;
-	
-	UPROPERTY()
-	float RotationSpeed = 2.f;
 	
 	UPROPERTY(EditInstanceOnly)
 	TArray<AActor*> EnemiesInRadius;
@@ -88,6 +91,20 @@ public:
 	
 	UFUNCTION()
 	void RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTim);
+	
+	//Getting upgrade variables
+	UPROPERTY()
+	float ShootingSpeed = 2.f;
+	
+	UPROPERTY()
+	float DeactivationSpeed = 3.f;
+	
+	UPROPERTY()
+	float RotationSpeed = 2.f;
+	
+	//Creating interface function to change the upgrade values
+	virtual void UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed) override;
+	
 	
 };
 

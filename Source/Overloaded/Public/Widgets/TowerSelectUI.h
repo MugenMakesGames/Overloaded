@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Interface/TowerUpgradesInterface.h"
 #include "TowerSelectUI.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERLOADED_API UTowerSelectUI : public UUserWidget
+class OVERLOADED_API UTowerSelectUI : public UUserWidget, public ITowerUpgradesInterface
 {
 	GENERATED_BODY()
 	
@@ -43,5 +44,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();
+	
+	UPROPERTY()
+	class ATowers* TowerClass;
 	
 };

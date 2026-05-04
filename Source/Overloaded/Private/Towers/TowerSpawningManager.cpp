@@ -43,7 +43,7 @@ void ATowerSpawningManager::SpawnTowerAtMouseLocation_Implementation(ATowers*& S
 	
 	if (SpawnedTower)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("TOWER SPAWNED"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("TOWER SPAWNED"));
 	}
 }
 

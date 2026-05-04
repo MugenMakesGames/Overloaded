@@ -10,6 +10,7 @@
 
 class ATowers;
 class ATowerBullet;
+class UArrowComponent;
 
 UCLASS()
 class OVERLOADED_API ATowerSpawningManager : public AActor, public IInteractionInterface
@@ -45,5 +46,4 @@ public:
 	
 	//Interface functions
 	virtual void SpawnTowerAtMouseLocation_Implementation(ATowers*& SpawnedTower, const FVector& SpawnLocation) override;
-	
 };

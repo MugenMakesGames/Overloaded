@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ArrowComponent.h"
 #include "UObject/Interface.h"
 #include "InteractionInterface.generated.h"
 
@@ -20,24 +19,22 @@ class OVERLOADED_API IInteractionInterface
 
 public:
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	void ActivateBullet(const FVector& BulletLocation, const FRotator& BulletRotation);
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	void EnemyTakeDamage(int32 DamageAmount);
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	void DestroyEnemy(class AEnemyPawn* CurrentEnemy);
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	void CreateEnemyPool(int32 NumberOfEnemiesToSpawn);
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	void EnemyCrossedFinishLine(class AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool);
 	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	void SpawnTowerAtMouseLocation(class ATowers*& SpawnedTower, const FVector& SpawnLocation);
-	
-	
 	
 };

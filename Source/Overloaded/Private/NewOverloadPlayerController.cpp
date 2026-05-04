@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Towers/TowerSpawningManager.h"
 
@@ -25,6 +26,8 @@ void ANewOverloadPlayerController::BeginPlay()
 	
 	//Creating the widget
 	CameraSwitchingUI = CreateWidget<UCameraSwitchingUI>(this, CameraSwitchingUIClass);
+	
+	TowerSelectUI = CreateWidget<UTowerSelectUI>(this, TowerSelectUIClass);
 	
 	if (CameraSwitchingUIClass && CameraSwitchingUI)
 	{
@@ -50,6 +53,8 @@ void ANewOverloadPlayerController::SetupInputComponent()
 		{
 			//Left mouse button clicked
 			EnhancedInputComponent->BindAction(LeftMouseButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnLeftMouseButtonClicked);
+			
+			EnhancedInputComponent->BindAction(QButtonAction, ETriggerEvent::Started, this, &ANewOverloadPlayerController::OnExitTowerUIClicked);
 		}
 	}
 }
@@ -70,13 +75,20 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 
 		if (ATowerSpawningManager* Spawner = Cast<ATowerSpawningManager>(HitResult.GetActor()))
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,  HitResult.GetActor()->GetName();
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,  HitResult.GetActor()->GetName());
 
 			if (!Spawner) return;
 			
 			if (TowerSpawners.Contains(Spawner) && TowerSpawners[Spawner] == true)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "TowerSpawner already exists");
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "TowerSpawner already exists");
+				
+				if (TowerSelectUI && TowerSelectUIClass)
+				{
+					TowerSelectUI->AddToViewport();
+					
+					CameraSwitchingUI->RemoveFromParent();
+				}
 			}
 			else
 			{
@@ -85,7 +97,7 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 				
 				Execute_SpawnTowerAtMouseLocation(TowerSpawningClass, TowerToUpgrade, SpawnLocation);
 				
-				Spawner->TowerSpawningArea->ShapeColor = FColor::Emerald;
+				//Spawner->TowerSpawningArea->ShapeColor = FColor::Emerald;
 				
 				TowerSpawners.Add(Spawner, true);
 			}
@@ -93,4 +105,21 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 	}
 }
 
+void ANewOverloadPlayerController::OnExitTowerUIClicked()
+{
+	if (TowerSelectUI && TowerSelectUI->IsInViewport())
+	{
+		TowerSelectUI->RemoveFromParent();
 
+		if (CameraSwitchingUIClass && CameraSwitchingUI)
+		{
+			CameraSwitchingUI->AddToViewport();
+		}
+	}
+}
+
+void ANewOverloadPlayerController::GetCurrentTower_Implementation(class ATowers*& CurrentTower)
+{
+	//Getting the current selected tower actor
+	CurrentTower = TowerToUpgrade;
+}

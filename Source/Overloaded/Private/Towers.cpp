@@ -174,3 +174,13 @@ void ATowers::RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTime)
 	}
 }
 
+void ATowers::UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Emerald, FString::Printf(TEXT("New Speed: %f"), ShootingSpeed));
+	
+	//Setting new shooting and deactivation speeds
+	ShootingSpeed = NewShootingSpeed;
+	
+	DeactivationSpeed = NewDeactivationSpeed;
+}
+
