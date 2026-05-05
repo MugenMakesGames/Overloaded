@@ -60,15 +60,20 @@ public:
 	UTowerSelectUI* TowerSelectUI;
 	
 	UPROPERTY()
+	ATowerSpawningManager* CurrentSpawner;
+	
+	UPROPERTY()
 	ATowers* TowerToUpgrade;
 	
 	UPROPERTY()
 	TMap<ATowerSpawningManager*, bool> TowerSpawners;
 	
+	UPROPERTY()
+	TMap<ATowerSpawningManager*, ATowers*> CurrentSpawnerTower;
+	
 	//Interface functions
 	virtual void GetCurrentTower_Implementation(class ATowers*& CurrentTower) override;
 
-	
 
 protected:
 	

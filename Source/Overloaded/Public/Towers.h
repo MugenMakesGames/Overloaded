@@ -12,8 +12,11 @@
 
 class ATowerBulletHandler;
 
+USTRUCT(BlueprintType)
 struct FNumberOfUpgradesPerType
 {
+	GENERATED_BODY()
+	
 	int32 NumberOfShootingSpeedUpgrades = 3;
 	
 	int32 NumberOfRotationSpeedUpgrades = 3;
@@ -59,6 +62,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Detection Radius")
 	USphereComponent* EnemyDetectionRadius;
 	
+	UPROPERTY(EditAnywhere, Category = "Tower Placement Area")
+	UBillboardComponent* UpgradingTowerIndicator;
+	
 	//Creating a FVector variable to store where the bullet should go when deactivated
 	UPROPERTY(EditAnywhere, Category = "Bullet")
 	FVector ResetBulletLocation;
@@ -102,12 +108,15 @@ public:
 	UPROPERTY()
 	float RotationSpeed = 2.f;
 	
-	//Creating interface function to change the upgrade values
-	virtual void UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed) override;
-	
+	UPROPERTY()
 	TMap<ATowers*, FNumberOfUpgradesPerType> NumberOfUpgradesPerTower;
 	
 	UFUNCTION()
 	void TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType);
+	
+	//Creating interface function to change the upgrade values
+	virtual void UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed) override;
+	
+	virtual void IsTowerBeingUpgraded_Implementation(bool IsTowerBeingUpgraded) override;
 };
 

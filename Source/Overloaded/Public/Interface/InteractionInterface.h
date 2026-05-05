@@ -36,5 +36,4 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void SpawnTowerAtMouseLocation(class ATowers*& SpawnedTower, const FVector& SpawnLocation);
-	
 };

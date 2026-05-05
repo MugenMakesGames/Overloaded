@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "UObject/Interface.h"
 #include "TowerUpgradesInterface.generated.h"
 
@@ -25,5 +26,8 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void GetCurrentTower(class ATowers*& CurrentTower);
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void IsTowerBeingUpgraded(bool IsTowerBeingUpgraded);
 	
   };

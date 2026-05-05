@@ -4,8 +4,11 @@
 #include "NewOverloadPlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Towers.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/ArrowComponent.h"
+#include "Components/BillboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Towers/TowerSpawningManager.h"
 
@@ -76,18 +79,32 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 		if (ATowerSpawningManager* Spawner = Cast<ATowerSpawningManager>(HitResult.GetActor()))
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,  HitResult.GetActor()->GetName());
+			
+			CurrentSpawner = Spawner;
 
 			if (!Spawner) return;
 			
 			if (TowerSpawners.Contains(Spawner) && TowerSpawners[Spawner] == true)
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "TowerSpawner already exists");
-				
 				if (TowerSelectUI && TowerSelectUIClass)
 				{
 					TowerSelectUI->AddToViewport();
 					
+					for (auto& Elem : CurrentSpawnerTower)
+					{
+						//Setting all the tower's billboard to hidden so the selected one can be unhidden 
+						Elem.Value->UpgradingTowerIndicator->SetHiddenInGame(true);
+						
+						if (Elem.Value == CurrentSpawnerTower[Spawner])
+						{
+							//Unhiding the current tower the player has selected
+							CurrentSpawnerTower[Spawner]->UpgradingTowerIndicator->SetHiddenInGame(false);
+						}
+					}
+					
 					CameraSwitchingUI->RemoveFromParent();
+					
+					Execute_IsTowerBeingUpgraded(Spawner, true);
 				}
 			}
 			else
@@ -97,19 +114,21 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 				
 				Execute_SpawnTowerAtMouseLocation(TowerSpawningClass, TowerToUpgrade, SpawnLocation);
 				
-				//Spawner->TowerSpawningArea->ShapeColor = FColor::Emerald;
-				
 				TowerSpawners.Add(Spawner, true);
+				
+				//Adding spawner with its tower to a map to get the exact tower we need to upgrade
+				CurrentSpawnerTower.Add(Spawner, TowerToUpgrade);
 			}
-		}	
-	}
+		}
+	}	
 }
+
 
 void ANewOverloadPlayerController::OnExitTowerUIClicked()
 {
 	if (TowerSelectUI && TowerSelectUI->IsInViewport())
 	{
-		TowerSelectUI->RemoveFromParent();
+		UWidgetLayoutLibrary::RemoveAllWidgets(this);
 
 		if (CameraSwitchingUIClass && CameraSwitchingUI)
 		{
@@ -121,5 +140,5 @@ void ANewOverloadPlayerController::OnExitTowerUIClicked()
 void ANewOverloadPlayerController::GetCurrentTower_Implementation(class ATowers*& CurrentTower)
 {
 	//Getting the current selected tower actor
-	CurrentTower = TowerToUpgrade;
+	CurrentTower = CurrentSpawnerTower[CurrentSpawner];
 }

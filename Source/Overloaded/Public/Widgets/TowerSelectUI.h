@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 #include "Interface/TowerUpgradesInterface.h"
 #include "TowerSelectUI.generated.h"
 
@@ -23,6 +24,7 @@ public:
 	//Tower Upgrades
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* UpgradeShootingAndDeactivationSpeed;
+	
 	
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* UpgradeDetectionRadius;
@@ -44,4 +46,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();
+	
+	//Player budget variables and functions
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* PlayerBudget;
+	
+	UPROPERTY()
+	int32 CurrentPlayerBudget = 1000;
 };

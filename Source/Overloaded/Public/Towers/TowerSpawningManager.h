@@ -6,6 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Interface/InteractionInterface.h"
+#include "Interface/TowerUpgradesInterface.h"
 #include "TowerSpawningManager.generated.h"
 
 class ATowers;
@@ -13,7 +14,7 @@ class ATowerBullet;
 class UArrowComponent;
 
 UCLASS()
-class OVERLOADED_API ATowerSpawningManager : public AActor, public IInteractionInterface
+class OVERLOADED_API ATowerSpawningManager : public AActor, public IInteractionInterface, public ITowerUpgradesInterface
 {
 	GENERATED_BODY()
 	

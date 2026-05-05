@@ -2,6 +2,7 @@
 
 
 #include "Towers/TowerSpawningManager.h"
+#include "Components/BoxComponent.h"
 #include "Towers.h"
 
 // Sets default values
@@ -46,6 +47,4 @@ void ATowerSpawningManager::SpawnTowerAtMouseLocation_Implementation(ATowers*& S
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("TOWER SPAWNED"));
 	}
 }
-
-
 

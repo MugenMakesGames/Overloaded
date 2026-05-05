@@ -3,6 +3,7 @@
 
 #include "Towers.h"
 
+#include "Components/BillboardComponent.h"
 #include "Enemy/EnemyPawn.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -28,6 +29,9 @@ ATowers::ATowers()
 	EnemyDetectionRadius->SetCollisionResponseToAllChannels(ECR_Overlap);
 	EnemyDetectionRadius->OnComponentBeginOverlap.AddDynamic(this, &ATowers::OnEnemyInRadius);
 	EnemyDetectionRadius->OnComponentEndOverlap.AddDynamic(this, &ATowers::OnEnemyOutOfRadius);
+	
+	UpgradingTowerIndicator = CreateDefaultSubobject<UBillboardComponent>(TEXT("UpgradingTowerIndicator"));
+	UpgradingTowerIndicator->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -37,6 +41,9 @@ void ATowers::BeginPlay()
 	
 	 BulletPoolClass = Cast<ATowerBulletHandler>(UGameplayStatics::GetActorOfClass(GetWorld(),
 	 ATowerBulletHandler::StaticClass()));
+	
+	//Setting billboard to hidden by default
+	UpgradingTowerIndicator->SetHiddenInGame(true);
 }
 
 // Called every frame
@@ -186,7 +193,7 @@ void ATowers::UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float 
 
 void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 {
-	//Adding the current tower to the map or finding an already existing tower 
+	//Adding the current tower the player has selected to the map or finding an already existing tower 
 	FNumberOfUpgradesPerType& UpgradesPerTower = NumberOfUpgradesPerTower.FindOrAdd(CurrentTower);
 
 	if (UpgradeType.IsEqual(TEXT("ShootingUpgrades")))
@@ -204,4 +211,7 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 	}
 }
 
-
+void ATowers::IsTowerBeingUpgraded_Implementation(bool IsTowerBeingUpgraded)
+{
+	UpgradingTowerIndicator->SetHiddenInGame(IsTowerBeingUpgraded);
+}

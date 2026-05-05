@@ -43,9 +43,6 @@ private:
 	
 public:
 	
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
-	UTextBlock* PlayerBudget;
-	
 	//Creating all the camera switching buttons
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Camera Switching")
 	UButton* SwitchMainCamera;
@@ -76,6 +73,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void OnFourthCamButtonClicked();
+	
+	//Player budget variables and functions
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* PlayerBudget;
+	
+	UPROPERTY()
+	int32 CurrentPlayerBudget = 1000;
 	
 	void SetText(const FText& Text);
 };

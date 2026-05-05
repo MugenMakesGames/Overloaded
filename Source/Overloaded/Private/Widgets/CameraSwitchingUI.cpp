@@ -96,9 +96,3 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	//Start shooting bullets
 	TowerClass->AddToActiveBulletPool();
 }
-
-void UCameraSwitchingUI::SetText(const FText& Text)
-{
-	//Text = FText::Format();
-	PlayerBudget->SetText(Text);
-}
