@@ -9,6 +9,7 @@
 #include "Interface/TowerUpgradesInterface.h"
 #include "TowerSelectUI.generated.h"
 
+class APlayerMoneyManager;
 /**
  * 
  */
@@ -25,7 +26,6 @@ public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* UpgradeShootingAndDeactivationSpeed;
 	
-	
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* UpgradeDetectionRadius;
 	
@@ -34,6 +34,9 @@ public:
 	
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* UpgradeRotationSpeed;
+	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* ShootingSpeedText;
 	
 	UFUNCTION(BlueprintCallable)
 	void ShootingAndDetectionSpeedUpgraded();
@@ -47,10 +50,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();
 	
-	//Player budget variables and functions
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UPROPERTY(meta = (BindWidget))
 	UTextBlock* PlayerBudget;
 	
 	UPROPERTY()
-	int32 CurrentPlayerBudget = 1000;
+	APlayerMoneyManager* MoneyManagerClass;
+	
+	//Interface functions
+	virtual void SetSoldOutTextBlock_Implementation(const FText& NewText, FName WhichUpgradeText) override;
 };

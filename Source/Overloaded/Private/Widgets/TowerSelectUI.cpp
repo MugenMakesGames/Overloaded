@@ -2,9 +2,8 @@
 
 
 #include "Widgets/TowerSelectUI.h"
-
-#include "Towers.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/PlayerMoneyManager.h"
 
 void UTowerSelectUI::NativeConstruct()
 {
@@ -18,29 +17,16 @@ void UTowerSelectUI::NativeConstruct()
 	
 	UpgradeRotationSpeed->OnClicked.AddDynamic(this, &UTowerSelectUI::RotationSpeedUpgraded);
 	
+	MoneyManagerClass = Cast<APlayerMoneyManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
+	APlayerMoneyManager::StaticClass()));
 }
 
 
 void UTowerSelectUI::ShootingAndDetectionSpeedUpgraded()
 {
-	float ShootingSpeed = 2;
-	float DetectionSpeed = 3;
+	if (!MoneyManagerClass) return;
 	
-	ATowers* CurrentTower = nullptr;
-	
-	Execute_GetCurrentTower(GetOwningPlayer(), CurrentTower);
-	
-	if (!CurrentTower) return;
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, CurrentTower->GetName());
-	
-	CurrentTower->TrackingUpgrades(CurrentTower, TEXT("ShootingUpgrades"));
-	
-	//Decreasing the delay between each fired bullet
-	ShootingSpeed -= 0.5;
-	DetectionSpeed -= 0.5;
-	
-	Execute_UpgradeShootingSpeed(CurrentTower, ShootingSpeed, DetectionSpeed);
+	MoneyManagerClass->UpgradeShootingFrequency();
 }
 
 void UTowerSelectUI::DetectionRadiusUpgraded()
@@ -55,5 +41,27 @@ void UTowerSelectUI::DamageAmountUpgraded()
 
 void UTowerSelectUI::RotationSpeedUpgraded()
 {
+	
+}
+
+void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FName WhichUpgradeText)
+{
+	//Updating the text based on the which upgrade button is being pressed
+	if (WhichUpgradeText.IsEqual(TEXT("ShootingSpeedText")))
+	{
+		ShootingSpeedText->SetText(NewText);
+	}
+	else if (WhichUpgradeText.IsEqual(TEXT("DetectionRadiusText")))
+	{
+		
+	}
+	else if (WhichUpgradeText.IsEqual(TEXT("RotationSpeedText")))
+	{
+		
+	}
+	else
+	{
+		
+	}
 	
 }

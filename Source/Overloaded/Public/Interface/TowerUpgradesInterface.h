@@ -22,12 +22,18 @@ class OVERLOADED_API ITowerUpgradesInterface
 public:
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void UpgradeShootingSpeed(float NewShootingSpeed, float NewDeactivationSpeed);
+	void UpgradeShootingSpeed(float& NewShootingSpeed, float& NewDeactivationSpeed, class ATowers* CurrentTower);
+	
+	// UFUNCTION(BlueprintNativeEvent)
+	// void UpgradeRotationSpeed(float& NewRotationSpeed);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void GetCurrentTower(class ATowers*& CurrentTower);
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void IsTowerBeingUpgraded(bool IsTowerBeingUpgraded);
+	void SetBudgetTextBlock(int32 CurrentBudget);
 	
+	UFUNCTION(BlueprintNativeEvent)
+	void SetSoldOutTextBlock(const FText& NewText, FName WhichUpgradeText);
   };
+

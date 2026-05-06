@@ -10,7 +10,7 @@
 void UCameraSwitchingUI::NativeConstruct()
 {
 	//Setting the on clicked button events
-	SwitchMainCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnMainCamButtonclicked);
+	SwitchMainCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnMainCamButtonClicked);
 	SwitchSecondCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnSecondCamButtonClicked);
 	SwitchThirdCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnThirdCamButtonClicked);
 	SwitchFourthCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnFourthCamButtonClicked);
@@ -29,7 +29,7 @@ void UCameraSwitchingUI::NativeConstruct()
 }
 
 
-void UCameraSwitchingUI::OnMainCamButtonclicked()
+void UCameraSwitchingUI::OnMainCamButtonClicked()
 {
 	//Setting the cam ID to 1 so the main cam is switched to etc
 	CamID = 1;
@@ -96,3 +96,4 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	//Start shooting bullets
 	TowerClass->AddToActiveBulletPool();
 }
+

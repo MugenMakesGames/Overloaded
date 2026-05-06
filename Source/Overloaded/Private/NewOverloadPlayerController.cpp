@@ -35,6 +35,8 @@ void ANewOverloadPlayerController::BeginPlay()
 	if (CameraSwitchingUIClass && CameraSwitchingUI)
 	{
 		CameraSwitchingUI->AddToViewport();
+		
+		Execute_SetBudgetTextBlock(CameraSwitchingUI, 1000);
 	}
 }
 
@@ -75,7 +77,7 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
+		
 		if (ATowerSpawningManager* Spawner = Cast<ATowerSpawningManager>(HitResult.GetActor()))
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,  HitResult.GetActor()->GetName());
@@ -88,7 +90,14 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 			{
 				if (TowerSelectUI && TowerSelectUIClass)
 				{
+					CameraSwitchingUI->RemoveFromParent();
+					
 					TowerSelectUI->AddToViewport();
+
+					if (ATowers* CurrentSelectedTower = Cast<ATowers>(CurrentSpawnerTower[Spawner]))
+					{
+						CurrentSelectedTower->SetTowerSelectText(CurrentSelectedTower, this);
+					}
 					
 					for (auto& Elem : CurrentSpawnerTower)
 					{
@@ -101,10 +110,6 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 							CurrentSpawnerTower[Spawner]->UpgradingTowerIndicator->SetHiddenInGame(false);
 						}
 					}
-					
-					CameraSwitchingUI->RemoveFromParent();
-					
-					Execute_IsTowerBeingUpgraded(Spawner, true);
 				}
 			}
 			else
@@ -142,3 +147,5 @@ void ANewOverloadPlayerController::GetCurrentTower_Implementation(class ATowers*
 	//Getting the current selected tower actor
 	CurrentTower = CurrentSpawnerTower[CurrentSpawner];
 }
+
+

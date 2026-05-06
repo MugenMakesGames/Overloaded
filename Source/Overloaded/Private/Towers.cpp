@@ -3,6 +3,7 @@
 
 #include "Towers.h"
 
+#include "NewOverloadPlayerController.h"
 #include "Components/BillboardComponent.h"
 #include "Enemy/EnemyPawn.h"
 #include "Kismet/GameplayStatics.h"
@@ -181,37 +182,58 @@ void ATowers::RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTime)
 	}
 }
 
-void ATowers::UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed)
+void ATowers::UpgradeShootingSpeed_Implementation(float& NewShootingSpeed, float& NewDeactivationSpeed, ATowers* CurrentTower)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Emerald, FString::Printf(TEXT("New Speed: %f"), ShootingSpeed));
+	//Decrementing the value of the ShootingSpeed to increase shooting frequency
+	CurrentTower->ShootingSpeed -= 0.5;
+	CurrentTower->DeactivationSpeed -= 0.5;
 	
 	//Setting new shooting and deactivation speeds
-	ShootingSpeed = NewShootingSpeed;
-	
-	DeactivationSpeed = NewDeactivationSpeed;
+	NewShootingSpeed = CurrentTower->ShootingSpeed;
+	NewDeactivationSpeed = CurrentTower->DeactivationSpeed;
 }
 
 void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 {
 	//Adding the current tower the player has selected to the map or finding an already existing tower 
 	FNumberOfUpgradesPerType& UpgradesPerTower = NumberOfUpgradesPerTower.FindOrAdd(CurrentTower);
-
+	
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
 	if (UpgradeType.IsEqual(TEXT("ShootingUpgrades")))
 	{
 		//Getting the decremented values
-		int32 NumberOfUpgrades = --UpgradesPerTower.NumberOfShootingSpeedUpgrades;
+		NumberOfUpgrades = UpgradesPerTower.NumberOfShootingSpeedUpgrades;
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Shooting Upgrades left: %i"), NumberOfUpgrades));
-
-		if (NumberOfUpgrades <= 0)
+		if (UpgradesPerTower.NumberOfShootingSpeedUpgrades == 0)
 		{
-			//Set text sold out
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("OUT OF SHOOTING UPGRADES"));
+			FText NewText = FText::FromString(TEXT("Sold Out"));
+ 			
+			Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("ShootingSpeedText"));
+			
+			return;
 		}
+		
+		--UpgradesPerTower.NumberOfShootingSpeedUpgrades;
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
 	}
 }
 
-void ATowers::IsTowerBeingUpgraded_Implementation(bool IsTowerBeingUpgraded)
+void ATowers::SetTowerSelectText(ATowers* CurrentSelectedTower, ANewOverloadPlayerController* PC)
 {
-	UpgradingTowerIndicator->SetHiddenInGame(IsTowerBeingUpgraded);
+	FNumberOfUpgradesPerType& UpgradesPerTower = NumberOfUpgradesPerTower.FindOrAdd(CurrentSelectedTower);
+	
+	if (UpgradesPerTower.NumberOfShootingSpeedUpgrades > 0)
+	{
+		FText NewText = FText::FromString(TEXT("Upgrade Shooting Speed"));
+ 			
+		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("ShootingSpeedText"));
+	} 
+	else if (UpgradesPerTower.NumberOfShootingSpeedUpgrades <= 0)
+	{
+		FText NewText = FText::FromString(TEXT("Sold Out"));
+ 			
+		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("ShootingSpeedText"));
+	}
 }

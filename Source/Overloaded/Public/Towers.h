@@ -11,6 +11,7 @@
 #include "Towers.generated.h"
 
 class ATowerBulletHandler;
+class ANewOverloadPlayerController;
 
 USTRUCT(BlueprintType)
 struct FNumberOfUpgradesPerType
@@ -111,12 +112,16 @@ public:
 	UPROPERTY()
 	TMap<ATowers*, FNumberOfUpgradesPerType> NumberOfUpgradesPerTower;
 	
+	UPROPERTY()
+	int32 NumberOfUpgrades = 0;
+	
+	UFUNCTION()
+	void SetTowerSelectText(ATowers* CurrentSelectedTower, ANewOverloadPlayerController* PC);
+	
 	UFUNCTION()
 	void TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType);
 	
 	//Creating interface function to change the upgrade values
-	virtual void UpgradeShootingSpeed_Implementation(float NewShootingSpeed, float NewDeactivationSpeed) override;
-	
-	virtual void IsTowerBeingUpgraded_Implementation(bool IsTowerBeingUpgraded) override;
+	virtual void UpgradeShootingSpeed_Implementation(float& NewShootingSpeed, float& NewDeactivationSpeed, ATowers* CurrentTower) override;
 };
 

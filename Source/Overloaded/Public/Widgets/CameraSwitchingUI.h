@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Interface/InteractionInterface.h"
+#include "Interface/TowerUpgradesInterface.h"
 #include "CameraSwitchingUI.generated.h"
 
 class ACameraSwitcher;
@@ -17,7 +18,7 @@ class AEnemyPawn;
  */
 
 UCLASS()
-class OVERLOADED_API UCameraSwitchingUI : public UUserWidget, public IInteractionInterface
+class OVERLOADED_API UCameraSwitchingUI : public UUserWidget, public IInteractionInterface, public ITowerUpgradesInterface
 {
 	GENERATED_BODY()
 	
@@ -63,7 +64,7 @@ public:
 	void OnStartRoundButtonClicked();
 	
 	UFUNCTION(BlueprintCallable)
-	void OnMainCamButtonclicked();
+	void OnMainCamButtonClicked();
 	
 	UFUNCTION(BlueprintCallable)
 	void OnSecondCamButtonClicked();
@@ -73,13 +74,4 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void OnFourthCamButtonClicked();
-	
-	//Player budget variables and functions
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
-	UTextBlock* PlayerBudget;
-	
-	UPROPERTY()
-	int32 CurrentPlayerBudget = 1000;
-	
-	void SetText(const FText& Text);
 };
