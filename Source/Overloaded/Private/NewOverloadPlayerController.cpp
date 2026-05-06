@@ -35,8 +35,6 @@ void ANewOverloadPlayerController::BeginPlay()
 	if (CameraSwitchingUIClass && CameraSwitchingUI)
 	{
 		CameraSwitchingUI->AddToViewport();
-		
-		Execute_SetBudgetTextBlock(CameraSwitchingUI, 1000);
 	}
 }
 

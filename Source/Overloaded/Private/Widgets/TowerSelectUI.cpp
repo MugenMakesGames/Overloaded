@@ -31,17 +31,19 @@ void UTowerSelectUI::ShootingAndDetectionSpeedUpgraded()
 
 void UTowerSelectUI::DetectionRadiusUpgraded()
 {
+	if (!MoneyManagerClass) return;
+	
 	
 }
 
 void UTowerSelectUI::DamageAmountUpgraded()
 {
-	
+	if (!MoneyManagerClass) return;
 }
 
 void UTowerSelectUI::RotationSpeedUpgraded()
 {
-	
+	if (!MoneyManagerClass) return;
 }
 
 void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FName WhichUpgradeText)
@@ -59,9 +61,13 @@ void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FN
 	{
 		
 	}
-	else
+	else if (WhichUpgradeText.IsEqual(TEXT("DamageSpeedText")))
 	{
 		
+	}
+	else if (WhichUpgradeText.IsEqual(TEXT("PlayerBudgetText")))
+	{
+		PlayerBudget->SetText(NewText);
 	}
 	
 }

@@ -31,7 +31,7 @@ public:
 	void GetCurrentTower(class ATowers*& CurrentTower);
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void SetBudgetTextBlock(int32 CurrentBudget);
+	void GetCurrentBudget(int32 CurrentBudget);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void SetSoldOutTextBlock(const FText& NewText, FName WhichUpgradeText);

@@ -40,4 +40,10 @@ public:
 	
 	UPROPERTY()
 	float DeactivationSpeed;
+	
+	UFUNCTION()
+	void GetBudget();
+	
+	//Interface Functions
+	
 };
