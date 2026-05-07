@@ -154,11 +154,6 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 	}	
 }
 
-void ANewOverloadPlayerController::SpawnTheTowerInTheSpawner(APlayerMoneyManager* MoneyManager)
-{
-	
-}
-
 void ANewOverloadPlayerController::OnExitTowerUIClicked()
 {
 	if (TowerSelectUI && TowerSelectUI->IsInViewport())

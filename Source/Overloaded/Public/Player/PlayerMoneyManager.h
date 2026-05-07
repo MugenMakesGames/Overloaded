@@ -32,14 +32,27 @@ public:
 	UPROPERTY()
 	int32 PlayerCurrentBudget = 0;
 	
+	//Upgrade functions and variables
 	UFUNCTION()
 	void UpgradeShootingFrequency();
+	
+	UFUNCTION()
+	void UpgradeRadius();
+	
+	UFUNCTION()
+	void UpgradeRotation();
 	
 	UPROPERTY()
 	float ShootingSpeed;
 	
 	UPROPERTY()
 	float DeactivationSpeed;
+	
+	UPROPERTY()
+	float DetectionRadius;
+	
+	UPROPERTY()
+	float RotationSpeed;
 	
 	UFUNCTION()
 	void SetBudget(FName PurchaseType);

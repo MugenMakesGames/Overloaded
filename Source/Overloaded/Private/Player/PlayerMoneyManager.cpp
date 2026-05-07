@@ -5,7 +5,6 @@
 
 #include "NewOverloadPlayerController.h"
 #include "Towers.h"
-#include "Interfaces/IHttpResponse.h"
 
 // Sets default values
 APlayerMoneyManager::APlayerMoneyManager()
@@ -29,7 +28,6 @@ void APlayerMoneyManager::BeginPlay()
 void APlayerMoneyManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
 
 void APlayerMoneyManager::UpgradeShootingFrequency()
@@ -56,6 +54,57 @@ void APlayerMoneyManager::UpgradeShootingFrequency()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Shooting Speed: %f"), ShootingSpeed));
 }
 
+void APlayerMoneyManager::UpgradeRadius()
+{
+	ATowers* CurrentTower = nullptr;
+	
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	Execute_GetCurrentTower(PC, CurrentTower);
+	
+	if (!CurrentTower) return;
+	
+	CurrentTower->TrackingUpgrades(CurrentTower, TEXT("DetectionRadiusUpgrades"));
+	
+	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
+	
+	//When max number of upgrades to hit
+	if (NumberOfUpgrades == 0) return;
+	
+	NumberOfUpgrades--;
+	
+	Execute_UpgradeDetectionRadius(CurrentTower, DetectionRadius, CurrentTower);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), DetectionRadius));
+}
+
+
+
+void APlayerMoneyManager::UpgradeRotation()
+{
+	ATowers* CurrentTower = nullptr;
+	
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	Execute_GetCurrentTower(PC, CurrentTower);
+	
+	if (!CurrentTower) return;
+	
+	CurrentTower->TrackingUpgrades(CurrentTower, TEXT("RotationSpeedUpgrades"));
+	
+	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
+	
+	//When max number of upgrades to hit
+	if (NumberOfUpgrades == 0) return;
+	
+	NumberOfUpgrades--;
+	
+	Execute_UpgradeRotationSpeed(CurrentTower, RotationSpeed, CurrentTower);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), RotationSpeed));
+}
+
+
 void APlayerMoneyManager::SetBudget(FName PurchaseType)
 {
 	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
@@ -74,7 +123,22 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
 		}
 	}
-	else if (PurchaseType.IsEqual(TEXT("Upgrade")))
+	else if (PurchaseType.IsEqual(TEXT("ShootingUpgrade")))
+	{
+		if (PlayerCurrentBudget >= 50)
+		{
+			//PLAYER BUY SOUND EFFECT
+			
+			PlayerCurrentBudget -= 50;
+		
+			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
+		
+			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
+			
+			UpgradeShootingFrequency();
+		}
+	}
+	else if (PurchaseType.IsEqual(TEXT("RadiusUpgrade")))
 	{
 		if (PlayerCurrentBudget >= 50)
 		{
@@ -86,7 +150,22 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 		
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
 		
-			UpgradeShootingFrequency();
+			UpgradeRadius();
+		}
+	}
+	else if (PurchaseType.IsEqual(TEXT("RotationUpgrade")))
+	{
+		if (PlayerCurrentBudget >= 50)
+		{
+			//PLAYER BUY SOUND EFFECT
+			
+			PlayerCurrentBudget -= 50;
+		
+			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
+		
+			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
+		
+			UpgradeRotation();
 		}
 	}
 }

@@ -52,7 +52,6 @@ void AEnemyPawn::ResetActor()
 
 void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount)
 {
-	
 	CurrentHealth -= DamageAmount;
 	
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::Printf(TEXT("DamageDone: %i"), CurrentHealth));

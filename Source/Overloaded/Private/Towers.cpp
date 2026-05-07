@@ -193,6 +193,28 @@ void ATowers::UpgradeShootingSpeed_Implementation(float& NewShootingSpeed, float
 	NewDeactivationSpeed = CurrentTower->DeactivationSpeed;
 }
 
+void ATowers::UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, ATowers* CurrentTower)
+{
+	float NewRadiusSize = CurrentTower->EnemyDetectionRadius->GetUnscaledSphereRadius();
+	
+	NewRadiusSize += 10.f;
+	
+	NewDetectionRadius = NewRadiusSize;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), NewDetectionRadius));
+	
+	CurrentTower->EnemyDetectionRadius->SetSphereRadius(NewDetectionRadius);
+}
+
+void ATowers::UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowers* CurrentTower)
+{
+	CurrentTower->RotationSpeed += 1.f;
+	
+	NewRotationSpeed = CurrentTower->RotationSpeed;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Rotation: %f"), NewRotationSpeed));
+}
+
 void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 {
 	//Adding the current tower the player has selected to the map or finding an already existing tower 
@@ -202,7 +224,7 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 	
 	if (UpgradeType.IsEqual(TEXT("ShootingUpgrades")))
 	{
-		//Getting the decremented values
+		//Getting the decremented values shooting upgrades
 		NumberOfUpgrades = UpgradesPerTower.NumberOfShootingSpeedUpgrades;
 		
 		if (UpgradesPerTower.NumberOfShootingSpeedUpgrades == 0)
@@ -214,7 +236,43 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 			return;
 		}
 		
-		--UpgradesPerTower.NumberOfShootingSpeedUpgrades;
+		UpgradesPerTower.NumberOfShootingSpeedUpgrades--;
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
+	}
+	else if (UpgradeType.IsEqual(TEXT("DetectionRadiusUpgrades")))
+	{
+		//Getting the decremented values of dadius upgrades
+		NumberOfUpgrades = UpgradesPerTower.NumberOfRadiusUpgrades;
+		
+		if (UpgradesPerTower.NumberOfRadiusUpgrades == 0)
+		{
+			FText NewText = FText::FromString(TEXT("Sold Out"));
+ 			
+			Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("DetectionRadiusText"));
+			
+			return;
+		}
+		
+		UpgradesPerTower.NumberOfRadiusUpgrades--;
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
+	}
+	else if (UpgradeType.IsEqual(TEXT("RotationSpeedUpgrades")))
+	{
+		//Getting the decremented values of dadius upgrades
+		NumberOfUpgrades = UpgradesPerTower.NumberOfRotationSpeedUpgrades;
+		
+		if (UpgradesPerTower.NumberOfRotationSpeedUpgrades == 0)
+		{
+			FText NewText = FText::FromString(TEXT("Sold Out"));
+ 			
+			Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("RotationSpeedText"));
+			
+			return;
+		}
+		
+		UpgradesPerTower.NumberOfRotationSpeedUpgrades--;
 		
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
 	}
@@ -224,6 +282,7 @@ void ATowers::SetTowerSelectText(ATowers* CurrentSelectedTower, ANewOverloadPlay
 {
 	FNumberOfUpgradesPerType& UpgradesPerTower = NumberOfUpgradesPerTower.FindOrAdd(CurrentSelectedTower);
 	
+	//Getting the current tower number of upgrades for each type and setting text
 	if (UpgradesPerTower.NumberOfShootingSpeedUpgrades > 0)
 	{
 		FText NewText = FText::FromString(TEXT("Upgrade Shooting Speed"));
@@ -235,5 +294,31 @@ void ATowers::SetTowerSelectText(ATowers* CurrentSelectedTower, ANewOverloadPlay
 		FText NewText = FText::FromString(TEXT("Sold Out"));
  			
 		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("ShootingSpeedText"));
+	}
+
+	if (UpgradesPerTower.NumberOfRadiusUpgrades > 0)
+	{
+		FText NewText = FText::FromString(TEXT("Upgrade Detection Radius"));
+ 			
+		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("DetectionRadiusText"));
+	} 
+	else if (UpgradesPerTower.NumberOfRadiusUpgrades <= 0)
+	{
+		FText NewText = FText::FromString(TEXT("Sold Out"));
+ 			
+		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("DetectionRadiusText"));
+	}
+	
+	if (UpgradesPerTower.NumberOfRotationSpeedUpgrades > 0)
+	{
+		FText NewText = FText::FromString(TEXT("Upgrade Rotation Speed"));
+ 			
+		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("RotationSpeedText"));
+	} 
+	else if (UpgradesPerTower.NumberOfRotationSpeedUpgrades <= 0)
+	{
+		FText NewText = FText::FromString(TEXT("Sold Out"));
+ 			
+		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("RotationSpeedText"));
 	}
 }

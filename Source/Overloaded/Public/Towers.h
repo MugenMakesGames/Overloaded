@@ -23,8 +23,6 @@ struct FNumberOfUpgradesPerType
 	int32 NumberOfRotationSpeedUpgrades = 3;
 	
 	int32 NumberOfRadiusUpgrades = 3;
-	
-	int32 NumberOfDamageUpgrades = 3;
 };
 
 UCLASS()
@@ -123,5 +121,9 @@ public:
 	
 	//Creating interface function to change the upgrade values
 	virtual void UpgradeShootingSpeed_Implementation(float& NewShootingSpeed, float& NewDeactivationSpeed, ATowers* CurrentTower) override;
+	
+	virtual void UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, ATowers* CurrentTower) override;
+	
+	virtual void UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowers* CurrentTower) override;
 };
 

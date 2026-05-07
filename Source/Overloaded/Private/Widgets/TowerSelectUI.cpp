@@ -13,8 +13,6 @@ void UTowerSelectUI::NativeConstruct()
 	
 	UpgradeDetectionRadius->OnClicked.AddDynamic(this, &UTowerSelectUI::DetectionRadiusUpgraded);
 	
-	UpgradeDamageAmount->OnClicked.AddDynamic(this, &UTowerSelectUI::DamageAmountUpgraded);
-	
 	UpgradeRotationSpeed->OnClicked.AddDynamic(this, &UTowerSelectUI::RotationSpeedUpgraded);
 	
 	MoneyManagerClass = Cast<APlayerMoneyManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
@@ -27,31 +25,21 @@ void UTowerSelectUI::ShootingAndDetectionSpeedUpgraded()
 	if (!MoneyManagerClass) return;
 	
 	//Displaying the budget in the TowerSelectUI
-	MoneyManagerClass->SetBudget(TEXT("Upgrade"));
+	MoneyManagerClass->SetBudget(TEXT("ShootingUpgrade"));
 }
 
 void UTowerSelectUI::DetectionRadiusUpgraded()
 {
 	if (!MoneyManagerClass) return;
 	
-	// //Displaying the budget in the TowerSelectUI
-	// MoneyManagerClass->SetBudget(TEXT("Upgrade"));
-}
-
-void UTowerSelectUI::DamageAmountUpgraded()
-{
-	if (!MoneyManagerClass) return;
-	
-	// //Displaying the budget in the TowerSelectUI
-	// MoneyManagerClass->SetBudget(TEXT("Upgrade"));
+	MoneyManagerClass->SetBudget(TEXT("RadiusUpgrade"));
 }
 
 void UTowerSelectUI::RotationSpeedUpgraded()
 {
 	if (!MoneyManagerClass) return;
 	
-	// //Displaying the budget in the TowerSelectUI
-	// MoneyManagerClass->SetBudget(TEXT("Upgrade"));
+	MoneyManagerClass->SetBudget(TEXT("RotationUpgrade"));
 }
 
 void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FName WhichUpgradeText)
@@ -63,14 +51,10 @@ void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FN
 	}
 	else if (WhichUpgradeText.IsEqual(TEXT("DetectionRadiusText")))
 	{
-		
+		DetectionRadiusText->SetText(NewText);
 	}
 	else if (WhichUpgradeText.IsEqual(TEXT("RotationSpeedText")))
 	{
-		
-	}
-	else if (WhichUpgradeText.IsEqual(TEXT("DamageSpeedText")))
-	{
-		
+		RotationSpeedText->SetText(NewText);
 	}
 }

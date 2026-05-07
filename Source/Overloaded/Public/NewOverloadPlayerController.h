@@ -81,9 +81,6 @@ public:
 	UPROPERTY()
 	TMap<ATowerSpawningManager*, ATowers*> CurrentSpawnerTower;
 	
-	UFUNCTION()
-	void SpawnTheTowerInTheSpawner(APlayerMoneyManager* MoneyManager);
-	
 	//Interface functions
 	virtual void GetCurrentTower_Implementation(class ATowers*& CurrentTower) override;
 

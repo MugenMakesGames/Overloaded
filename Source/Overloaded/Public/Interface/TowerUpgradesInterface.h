@@ -6,6 +6,7 @@
 #include "UObject/Interface.h"
 #include "TowerUpgradesInterface.generated.h"
 
+class USphereComponent;
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
 class OVERLOADED_API UTowerUpgradesInterface : public UInterface
@@ -23,8 +24,11 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void UpgradeShootingSpeed(float& NewShootingSpeed, float& NewDeactivationSpeed, class ATowers* CurrentTower);
 	
-	// UFUNCTION(BlueprintNativeEvent)
-	// void UpgradeRotationSpeed(float& NewRotationSpeed);
+	UFUNCTION(blueprintNativeEvent)
+	void UpgradeDetectionRadius(float& NewDetectionRadius, ATowers* CurrentTower);
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void UpgradeRotationSpeed(float& NewRotationSpeed, ATowers* CurrentTower);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void GetCurrentTower(class ATowers*& CurrentTower);

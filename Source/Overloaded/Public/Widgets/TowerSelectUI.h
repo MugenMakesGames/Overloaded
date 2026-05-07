@@ -30,13 +30,16 @@ public:
 	UButton* UpgradeDetectionRadius;
 	
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
-	UButton* UpgradeDamageAmount;
-	
-	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UButton* UpgradeRotationSpeed;
 	
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
 	UTextBlock* ShootingSpeedText;
+	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* DetectionRadiusText;
+	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* RotationSpeedText;
 	
 	UFUNCTION(BlueprintCallable)
 	void ShootingAndDetectionSpeedUpgraded();
@@ -44,8 +47,6 @@ public:
 	UFUNCTION(blueprintCallable)
 	void DetectionRadiusUpgraded();
 	
-	UFUNCTION(BlueprintCallable)
-	void DamageAmountUpgraded();
 	
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();

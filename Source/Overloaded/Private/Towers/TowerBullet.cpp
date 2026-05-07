@@ -72,7 +72,7 @@ void ATowerBullet::ActivateBullet_Implementation(const FVector& BulletLocation, 
 	BulletProjectile->SetVelocityInLocalSpace(FVector::ForwardVector * BulletSpeed);
 	BulletProjectile->Activate(true);
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  IsHidden() ? "True" : "False");
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,  IsHidden() ? "True" : "False");
 }
 
 void ATowerBullet::DeactivateBullet()
