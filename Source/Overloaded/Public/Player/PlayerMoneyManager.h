@@ -23,7 +23,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	const int32 BudgetMaxPerRound = 1000;
+	const int32 BudgetMaxPerRound = 1200;
 
 public:	
 	// Called every frame
@@ -42,8 +42,7 @@ public:
 	float DeactivationSpeed;
 	
 	UFUNCTION()
-	void GetBudget();
+	void SetBudget(FName PurchaseType);
 	
-	//Interface Functions
 	
 };

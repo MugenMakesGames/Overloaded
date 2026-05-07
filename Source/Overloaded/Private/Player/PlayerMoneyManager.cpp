@@ -5,6 +5,7 @@
 
 #include "NewOverloadPlayerController.h"
 #include "Towers.h"
+#include "Interfaces/IHttpResponse.h"
 
 // Sets default values
 APlayerMoneyManager::APlayerMoneyManager()
@@ -22,9 +23,6 @@ void APlayerMoneyManager::BeginPlay()
 	//Setting the current budget to max budget on begin play
 	PlayerCurrentBudget = BudgetMaxPerRound;
 	
-	//Displaying the budget in the TowerSelectUI
-	GetBudget();
-	
 }
 
 // Called every frame
@@ -36,46 +34,64 @@ void APlayerMoneyManager::Tick(float DeltaTime)
 
 void APlayerMoneyManager::UpgradeShootingFrequency()
 {
-	if (PlayerCurrentBudget >= 50)
-	{
-		ATowers* CurrentTower = nullptr;
+	ATowers* CurrentTower = nullptr;
 	
-		ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
 	
-		Execute_GetCurrentTower(PC, CurrentTower);
+	Execute_GetCurrentTower(PC, CurrentTower);
 	
-		if (!CurrentTower) return;
+	if (!CurrentTower) return;
 	
-		CurrentTower->TrackingUpgrades(CurrentTower, TEXT("ShootingUpgrades"));
+	CurrentTower->TrackingUpgrades(CurrentTower, TEXT("ShootingUpgrades"));
 	
-		int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
+	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
-		//When max number of upgrades to hit
-		if (NumberOfUpgrades == 0)
-		{
-			return;
-		}
+	//When max number of upgrades to hit
+	if (NumberOfUpgrades == 0) return;
 	
-		NumberOfUpgrades--;
+	NumberOfUpgrades--;
 	
-		Execute_UpgradeShootingSpeed(CurrentTower, ShootingSpeed, DeactivationSpeed, CurrentTower);
+	Execute_UpgradeShootingSpeed(CurrentTower, ShootingSpeed, DeactivationSpeed, CurrentTower);
 	
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Shooting Speed: %f"), ShootingSpeed));
-	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Shooting Speed: %f"), ShootingSpeed));
 }
 
-void APlayerMoneyManager::GetBudget()
+void APlayerMoneyManager::SetBudget(FName PurchaseType)
 {
 	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
 	
-	PlayerCurrentBudget -= 50;
-	
-	//Setting the new budget text block to the player's budget
-	FText NewText = FText::Format(NSLOCTEXT("UI", "BudgetText", "Your Budget: {0}"), PlayerCurrentBudget);
-	
-	if (NewText.IsEmpty()) return;
+	if (PurchaseType.IsEqual(TEXT("Tower")))
+	{
+		if (PlayerCurrentBudget >= 200)
+		{
+			//PLAYER BUY SOUND EFFECT
+			
+			//Towers cost 200 to buy and Upgrades cost 50
+			PlayerCurrentBudget -= 200;
 		
-	Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("PlayerBudgetText"));
+			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
+		
+			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
+		}
+	}
+	else if (PurchaseType.IsEqual(TEXT("Upgrade")))
+	{
+		if (PlayerCurrentBudget >= 50)
+		{
+			//PLAYER BUY SOUND EFFECT
+			
+			PlayerCurrentBudget -= 50;
+		
+			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
+		
+			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
+		
+			UpgradeShootingFrequency();
+		}
+	}
 }
+
+
+
 
 

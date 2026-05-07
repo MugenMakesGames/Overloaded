@@ -10,7 +10,9 @@
 #include "Components/ArrowComponent.h"
 #include "Components/BillboardComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/PlayerMoneyManager.h"
 #include "Towers/TowerSpawningManager.h"
+#include "Widgets/PlayerBudgetUI.h"
 
 ANewOverloadPlayerController::ANewOverloadPlayerController()
 {
@@ -32,9 +34,25 @@ void ANewOverloadPlayerController::BeginPlay()
 	
 	TowerSelectUI = CreateWidget<UTowerSelectUI>(this, TowerSelectUIClass);
 	
+	PlayerBudgetUI = CreateWidget<UPlayerBudgetUI>(this, PlayerBudgetUIClass);
+	
 	if (CameraSwitchingUIClass && CameraSwitchingUI)
 	{
 		CameraSwitchingUI->AddToViewport();
+	}
+	
+	if (PlayerBudgetUIClass && PlayerBudgetUI)
+	{
+		PlayerBudgetUI->AddToViewport();
+		
+		MoneyManagerClass = Cast<APlayerMoneyManager>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerMoneyManager::StaticClass()));
+		
+		if (!MoneyManagerClass) return;
+		
+		//Setting the text to 1000
+		FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), MoneyManagerClass->PlayerCurrentBudget));
+		
+		Execute_SetBudgetText(PlayerBudgetUI, NewBudgetText);
 	}
 }
 
@@ -78,8 +96,6 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 		
 		if (ATowerSpawningManager* Spawner = Cast<ATowerSpawningManager>(HitResult.GetActor()))
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,  HitResult.GetActor()->GetName());
-			
 			CurrentSpawner = Spawner;
 
 			if (!Spawner) return;
@@ -112,13 +128,25 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 			}
 			else
 			{
+				if (MoneyManagerClass)
+				{
+					MoneyManagerClass->SetBudget(TEXT("Tower"));
+					
+					//No more spawning towers
+					if (MoneyManagerClass->PlayerCurrentBudget <= 0)
+					{
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("BUDGET IS FINISHED"));
+						
+						return;
+					}
+				}
 				//Getting spawning location
 				SpawnLocation = Spawner->TowerSpawnLocation->GetComponentLocation();
-				
+	
 				Execute_SpawnTowerAtMouseLocation(TowerSpawningClass, TowerToUpgrade, SpawnLocation);
-				
+	
 				TowerSpawners.Add(Spawner, true);
-				
+	
 				//Adding spawner with its tower to a map to get the exact tower we need to upgrade
 				CurrentSpawnerTower.Add(Spawner, TowerToUpgrade);
 			}
@@ -126,12 +154,16 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 	}	
 }
 
+void ANewOverloadPlayerController::SpawnTheTowerInTheSpawner(APlayerMoneyManager* MoneyManager)
+{
+	
+}
 
 void ANewOverloadPlayerController::OnExitTowerUIClicked()
 {
 	if (TowerSelectUI && TowerSelectUI->IsInViewport())
 	{
-		UWidgetLayoutLibrary::RemoveAllWidgets(this);
+		TowerSelectUI->RemoveFromParent();
 
 		if (CameraSwitchingUIClass && CameraSwitchingUI)
 		{

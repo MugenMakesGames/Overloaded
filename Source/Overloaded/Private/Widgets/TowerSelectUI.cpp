@@ -26,24 +26,32 @@ void UTowerSelectUI::ShootingAndDetectionSpeedUpgraded()
 {
 	if (!MoneyManagerClass) return;
 	
-	MoneyManagerClass->UpgradeShootingFrequency();
+	//Displaying the budget in the TowerSelectUI
+	MoneyManagerClass->SetBudget(TEXT("Upgrade"));
 }
 
 void UTowerSelectUI::DetectionRadiusUpgraded()
 {
 	if (!MoneyManagerClass) return;
 	
-	
+	// //Displaying the budget in the TowerSelectUI
+	// MoneyManagerClass->SetBudget(TEXT("Upgrade"));
 }
 
 void UTowerSelectUI::DamageAmountUpgraded()
 {
 	if (!MoneyManagerClass) return;
+	
+	// //Displaying the budget in the TowerSelectUI
+	// MoneyManagerClass->SetBudget(TEXT("Upgrade"));
 }
 
 void UTowerSelectUI::RotationSpeedUpgraded()
 {
 	if (!MoneyManagerClass) return;
+	
+	// //Displaying the budget in the TowerSelectUI
+	// MoneyManagerClass->SetBudget(TEXT("Upgrade"));
 }
 
 void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FName WhichUpgradeText)
@@ -65,9 +73,4 @@ void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FN
 	{
 		
 	}
-	else if (WhichUpgradeText.IsEqual(TEXT("PlayerBudgetText")))
-	{
-		PlayerBudget->SetText(NewText);
-	}
-	
 }

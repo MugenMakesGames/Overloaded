@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/BoxComponent.h"
 #include "UObject/Interface.h"
 #include "TowerUpgradesInterface.generated.h"
 
@@ -31,7 +30,7 @@ public:
 	void GetCurrentTower(class ATowers*& CurrentTower);
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void GetCurrentBudget(int32 CurrentBudget);
+	void SetBudgetText(const FText& NewText);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void SetSoldOutTextBlock(const FText& NewText, FName WhichUpgradeText);

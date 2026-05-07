@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Widgets/CameraSwitchingUI.h"
+#include "Widgets/PlayerBudgetUI.h"
 #include "Widgets/TowerSelectUI.h"
 #include "NewOverloadPlayerController.generated.h"
 
@@ -52,6 +53,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Tower Select Widget")
 	TSubclassOf<UTowerSelectUI> TowerSelectUIClass;
 	
+	UPROPERTY(EditAnywhere, Category = "Player Budget Widget")
+	TSubclassOf<UPlayerBudgetUI> PlayerBudgetUIClass;
+	
 	//The widget instance that we are using
 	UPROPERTY()
 	UCameraSwitchingUI* CameraSwitchingUI;
@@ -60,10 +64,16 @@ public:
 	UTowerSelectUI* TowerSelectUI;
 	
 	UPROPERTY()
+	UPlayerBudgetUI* PlayerBudgetUI;
+	
+	UPROPERTY()
 	ATowerSpawningManager* CurrentSpawner;
 	
 	UPROPERTY()
 	ATowers* TowerToUpgrade;
+	
+	UPROPERTY(EditAnywhere, Category = "Money Manager")
+	class APlayerMoneyManager* MoneyManagerClass;
 	
 	UPROPERTY()
 	TMap<ATowerSpawningManager*, bool> TowerSpawners;
@@ -71,9 +81,11 @@ public:
 	UPROPERTY()
 	TMap<ATowerSpawningManager*, ATowers*> CurrentSpawnerTower;
 	
+	UFUNCTION()
+	void SpawnTheTowerInTheSpawner(APlayerMoneyManager* MoneyManager);
+	
 	//Interface functions
 	virtual void GetCurrentTower_Implementation(class ATowers*& CurrentTower) override;
-
 
 protected:
 	

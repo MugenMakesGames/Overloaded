@@ -50,9 +50,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();
 	
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* PlayerBudget;
-	
 	UPROPERTY()
 	APlayerMoneyManager* MoneyManagerClass;
 	
