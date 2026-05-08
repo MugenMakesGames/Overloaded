@@ -9,6 +9,7 @@
 #include "Interface/TowerUpgradesInterface.h"
 #include "CameraSwitchingUI.generated.h"
 
+class UTextBlock;
 class AEnemyFinishLine;
 class ACameraSwitcher;
 class AEnemyPawn;
@@ -42,6 +43,10 @@ private:
 	UPROPERTY()
 	AEnemyFinishLine* FinishLineClass;
 	
+	int32 RoundsSurvived;
+	
+	bool bIsRoundOver = true;
+	
 	int CamID;
 	
 	int32 NumberOfEnemiesPerRound;
@@ -64,6 +69,9 @@ public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Start Round")
 	UButton* StartRound;
 	
+	UPROPERTY(meta = (BindWidget), BlueprintReadOnly)
+	UTextBlock* RoundsSurvivedText;
+		
 	UFUNCTION()
 	void OnStartRoundButtonClicked();
 	
@@ -87,4 +95,6 @@ public:
 	
 	//Interface Functions
 	virtual void GetNumberOfEnemiesSpawned_Implementation(int32& GetEnemiesSpawned) override;
+	
+	virtual void IsRoundOver_Implementation(bool bIsRoundOver) override;
 };

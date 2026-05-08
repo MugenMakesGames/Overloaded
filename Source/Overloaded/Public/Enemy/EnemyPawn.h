@@ -6,6 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Interface/InteractionInterface.h"
+#include "Interface/TowerUpgradesInterface.h"
 #include "EnemyPawn.generated.h"
 
 class CurveFloat;

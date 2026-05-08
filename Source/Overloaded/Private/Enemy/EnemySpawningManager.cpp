@@ -2,6 +2,8 @@
 
 
 #include "Enemy/EnemySpawningManager.h"
+
+#include "NewOverloadPlayerController.h"
 #include "Enemy/EnemyPawn.h"
 #include "Enemy/EnemySplinePath.h"
 
@@ -157,13 +159,6 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 	if (ActiveEnemyPawns.Contains(CurrentEnemy))
 	{
 		ActiveEnemyPawns.Remove(CurrentEnemy);
-
-		if (ActiveEnemyPawns.Num() <= 0)
-		{
-			TimelineAlpha = 1.f;
-			
-			return;
-		}
 		
 		CurrentEnemy->SetActorEnableCollision(false);
 		CurrentEnemy->SetActorHiddenInGame(true);
@@ -178,5 +173,11 @@ void AEnemySpawningManager::ResetTimeline()
 	if (ActiveEnemyPawns.Num() <= 0)
 	{
 		TimelineAlpha = 1.f;
+		
+		ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ROUND IS OVER"));
+			
+		Execute_IsRoundOver(PC->CameraSwitchingUI, true);
 	}
 }

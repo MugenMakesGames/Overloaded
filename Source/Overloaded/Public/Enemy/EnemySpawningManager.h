@@ -6,10 +6,11 @@
 #include "Components/SplineComponent.h"
 #include "GameFramework/Actor.h"
 #include "Interface/InteractionInterface.h"
+#include "Interface/TowerUpgradesInterface.h"
 #include "EnemySpawningManager.generated.h"
 
 UCLASS()
-class OVERLOADED_API AEnemySpawningManager : public AActor, public IInteractionInterface
+class OVERLOADED_API AEnemySpawningManager : public AActor, public IInteractionInterface, public ITowerUpgradesInterface
 {
 	GENERATED_BODY()
 	

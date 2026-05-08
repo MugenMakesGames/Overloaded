@@ -6,7 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "Widgets/CameraSwitchingUI.h"
 #include "Widgets/PlayerBudgetUI.h"
+#include "Widgets/EndScreenUI.h"
 #include "Widgets/TowerSelectUI.h"
+#include "Widgets/WinScreenUI.h"
 #include "NewOverloadPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -46,7 +48,7 @@ public:
 	UPROPERTY(editAnywhere, Category = "Input")
 	UInputAction* QButtonAction;
 	
-	//Creating widget class
+	//Creating widget classes
 	UPROPERTY(EditAnywhere, Category = "Camera Switching Widget")
 	TSubclassOf<UCameraSwitchingUI> CameraSwitchingUIClass;
 	
@@ -56,7 +58,19 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Player Budget Widget")
 	TSubclassOf<UPlayerBudgetUI> PlayerBudgetUIClass;
 	
-	//The widget instance that we are using
+	UPROPERTY(EditAnywhere, Category = "Loss Screen")
+	TSubclassOf<UEndScreenUI> LossScreenUIClass;
+	
+	UPROPERTY(EditAnywhere, Category = "Win Screen")
+	TSubclassOf<UWinScreenUI> WinScreenUIClass;
+	
+	UPROPERTY()
+	UWinScreenUI* WinScreenUI;
+	
+	//Creating widget instances
+	UPROPERTY()
+	UEndScreenUI* LossScreenUI;
+	
 	UPROPERTY()
 	UCameraSwitchingUI* CameraSwitchingUI;
 	

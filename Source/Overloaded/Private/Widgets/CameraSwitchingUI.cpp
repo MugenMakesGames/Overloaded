@@ -8,7 +8,6 @@
 #include "Enemy/EnemyFinishLine.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "Player/PlayerMoneyManager.h"
 
 void UCameraSwitchingUI::NativeConstruct()
 {
@@ -18,7 +17,7 @@ void UCameraSwitchingUI::NativeConstruct()
 	SwitchThirdCamera->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnThirdCamButtonClicked);
 	SwitchFourthCamera->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnFourthCamButtonClicked);
 	
-	//The widget is being called multiple times so I use AddUniqueDynamic to avoid duplicate bindings
+	//The widget is being called multiple times, so I used AddUniqueDynamic to avoid duplicate bindings
 	StartRound->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnStartRoundButtonClicked);
 	
 	//Getting actor refs
@@ -82,6 +81,30 @@ void UCameraSwitchingUI::OnFourthCamButtonClicked()
 
 void UCameraSwitchingUI::OnStartRoundButtonClicked()
 {
+	if (bIsRoundOver == false)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ROUND IS NOT OVER"));
+		
+		return;
+	}
+	
+	//Starting Round
+	bIsRoundOver = false;
+	
+	//Creating win condition using round survived;
+	if (RoundsSurvived >= 10)
+	{
+		ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+		
+		//Display Win Screen
+		if (PC->WinScreenUI)
+		{
+			PC->WinScreenUI->AddToViewport();
+		} 
+		
+		return;
+	}
+	
 	if (!EnemySpawnerClass || !TowerClass)
 	{
 		TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowers::StaticClass()));
@@ -101,10 +124,16 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	//Start shooting bullets
 	TowerClass->AddToActiveBulletPool();
 	
+	SetEnemiesCrossedLineText();
+	
 	//Resetting the finished enemy pool length to match the number of enemies spawned
 	EnemiesFinishedPool.Empty();
-		
-	SetEnemiesCrossedLineText();
+	
+	RoundsSurvived++;
+	
+	FText NewText = FText::FromString(FString::Printf(TEXT("Round Survived: %d/%d"), RoundsSurvived, 10));
+	
+	RoundsSurvivedText->SetText(NewText);
 }
 
 void UCameraSwitchingUI::SetEnemiesCrossedLineText()
@@ -125,3 +154,9 @@ void UCameraSwitchingUI::GetNumberOfEnemiesSpawned_Implementation(int32& GetEnem
 {
 	GetEnemiesSpawned = NumberOfEnemiesPerRound;
 }
+
+void UCameraSwitchingUI::IsRoundOver_Implementation(bool bNewIsRoundOver)
+{
+	bIsRoundOver = bNewIsRoundOver;
+}
+

@@ -48,6 +48,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void SetSoldOutTextBlock(const FText& NewText, FName WhichUpgradeText);
 	
+	UFUNCTION(blueprintNativeEvent)
+	void IsRoundOver(bool bIsRoundOver);
 	
   };
 

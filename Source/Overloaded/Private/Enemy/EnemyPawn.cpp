@@ -2,10 +2,13 @@
 
 
 #include "Enemy/EnemyPawn.h"
+
+#include "NewOverloadPlayerController.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
 
 
+class ANewOverloadPlayerController;
 // Sets default values
 AEnemyPawn::AEnemyPawn()
 {

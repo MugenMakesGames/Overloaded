@@ -6,7 +6,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "Towers.h"
 #include "Blueprint/UserWidget.h"
-#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BillboardComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -35,6 +34,10 @@ void ANewOverloadPlayerController::BeginPlay()
 	TowerSelectUI = CreateWidget<UTowerSelectUI>(this, TowerSelectUIClass);
 	
 	PlayerBudgetUI = CreateWidget<UPlayerBudgetUI>(this, PlayerBudgetUIClass);
+	
+	LossScreenUI = CreateWidget<UEndScreenUI>(this, LossScreenUIClass);
+	
+	WinScreenUI = CreateWidget<UWinScreenUI>(this, WinScreenUIClass);
 	
 	if (CameraSwitchingUIClass && CameraSwitchingUI)
 	{
