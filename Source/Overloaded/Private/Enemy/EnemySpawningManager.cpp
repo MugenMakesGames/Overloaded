@@ -2,7 +2,6 @@
 
 
 #include "Enemy/EnemySpawningManager.h"
-
 #include "NewOverloadPlayerController.h"
 #include "Enemy/EnemyPawn.h"
 #include "Enemy/EnemySplinePath.h"
@@ -128,6 +127,8 @@ void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy
 	if (ActiveEnemyPawns.IsEmpty())
 	{
 		ResetRound();
+		
+		
 	}
 }
 

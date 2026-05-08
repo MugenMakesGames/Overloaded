@@ -110,8 +110,6 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	}
 	else
 	{
-		MoneyManagerClass->AddToBudgetOnRoundWin();
-	
 		//Increasing number of enemies each round
 		NumberOfEnemiesPerRound += 5;
 	
