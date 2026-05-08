@@ -99,10 +99,10 @@ public:
 	
 	//Getting upgrade variables
 	UPROPERTY()
-	float ShootingSpeed = 2.5f;
+	float ShootingSpeed = 1.5f;
 	
 	UPROPERTY()
-	float DeactivationSpeed = 3.5f;
+	float DeactivationSpeed = 2.5f;
 	
 	UPROPERTY()
 	float RotationSpeed = 3.f;

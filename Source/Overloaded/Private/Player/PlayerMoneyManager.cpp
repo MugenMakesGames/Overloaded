@@ -45,13 +45,11 @@ void APlayerMoneyManager::UpgradeShootingFrequency()
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
 	//When max number of upgrades to hit
-	if (NumberOfUpgrades == 0) return;
+	if (NumberOfUpgrades == 1) return;
 	
 	NumberOfUpgrades--;
 	
 	Execute_UpgradeShootingSpeed(CurrentTower, ShootingSpeed, DeactivationSpeed, CurrentTower);
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Shooting Speed: %f"), ShootingSpeed));
 }
 
 void APlayerMoneyManager::UpgradeRadius()
@@ -69,13 +67,11 @@ void APlayerMoneyManager::UpgradeRadius()
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
 	//When max number of upgrades to hit
-	if (NumberOfUpgrades == 0) return;
+	if (NumberOfUpgrades == 1) return;
 	
 	NumberOfUpgrades--;
 	
 	Execute_UpgradeDetectionRadius(CurrentTower, DetectionRadius, CurrentTower);
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), DetectionRadius));
 }
 
 
@@ -94,15 +90,13 @@ void APlayerMoneyManager::UpgradeRotation()
 	
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::FromInt(NumberOfUpgrades));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::FromInt(NumberOfUpgrades));
+
+	if (NumberOfUpgrades == 1) return;
 	
 	NumberOfUpgrades--;
-
-	if (NumberOfUpgrades == 0) return;
 	
 	Execute_UpgradeRotationSpeed(CurrentTower, RotationSpeed, CurrentTower);
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), RotationSpeed));
 }
 
 

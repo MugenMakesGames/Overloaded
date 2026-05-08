@@ -191,6 +191,8 @@ void ATowers::UpgradeShootingSpeed_Implementation(float& NewShootingSpeed, float
 	//Setting new shooting and deactivation speeds
 	NewShootingSpeed = CurrentTower->ShootingSpeed;
 	NewDeactivationSpeed = CurrentTower->DeactivationSpeed;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f|%f"), NewShootingSpeed, NewDeactivationSpeed));
 }
 
 void ATowers::UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, ATowers* CurrentTower)
@@ -201,9 +203,9 @@ void ATowers::UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, A
 	
 	NewDetectionRadius = NewRadiusSize;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), NewDetectionRadius));
-	
 	CurrentTower->EnemyDetectionRadius->SetSphereRadius(NewDetectionRadius);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), NewDetectionRadius));
 }
 
 void ATowers::UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowers* CurrentTower)
@@ -212,7 +214,7 @@ void ATowers::UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowe
 	
 	NewRotationSpeed = CurrentTower->RotationSpeed;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Rotation: %f"), NewRotationSpeed));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), RotationSpeed));
 }
 
 void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
@@ -227,7 +229,7 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 		//Getting the decremented values shooting upgrades
 		NumberOfUpgrades = UpgradesPerTower.NumberOfShootingSpeedUpgrades;
 		
-		if (UpgradesPerTower.NumberOfShootingSpeedUpgrades == 0)
+		if (UpgradesPerTower.NumberOfShootingSpeedUpgrades == 1)
 		{
 			FText NewText = FText::FromString(TEXT("Sold Out"));
  			
@@ -245,7 +247,7 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 		//Getting the decremented values of dadius upgrades
 		NumberOfUpgrades = UpgradesPerTower.NumberOfRadiusUpgrades;
 		
-		if (UpgradesPerTower.NumberOfRadiusUpgrades == 0)
+		if (UpgradesPerTower.NumberOfRadiusUpgrades == 1)
 		{
 			FText NewText = FText::FromString(TEXT("Sold Out"));
  			
@@ -263,7 +265,7 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 		//Getting the decremented values of dadius upgrades
 		NumberOfUpgrades = UpgradesPerTower.NumberOfRotationSpeedUpgrades;
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
 		
 		if (UpgradesPerTower.NumberOfRotationSpeedUpgrades == 1)
 		{
