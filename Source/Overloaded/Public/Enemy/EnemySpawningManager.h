@@ -62,7 +62,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
 	int32 EnemySpacing;
 	
+	UFUNCTION()
 	void SpawnFromEnemyPool();
+	
+	UFUNCTION()
+	void ResetTimeline();
 	
 	//Interface functions
 	virtual void DestroyEnemy_Implementation(class AEnemyPawn* CurrentEnemy) override;

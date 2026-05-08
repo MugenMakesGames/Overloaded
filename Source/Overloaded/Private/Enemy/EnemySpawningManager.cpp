@@ -112,8 +112,6 @@ void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy
 {
 	if (!CurrentEnemy) return;
 	
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
-	
 	//Removing the current enemy pawn from the active pawns 
 	if (ActiveEnemyPawns.Contains(CurrentEnemy))
 	{
@@ -163,6 +161,8 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 		if (ActiveEnemyPawns.Num() <= 0)
 		{
 			TimelineAlpha = 1.f;
+			
+			return;
 		}
 		
 		CurrentEnemy->SetActorEnableCollision(false);
@@ -173,3 +173,10 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 	}
 }
 
+void AEnemySpawningManager::ResetTimeline()
+{
+	if (ActiveEnemyPawns.Num() <= 0)
+	{
+		TimelineAlpha = 1.f;
+	}
+}

@@ -30,6 +30,8 @@ protected:
 	
 	int32 CurrentHealth;
 	
+	const int32 MaxHealth = 10;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -37,7 +39,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(EditInstanceOnly, Category = "Enemy Spawner")
+	UPROPERTY()
 	class AEnemySpawningManager* EnemySpawningManagerClass;
 	
 	//Components
@@ -48,9 +50,6 @@ public:
 	UBoxComponent* EnemyCollision;
 	
 	//Enemy Health / Functions
-	UPROPERTY(EditAnywhere, Category = "Enemy Health")
-	int32 MaxHealth = 100;
-	
 	void ResetActor();
 	
 	//Interface functions

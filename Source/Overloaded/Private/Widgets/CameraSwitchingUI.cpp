@@ -12,12 +12,13 @@
 void UCameraSwitchingUI::NativeConstruct()
 {
 	//Setting the on clicked button events
-	SwitchMainCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnMainCamButtonClicked);
-	SwitchSecondCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnSecondCamButtonClicked);
-	SwitchThirdCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnThirdCamButtonClicked);
-	SwitchFourthCamera->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnFourthCamButtonClicked);
+	SwitchMainCamera->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnMainCamButtonClicked);
+	SwitchSecondCamera->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnSecondCamButtonClicked);
+	SwitchThirdCamera->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnThirdCamButtonClicked);
+	SwitchFourthCamera->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnFourthCamButtonClicked);
 	
-	StartRound->OnClicked.AddDynamic(this, &UCameraSwitchingUI::OnStartRoundButtonClicked);
+	//The widget is being called multiple times so I use AddUniqueDynamic to avoid duplicate bindings
+	StartRound->OnClicked.AddUniqueDynamic(this, &UCameraSwitchingUI::OnStartRoundButtonClicked);
 	
 	//Getting actor refs
 	CameraSwitcherActorRef = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(GetWorld(), 
@@ -82,15 +83,13 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 {
 	if (!EnemySpawnerClass || !TowerClass)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("TOWER IS NOT PLACED INTO THE WORLD"));
-		
 		TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowers::StaticClass()));
 		
 		return;
 	};
 	
 	//Increasing number of enemies each round
-	NumberOfEnemiesPerRound += 4;
+	NumberOfEnemiesPerRound += 2;
 	
 	//Increasing the number of enemies each round
 	Execute_CreateEnemyPool(EnemySpawnerClass, NumberOfEnemiesPerRound);

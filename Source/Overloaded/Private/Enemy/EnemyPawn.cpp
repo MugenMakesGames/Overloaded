@@ -3,6 +3,7 @@
 
 #include "Enemy/EnemyPawn.h"
 #include "Enemy/EnemySpawningManager.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -27,6 +28,9 @@ void AEnemyPawn::BeginPlay()
 	Super::BeginPlay();
 	
 	ResetActor();
+	
+	EnemySpawningManagerClass = Cast<AEnemySpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(),
+	AEnemySpawningManager::StaticClass()));
 }
 
 // Called every frame
@@ -54,9 +58,7 @@ void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount)
 {
 	CurrentHealth -= DamageAmount;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::Printf(TEXT("DamageDone: %i"), CurrentHealth));
-	
-	if (CurrentHealth <= 0.f)
+	if (CurrentHealth <= 0)
 	{
 		SetActorHiddenInGame(true);
 		SetActorEnableCollision(false);
@@ -64,6 +66,9 @@ void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount)
 		if (EnemySpawningManagerClass && EnemySpawningManagerClass->Implements<UInteractionInterface>())
 		{
 			Execute_DestroyEnemy(EnemySpawningManagerClass, this);
+			
+			//Resetting the timeline so the enemy start at the beginning of the spline
+			EnemySpawningManagerClass->ResetTimeline();
 		}
 	}
 }
