@@ -2,8 +2,6 @@
 
 
 #include "Enemy/EnemyPawn.h"
-
-#include "NewOverloadPlayerController.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -57,21 +55,25 @@ void AEnemyPawn::ResetActor()
 	SetActorEnableCollision(true);
 }
 
-void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount)
+void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount, AEnemyPawn* CurrentEnemy)
 {
-	CurrentHealth -= DamageAmount;
+	if (!CurrentEnemy) return;
 	
-	if (CurrentHealth <= 0)
+	CurrentEnemy->CurrentHealth -= DamageAmount;
+	
+	if (CurrentEnemy->CurrentHealth <= 0)
 	{
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
+		CurrentEnemy->SetActorHiddenInGame(true);
+		CurrentEnemy->SetActorEnableCollision(false);
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, CurrentEnemy->GetName());
 		
 		if (EnemySpawningManagerClass && EnemySpawningManagerClass->Implements<UInteractionInterface>())
 		{
-			Execute_DestroyEnemy(EnemySpawningManagerClass, this);
+			Execute_DestroyEnemy(EnemySpawningManagerClass, CurrentEnemy);
 			
 			//Resetting the timeline so the enemy start at the beginning of the spline
-			EnemySpawningManagerClass->ResetTimeline();
+			//EnemySpawningManagerClass->ResetTimeline();
 		}
 	}
 }

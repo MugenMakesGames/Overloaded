@@ -94,10 +94,11 @@ void APlayerMoneyManager::UpgradeRotation()
 	
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
-	//When max number of upgrades to hit
-	if (NumberOfUpgrades == 0) return;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::FromInt(NumberOfUpgrades));
 	
 	NumberOfUpgrades--;
+
+	if (NumberOfUpgrades == 0) return;
 	
 	Execute_UpgradeRotationSpeed(CurrentTower, RotationSpeed, CurrentTower);
 	
@@ -164,7 +165,7 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
 		
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
-		
+			
 			UpgradeRotation();
 		}
 	}

@@ -263,7 +263,9 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 		//Getting the decremented values of dadius upgrades
 		NumberOfUpgrades = UpgradesPerTower.NumberOfRotationSpeedUpgrades;
 		
-		if (UpgradesPerTower.NumberOfRotationSpeedUpgrades == 0)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
+		
+		if (UpgradesPerTower.NumberOfRotationSpeedUpgrades == 1)
 		{
 			FText NewText = FText::FromString(TEXT("Sold Out"));
  			
@@ -273,8 +275,6 @@ void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)
 		}
 		
 		UpgradesPerTower.NumberOfRotationSpeedUpgrades--;
-		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::FromInt(NumberOfUpgrades));
 	}
 }
 

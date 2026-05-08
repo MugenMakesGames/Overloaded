@@ -47,7 +47,6 @@ public:
 	UFUNCTION(blueprintCallable)
 	void DetectionRadiusUpgraded();
 	
-	
 	UFUNCTION(BlueprintCallable)
 	void RotationSpeedUpgraded();
 	

@@ -52,7 +52,9 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 	if (EnemyPawn && EnemyPawn->Implements<UInteractionInterface>())
 	{
 		//Applying damage to the enemy
-		Execute_EnemyTakeDamage(EnemyPawn, DamageAmount);
+		Execute_EnemyTakeDamage(EnemyPawn, DamageAmount, EnemyPawn);
+		
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, EnemyPawn->GetName());
 		
 		//Deactivate the bullet if it hits the enemy
 		DeactivateBullet();

@@ -29,8 +29,6 @@ protected:
 	
 	float EnemySplineLength;
 	
-	int32 CurrentHealth;
-	
 	const int32 MaxHealth = 10;
 	
 public:	
@@ -43,6 +41,12 @@ public:
 	UPROPERTY()
 	class AEnemySpawningManager* EnemySpawningManagerClass;
 	
+	UPROPERTY()
+	float EnemyOffset = 0.f;
+	
+	UPROPERTY(EditInstanceOnly)
+	int32 CurrentHealth;
+	
 	//Components
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;
@@ -54,5 +58,5 @@ public:
 	void ResetActor();
 	
 	//Interface functions
-	virtual void EnemyTakeDamage_Implementation(int32 DamageAmount) override;
+	virtual void EnemyTakeDamage_Implementation(int32 DamageAmount, AEnemyPawn* CurrentEnemy) override;
 };

@@ -99,13 +99,13 @@ public:
 	
 	//Getting upgrade variables
 	UPROPERTY()
-	float ShootingSpeed = 2.f;
+	float ShootingSpeed = 2.5f;
 	
 	UPROPERTY()
-	float DeactivationSpeed = 3.f;
+	float DeactivationSpeed = 3.5f;
 	
 	UPROPERTY()
-	float RotationSpeed = 2.f;
+	float RotationSpeed = 3.f;
 	
 	UPROPERTY()
 	TMap<ATowers*, FNumberOfUpgradesPerType> NumberOfUpgradesPerTower;

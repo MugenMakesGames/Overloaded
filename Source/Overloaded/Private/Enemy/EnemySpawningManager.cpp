@@ -59,8 +59,8 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 			//Getting the distance the new next enemy pawn should spawn after the other
 			float SpawnOffset =  EnemySpacing * i;
 		
-			//Fmod is used for if the distance exceeds the spline length
-			float Distance = FMath::Fmod((TimelineAlpha * SplineLength) + SpawnOffset, SplineLength);
+			//Fmod is used for if the distance exceeds the spline length and if it does reset it original enemy offset
+			float Distance = FMath::Fmod((TimelineAlpha * SplineLength) + CurrentEnemy->EnemyOffset, SplineLength);
 			
 			FVector Location = EnemySpline->GetLocationAtDistanceAlongSpline(
 				Distance, 
@@ -90,17 +90,19 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 		EnemyPawnPool.RemoveAt(0);
 		
 		if (!CurrentEnemy) continue;
-
-		float Distance = (SplineLength / TargetCount) * SpawnIndex;
-
+		
+		//Giving each spawned enemy their own permanent spacing
+		CurrentEnemy->EnemyOffset = EnemySpacing * SpawnIndex;
+		
+		//Making sure the enemies offset doesn't exceed the spline's length
+		float Distance = FMath::Fmod(CurrentEnemy->EnemyOffset, SplineLength);
+		
 		FVector Location = EnemySpline->GetLocationAtDistanceAlongSpline(
 			Distance,
 			ESplineCoordinateSpace::World
 		);
 
-		CurrentEnemy->SetActorHiddenInGame(false);
-		CurrentEnemy->SetActorEnableCollision(true);
-		
+		CurrentEnemy->ResetActor();
 		CurrentEnemy->SetActorLocation(Location);
 
 		ActiveEnemyPawns.Add(CurrentEnemy);
@@ -113,17 +115,18 @@ void AEnemySpawningManager::SpawnFromEnemyPool()
 void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy)
 {
 	if (!CurrentEnemy) return;
-	
-	//Removing the current enemy pawn from the active pawns 
-	if (ActiveEnemyPawns.Contains(CurrentEnemy))
-	{
-		ActiveEnemyPawns.Remove(CurrentEnemy);
-	}
-	
-	//Adding it back to the enemy pawn pool
+
+	ActiveEnemyPawns.Remove(CurrentEnemy);
+
 	if (!EnemyPawnPool.Contains(CurrentEnemy))
 	{
 		EnemyPawnPool.Add(CurrentEnemy);
+	}
+
+	//Reset the timeline if all enemies are destroyed
+	if (ActiveEnemyPawns.Num() <= 0)
+	{
+		ResetTimeline();
 	}
 }
 
@@ -176,7 +179,7 @@ void AEnemySpawningManager::ResetTimeline()
 		
 		ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ROUND IS OVER"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ROUND IS OVER"));
 			
 		Execute_IsRoundOver(PC->CameraSwitchingUI, true);
 	}
