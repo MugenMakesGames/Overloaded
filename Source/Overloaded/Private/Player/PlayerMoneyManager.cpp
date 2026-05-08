@@ -164,8 +164,8 @@ void APlayerMoneyManager::AddToBudgetOnRoundWin()
 {
 	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
 	
-	//Adding a 1000 to buy towers and upgrades
-	PlayerCurrentBudget += 500;
+	//Adding money to buy towers and upgrades
+	PlayerCurrentBudget += 600;
 	
 	FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
 		
