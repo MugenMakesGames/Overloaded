@@ -3,7 +3,9 @@
 
 #include "Widgets/CameraSwitchingUI.h"
 #include "CameraSwitcher.h"
+#include "NewOverloadPlayerController.h"
 #include "Towers.h"
+#include "Enemy/EnemyFinishLine.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -26,6 +28,9 @@ void UCameraSwitchingUI::NativeConstruct()
 	
 	EnemySpawnerClass = Cast<AEnemySpawningManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
 	AEnemySpawningManager::StaticClass()));
+	
+	FinishLineClass = Cast<AEnemyFinishLine>(UGameplayStatics::GetActorOfClass(GetWorld(),
+	AEnemyFinishLine::StaticClass()));
 }
 
 
@@ -77,15 +82,15 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 {
 	if (!EnemySpawnerClass || !TowerClass)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("TOWER IS NOT PLACED INTO THE WORLD"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,TEXT("TOWER IS NOT PLACED INTO THE WORLD"));
 		
 		TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowers::StaticClass()));
 		
 		return;
 	};
 	
-	//Increasing number of enemies by 5 each round
-	NumberOfEnemiesPerRound += 5;
+	//Increasing number of enemies each round
+	NumberOfEnemiesPerRound += 4;
 	
 	//Increasing the number of enemies each round
 	Execute_CreateEnemyPool(EnemySpawnerClass, NumberOfEnemiesPerRound);
@@ -95,5 +100,28 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	
 	//Start shooting bullets
 	TowerClass->AddToActiveBulletPool();
+	
+	//Resetting the finished enemy pool length to match the number of enemies spawned
+	EnemiesFinishedPool.Empty();
+		
+	SetEnemiesCrossedLineText();
 }
 
+void UCameraSwitchingUI::SetEnemiesCrossedLineText()
+{
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	//Setting the text to reference the number of enemies being spawned at the start
+	FText Text = FText::FromString(FString::Printf(TEXT("Enemies Crossed: 0/%d"), NumberOfEnemiesPerRound));
+	
+	Execute_SetEnemyCrossedLineText(PC->PlayerBudgetUI, Text);
+
+	if (!FinishLineClass) return;
+	
+	FinishLineClass->SetFinishedPool(EnemiesFinishedPool);
+}
+
+void UCameraSwitchingUI::GetNumberOfEnemiesSpawned_Implementation(int32& GetEnemiesSpawned)
+{
+	GetEnemiesSpawned = NumberOfEnemiesPerRound;
+}

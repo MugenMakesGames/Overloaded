@@ -2,10 +2,9 @@
 
 
 #include "Enemy/EnemyFinishLine.h"
-
+#include "NewOverloadPlayerController.h"
 #include "Enemy/EnemyPawn.h"
 #include "Enemy/EnemySpawningManager.h"
-
 
 // Sets default values
 AEnemyFinishLine::AEnemyFinishLine()
@@ -19,8 +18,6 @@ AEnemyFinishLine::AEnemyFinishLine()
 	EnemyFinishPoint->SetGenerateOverlapEvents(true);
 	EnemyFinishPoint->SetCollisionResponseToAllChannels(ECR_Overlap);
 	EnemyFinishPoint->OnComponentBeginOverlap.AddDynamic(this, &AEnemyFinishLine::OnEnemyCrossedLine);
-	
-
 }
 
 // Called when the game starts or when spawned
@@ -34,7 +31,6 @@ void AEnemyFinishLine::BeginPlay()
 void AEnemyFinishLine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AEnemyFinishLine::OnEnemyCrossedLine(UPrimitiveComponent* ThisComp, class AActor* OtherActor,
@@ -45,8 +41,39 @@ void AEnemyFinishLine::OnEnemyCrossedLine(UPrimitiveComponent* ThisComp, class A
 
 	if (ActiveEnemyPawn && EnemySpawnerClass)
 	{
+		ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+		
 		Execute_EnemyCrossedFinishLine(EnemySpawnerClass, ActiveEnemyPawn, FinishedEnemyPool);
 		
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Active enemy pool is: %i "), FinishedEnemyPool.Num()));
+		UpdateEnemiesCrossed();
+		
+		FText NewText = FText::FromString(FString::Printf(TEXT("Enemies Crossed: %d/%d"), FinishedEnemyPool.Num(), EnemiesSpawned));
+			
+		Execute_SetEnemyCrossedLineText(PC->PlayerBudgetUI, NewText);
 	}
 }
+
+void AEnemyFinishLine::UpdateEnemiesCrossed()
+{
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	//Setting the correct number of enemies that have crossed the line
+	Execute_GetNumberOfEnemiesSpawned(PC->CameraSwitchingUI, EnemiesSpawned);
+	
+	//You lose
+	if (FinishedEnemyPool.Num() == EnemiesSpawned)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::Printf(TEXT("Enemies Crossed: %d/%d"), FinishedEnemyPool.Num(), EnemiesSpawned));
+		
+		//Display Loss Widget
+	}
+}
+
+void AEnemyFinishLine::SetFinishedPool(TArray<AEnemyPawn*> FinishedPool)
+{
+	FinishedEnemyPool = FinishedPool;
+}
+
+
+
+

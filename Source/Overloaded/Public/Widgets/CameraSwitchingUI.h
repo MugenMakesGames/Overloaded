@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
-#include "Components/TextBlock.h"
 #include "Interface/InteractionInterface.h"
 #include "Interface/TowerUpgradesInterface.h"
 #include "CameraSwitchingUI.generated.h"
 
+class AEnemyFinishLine;
 class ACameraSwitcher;
 class AEnemyPawn;
 
@@ -38,6 +38,9 @@ private:
 	UPROPERTY()
 	class ATowers* TowerClass;
 	
+	UPROPERTY()
+	AEnemyFinishLine* FinishLineClass;
+	
 	int CamID;
 	
 	int32 NumberOfEnemiesPerRound;
@@ -60,18 +63,27 @@ public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadOnly, Category = "Start Round")
 	UButton* StartRound;
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void OnStartRoundButtonClicked();
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void OnMainCamButtonClicked();
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void OnSecondCamButtonClicked();
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void OnThirdCamButtonClicked();
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void OnFourthCamButtonClicked();
+	
+	UFUNCTION()
+	void SetEnemiesCrossedLineText();
+	
+	UPROPERTY()
+	TArray<AEnemyPawn*> EnemiesFinishedPool;
+	
+	//Interface Functions
+	virtual void GetNumberOfEnemiesSpawned_Implementation(int32& GetEnemiesSpawned) override;
 };

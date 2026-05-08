@@ -6,12 +6,13 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Interface/InteractionInterface.h"
+#include "Interface/TowerUpgradesInterface.h"
+#include "Enemy/EnemyPawn.h"
 #include "EnemyFinishLine.generated.h"
 
-class AEnemyPawn;
 
 UCLASS()
-class OVERLOADED_API AEnemyFinishLine : public AActor, public IInteractionInterface
+class OVERLOADED_API AEnemyFinishLine : public AActor, public IInteractionInterface, public ITowerUpgradesInterface
 {
 	GENERATED_BODY()
 	
@@ -36,9 +37,19 @@ public:
 	UPROPERTY()
 	TArray<AEnemyPawn*> FinishedEnemyPool;
 	
+	UPROPERTY()
+	int32 EnemiesSpawned;
+	
 	UFUNCTION()
 	void OnEnemyCrossedLine(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
 					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 					const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void UpdateEnemiesCrossed();
+	
+	UFUNCTION()
+	void SetFinishedPool(TArray<AEnemyPawn*> FinishedPool);
+	
 
 };

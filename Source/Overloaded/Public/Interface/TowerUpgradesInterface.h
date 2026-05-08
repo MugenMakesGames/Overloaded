@@ -6,7 +6,10 @@
 #include "UObject/Interface.h"
 #include "TowerUpgradesInterface.generated.h"
 
+class AEnemyPawn;
 class USphereComponent;
+class ATowerBullet;
+
 // This class does not need to be modified.
 UINTERFACE(BlueprintType)
 class OVERLOADED_API UTowerUpgradesInterface : public UInterface
@@ -33,10 +36,18 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void GetCurrentTower(class ATowers*& CurrentTower);
 	
+	UFUNCTION(blueprintNativeEvent)
+	void GetNumberOfEnemiesSpawned(int32& GetEnemiesSpawned);
+	
 	UFUNCTION(BlueprintNativeEvent)
 	void SetBudgetText(const FText& NewText);
 	
 	UFUNCTION(BlueprintNativeEvent)
+	void SetEnemyCrossedLineText(const FText& NewText);
+	
+	UFUNCTION(BlueprintNativeEvent)
 	void SetSoldOutTextBlock(const FText& NewText, FName WhichUpgradeText);
+	
+	
   };
 

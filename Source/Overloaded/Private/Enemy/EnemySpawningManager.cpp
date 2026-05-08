@@ -2,8 +2,6 @@
 
 
 #include "Enemy/EnemySpawningManager.h"
-
-#include "OverloadedPlayerController.h"
 #include "Enemy/EnemyPawn.h"
 #include "Enemy/EnemySplinePath.h"
 
@@ -169,8 +167,6 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 		
 		CurrentEnemy->SetActorEnableCollision(false);
 		CurrentEnemy->SetActorHiddenInGame(true);
-		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Active enemy pool is: %i "), ActiveEnemyPawns.Num()));
 		
 		//Adding it to the finish pool
 		FinishedPool.Add(CurrentEnemy);

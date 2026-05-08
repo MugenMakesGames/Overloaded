@@ -22,7 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	//Creating a variable to control enemy speed
-	const float MoveDuration = 50.f;
+	//const float MoveDuration = 50.f;
 
 public:	
 	// Called every frame
@@ -54,6 +54,9 @@ public:
 	
 	//Creating a timeline using tick
 	float TimelineAlpha = 0.f;
+	
+	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
+	float MoveDuration = 50.f;
 	
 	//Creating a variable to control enemy spacing
 	UPROPERTY(EditAnywhere, Category = "Enemy Movement")

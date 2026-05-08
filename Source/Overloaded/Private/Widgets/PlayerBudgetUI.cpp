@@ -13,3 +13,9 @@ void UPlayerBudgetUI::SetBudgetText_Implementation(const FText& NewText)
 {
 	PlayerBudgetText->SetText(NewText);
 }
+
+void UPlayerBudgetUI::SetEnemyCrossedLineText_Implementation(const FText& NewText)
+{
+	EnemiesCrossedLine->SetText(NewText);
+}
+

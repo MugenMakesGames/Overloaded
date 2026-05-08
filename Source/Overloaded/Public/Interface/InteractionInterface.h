@@ -32,7 +32,7 @@ public:
 	void CreateEnemyPool(int32 NumberOfEnemiesToSpawn);
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void EnemyCrossedFinishLine(class AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool);
+	void EnemyCrossedFinishLine(AEnemyPawn* CurrentEnemy, TArray<AEnemyPawn*>& FinishedPool);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void SpawnTowerAtMouseLocation(class ATowers*& SpawnedTower, const FVector& SpawnLocation);

@@ -21,6 +21,11 @@ class OVERLOADED_API UPlayerBudgetUI : public UUserWidget, public ITowerUpgrades
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* PlayerBudgetText;
 	
+	UPROPERTY()
+	UTextBlock* EnemiesCrossedLine;
+	
 	//Interface Functions
 	virtual void SetBudgetText_Implementation(const FText& NewText) override;
+	
+	virtual void SetEnemyCrossedLineText_Implementation(const FText& NewText) override;
 };
