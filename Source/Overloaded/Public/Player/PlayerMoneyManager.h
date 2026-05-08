@@ -23,7 +23,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	const int32 BudgetMaxPerRound = 1200;
+	const int32 BudgetMaxPerRound = 3000;
 
 public:	
 	// Called every frame

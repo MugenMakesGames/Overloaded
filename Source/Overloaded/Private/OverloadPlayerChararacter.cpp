@@ -3,6 +3,7 @@
 
 #include "OverloadPlayerChararacter.h"
 #include "CameraSwitcher.h"
+#include "NewOverloadPlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -24,10 +25,15 @@ void AOverloadPlayerChararacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Setting the camera to the main camera in camera switcher actor
-	APlayerController* PlayerController = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
+	CameraSwitcherClass = Cast<ACameraSwitcher>(UGameplayStatics::GetActorOfClass(GetWorld(),
+	ACameraSwitcher::StaticClass()));
 	
-	PlayerController->SetViewTargetWithBlend(CameraSwitcherActorRef);
+	//Setting the camera to the main camera in camera switcher actor
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	if (!CameraSwitcherClass) return;
+	
+	PC->SetViewTargetWithBlend(CameraSwitcherClass);
 }
 
 // Called every frame

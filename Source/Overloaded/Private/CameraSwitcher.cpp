@@ -31,11 +31,11 @@ void ACameraSwitcher::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Setting maincamera to active by default
-	MainCamera->SetActive(true);
+	//Setting the player's cam to the cam at the start of the course
+	MainCamera->SetActive(false);
 	SecondCamera->SetActive(false);
 	ThirdCamera->SetActive(false);
-	FourthCamera->SetActive(false);
+	FourthCamera->SetActive(true);
 }
 
 // Called every frame

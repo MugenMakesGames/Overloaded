@@ -12,6 +12,7 @@
 class AEnemyFinishLine;
 class ACameraSwitcher;
 class AEnemyPawn;
+class APlayerMoneyManager;
 
 /**
  * 

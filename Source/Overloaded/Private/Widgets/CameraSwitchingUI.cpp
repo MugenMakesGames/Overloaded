@@ -8,6 +8,7 @@
 #include "Enemy/EnemyFinishLine.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/PlayerMoneyManager.h"
 
 void UCameraSwitchingUI::NativeConstruct()
 {
