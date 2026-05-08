@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditInstanceOnly)
 	int32 CurrentHealth;
 	
+	UPROPERTY(editInstanceOnly)
+	float DistanceAlongSpline = 0.f;
+	
 	//Components
 	UPROPERTY(EditAnywhere, Category = "Static Mesh")
 	UStaticMeshComponent* EnemyStaticMesh;

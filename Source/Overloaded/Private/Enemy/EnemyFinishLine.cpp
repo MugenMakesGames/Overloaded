@@ -62,13 +62,15 @@ void AEnemyFinishLine::UpdateEnemiesCrossed()
 	//You lose
 	if (FinishedEnemyPool.Num() == EnemiesSpawned)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::Printf(TEXT("Enemies Crossed: %d/%d"), FinishedEnemyPool.Num(), EnemiesSpawned));
-		
 		//Display loss widget
 		if (PC->LossScreenUI)
 		{
 			PC->LossScreenUI->AddToViewport();
 		};
+	}
+	else
+	{
+		EnemySpawnerClass->ResetRound();
 	}
 }
 

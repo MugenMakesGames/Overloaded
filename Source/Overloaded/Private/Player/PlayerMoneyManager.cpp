@@ -21,7 +21,6 @@ void APlayerMoneyManager::BeginPlay()
 	
 	//Setting the current budget to max budget on begin play
 	PlayerCurrentBudget = BudgetMaxPerRound;
-	
 }
 
 // Called every frame
@@ -74,8 +73,6 @@ void APlayerMoneyManager::UpgradeRadius()
 	Execute_UpgradeDetectionRadius(CurrentTower, DetectionRadius, CurrentTower);
 }
 
-
-
 void APlayerMoneyManager::UpgradeRotation()
 {
 	ATowers* CurrentTower = nullptr;
@@ -90,15 +87,13 @@ void APlayerMoneyManager::UpgradeRotation()
 	
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString::FromInt(NumberOfUpgrades));
-
+	//When max number of upgrades to hit
 	if (NumberOfUpgrades == 1) return;
 	
 	NumberOfUpgrades--;
 	
 	Execute_UpgradeRotationSpeed(CurrentTower, RotationSpeed, CurrentTower);
 }
-
 
 void APlayerMoneyManager::SetBudget(FName PurchaseType)
 {
@@ -125,9 +120,9 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			//PLAYER BUY SOUND EFFECT
 			
 			PlayerCurrentBudget -= 50;
-		
+			
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
-		
+	
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
 			
 			UpgradeShootingFrequency();
@@ -140,9 +135,9 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			//PLAYER BUY SOUND EFFECT
 			
 			PlayerCurrentBudget -= 50;
-		
+			
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
-		
+	
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
 		
 			UpgradeRadius();
@@ -155,9 +150,9 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			//PLAYER BUY SOUND EFFECT
 			
 			PlayerCurrentBudget -= 50;
-		
+			
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
-		
+	
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
 			
 			UpgradeRotation();
@@ -165,7 +160,16 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 	}
 }
 
-
-
+void APlayerMoneyManager::AddToBudgetOnRoundWin()
+{
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	//Adding a 1000 to buy towers and upgrades
+	PlayerCurrentBudget += 500;
+	
+	FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
+		
+	Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
+}
 
 

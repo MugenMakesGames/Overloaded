@@ -49,25 +49,26 @@ public:
 	UPROPERTY()
 	TArray<AEnemyPawn*> ActiveEnemyPawns;
 	
-	//Creating max enemy pool size
-	UPROPERTY(EditAnywhere)
-	int32 EnemyPoolSize;
+	//Creating a variable to control enemy's movement
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float EnemyMoveSpeed = 200.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float EnemySpawnSpacing = 300.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 EnemiesRemainingToSpawn = 0;
 	
-	//Creating a timeline using tick
-	float TimelineAlpha = 0.f;
-	
-	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
-	float MoveDuration = 50.f;
-	
-	//Creating a variable to control enemy spacing
-	UPROPERTY(EditAnywhere, Category = "Enemy Movement")
-	int32 EnemySpacing;
+	bool bRoundActive = false;
 	
 	UFUNCTION()
 	void SpawnFromEnemyPool();
 	
 	UFUNCTION()
-	void ResetTimeline();
+	void StartRound(int32 NumberOfEnemiesPerRound);
+	
+	UFUNCTION()
+	void ResetRound();
 	
 	//Interface functions
 	virtual void DestroyEnemy_Implementation(class AEnemyPawn* CurrentEnemy) override;

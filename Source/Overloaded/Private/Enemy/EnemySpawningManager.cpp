@@ -31,85 +31,83 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (EnemySpline)
+	if (!EnemySpline) return;
+
+	float SplineLength = EnemySpline->GetSplineLength();
+	
+	for (int i = 0; i < ActiveEnemyPawns.Num(); ++i)
 	{
-		//Checking if the enemy pawn pool is populated
+		AEnemyPawn* CurrentEnemy = ActiveEnemyPawns[i];
+
+		if (!CurrentEnemy) continue;
+
+		//Getting the enemy forward and having the DistanceAlongSpline reach 200 units along the spline in a second by multiplying it by delta time
+		CurrentEnemy->DistanceAlongSpline += EnemyMoveSpeed * DeltaTime;
+		
+		//Make sure DistanceAlongSpline don't exceed the spline length
+		float Distance = FMath::Fmod(CurrentEnemy->DistanceAlongSpline,SplineLength);
+
+		FVector Location = EnemySpline->GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
+
+		CurrentEnemy->SetActorLocation(Location);
+	}
+	
+	//Checking if the round has started before spawning
+	if (bRoundActive && EnemiesRemainingToSpawn > 0)
+	{
 		if (!ActiveEnemyPawns.IsEmpty())
 		{
-			//Getting the amount of time pasted every frame 
-			//Dividing by move duration (5) so that it takes 5 seconds for the timeline alpha to get from 0 to 1.0 instead of 1
-			TimelineAlpha += DeltaTime / MoveDuration;
-		}
-		
-		//Looping the timeline 
-		if (TimelineAlpha >= 1.0f)
-		{
-			TimelineAlpha -= 1.0f;
-		}
-		
-		float SplineLength  = EnemySpline->GetSplineLength();
-		
-		for (int i = 0; i < ActiveEnemyPawns.Num(); ++i)
-		{
-			AEnemyPawn* CurrentEnemy = ActiveEnemyPawns[i];
-		
-			//Checking if the current enemy variable is null and continuing if it is
-			if (!CurrentEnemy) continue;
-		
-			//Getting the distance the new next enemy pawn should spawn after the other
-			float SpawnOffset =  EnemySpacing * i;
-		
-			//Fmod is used for if the distance exceeds the spline length and if it does reset it original enemy offset
-			float Distance = FMath::Fmod((TimelineAlpha * SplineLength) + CurrentEnemy->EnemyOffset, SplineLength);
+			//Getting the most recently spawn enemy
+			AEnemyPawn* LastEnemy = ActiveEnemyPawns.Last();
 			
-			FVector Location = EnemySpline->GetLocationAtDistanceAlongSpline(
-				Distance, 
-				ESplineCoordinateSpace::World
-				);
-		
-			CurrentEnemy->SetActorLocation(Location);
+			//Checking if the last spawned enemy's distance along the spline is higher than the spawn 
+			if (LastEnemy && LastEnemy->DistanceAlongSpline >= EnemySpawnSpacing)
+			{
+				SpawnFromEnemyPool();
+				
+				//Decrementing the enemies to spawn so we know how many times we need to get the enemy spawn spacing
+				EnemiesRemainingToSpawn--;
+			}
 		}
 	}
 }
 
 void AEnemySpawningManager::SpawnFromEnemyPool()
 {
-	float SplineLength = EnemySpline->GetSplineLength();
-	
-	//Engine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ITS RUNNING"));
-	
-	//Tracking the spawn index 
-	int SpawnIndex = 0;
-	//Making sure the enemy pool size and enemy pawn pool values don't desync
-	int TargetCount = FMath::Min(EnemyPoolSize, EnemyPawnPool.Num());
-	
-	//Looping until active all enemies in enemy pawn are in active enemy pawns
-	while (ActiveEnemyPawns.Num() < EnemyPoolSize && EnemyPawnPool.Num() > 0)
-	{
-		AEnemyPawn* CurrentEnemy = EnemyPawnPool[0];
-		EnemyPawnPool.RemoveAt(0);
-		
-		if (!CurrentEnemy) continue;
-		
-		//Giving each spawned enemy their own permanent spacing
-		CurrentEnemy->EnemyOffset = EnemySpacing * SpawnIndex;
-		
-		//Making sure the enemies offset doesn't exceed the spline's length
-		float Distance = FMath::Fmod(CurrentEnemy->EnemyOffset, SplineLength);
-		
-		FVector Location = EnemySpline->GetLocationAtDistanceAlongSpline(
-			Distance,
-			ESplineCoordinateSpace::World
-		);
+	if (EnemyPawnPool.IsEmpty()) return;
 
-		CurrentEnemy->ResetActor();
-		CurrentEnemy->SetActorLocation(Location);
+	AEnemyPawn* CurrentEnemy = EnemyPawnPool[0];
+	EnemyPawnPool.RemoveAt(0);
 
-		ActiveEnemyPawns.Add(CurrentEnemy);
-		
-		//Incrementing index
-		SpawnIndex++;
-	}
+	if (!CurrentEnemy) return;
+
+	CurrentEnemy->ResetActor();
+
+	//Start enemy at beginning of spline
+	CurrentEnemy->DistanceAlongSpline = 0.f;
+
+	FVector Location = EnemySpline->GetLocationAtDistanceAlongSpline(
+		0.f,
+		ESplineCoordinateSpace::World
+	);
+
+	CurrentEnemy->SetActorLocation(Location);
+
+	ActiveEnemyPawns.Add(CurrentEnemy);
+}
+
+void AEnemySpawningManager::StartRound(int32 NumberOfEnemies)
+{
+	//Setting the number of enemies to spawn on starting of the round
+	EnemiesRemainingToSpawn = NumberOfEnemies;
+	
+	bRoundActive = true;
+
+	//Spawning the first enemy to get the distance along the spline
+	SpawnFromEnemyPool();
+	
+	//Decrementing the enemies to spawn so we know how many times we need to get the enemy spawn spacing
+	EnemiesRemainingToSpawn--;
 }
 
 void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy)
@@ -120,21 +118,21 @@ void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy
 
 	if (!EnemyPawnPool.Contains(CurrentEnemy))
 	{
+		CurrentEnemy->SetActorHiddenInGame(true);
+		CurrentEnemy->SetActorEnableCollision(false);
+		
 		EnemyPawnPool.Add(CurrentEnemy);
 	}
-
-	//Reset the timeline if all enemies are destroyed
-	if (ActiveEnemyPawns.Num() <= 0)
+	
+	//Resetting the round
+	if (ActiveEnemyPawns.IsEmpty())
 	{
-		ResetTimeline();
+		ResetRound();
 	}
 }
 
 void AEnemySpawningManager::CreateEnemyPool_Implementation(int32 NumberOfEnemiesToSpawn)
 {
-	EnemyPoolSize = NumberOfEnemiesToSpawn;
-	
-	//Adding enemy pawns to the pool until the enemypoolsize is reached
 	for (int i = 0; i < NumberOfEnemiesToSpawn; ++i)
 	{
 		if (EnemyPawnClass)
@@ -161,8 +159,6 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 	//Removing the current enemy pawn from the active pawns when they cross the finish line
 	if (ActiveEnemyPawns.Contains(CurrentEnemy))
 	{
-		ActiveEnemyPawns.Remove(CurrentEnemy);
-		
 		CurrentEnemy->SetActorEnableCollision(false);
 		CurrentEnemy->SetActorHiddenInGame(true);
 		
@@ -171,16 +167,11 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 	}
 }
 
-void AEnemySpawningManager::ResetTimeline()
+void AEnemySpawningManager::ResetRound()
 {
-	if (ActiveEnemyPawns.Num() <= 0)
-	{
-		TimelineAlpha = 1.f;
-		
-		ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
-		
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ROUND IS OVER"));
-			
-		Execute_IsRoundOver(PC->CameraSwitchingUI, true);
-	}
+	EnemiesRemainingToSpawn = 0;
+
+	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
+
+	Execute_IsRoundOver(PC->CameraSwitchingUI, true);
 }

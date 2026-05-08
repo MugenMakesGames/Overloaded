@@ -43,6 +43,9 @@ private:
 	UPROPERTY()
 	AEnemyFinishLine* FinishLineClass;
 	
+	UPROPERTY()
+	class APlayerMoneyManager* MoneyManagerClass;
+	
 	int32 RoundsSurvived;
 	
 	bool bIsRoundOver = true;

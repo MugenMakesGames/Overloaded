@@ -71,9 +71,6 @@ void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount, AEnemyPawn* 
 		if (EnemySpawningManagerClass && EnemySpawningManagerClass->Implements<UInteractionInterface>())
 		{
 			Execute_DestroyEnemy(EnemySpawningManagerClass, CurrentEnemy);
-			
-			//Resetting the timeline so the enemy start at the beginning of the spline
-			//EnemySpawningManagerClass->ResetTimeline();
 		}
 	}
 }

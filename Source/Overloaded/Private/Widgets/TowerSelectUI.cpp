@@ -9,11 +9,11 @@ void UTowerSelectUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-	UpgradeShootingAndDeactivationSpeed->OnClicked.AddDynamic(this, &UTowerSelectUI::ShootingAndDetectionSpeedUpgraded);
+	UpgradeShootingAndDeactivationSpeed->OnClicked.AddUniqueDynamic(this, &UTowerSelectUI::ShootingAndDetectionSpeedUpgraded);
 	
-	UpgradeDetectionRadius->OnClicked.AddDynamic(this, &UTowerSelectUI::DetectionRadiusUpgraded);
+	UpgradeDetectionRadius->OnClicked.AddUniqueDynamic(this, &UTowerSelectUI::DetectionRadiusUpgraded);
 	
-	UpgradeRotationSpeed->OnClicked.AddDynamic(this, &UTowerSelectUI::RotationSpeedUpgraded);
+	UpgradeRotationSpeed->OnClicked.AddUniqueDynamic(this, &UTowerSelectUI::RotationSpeedUpgraded);
 	
 	MoneyManagerClass = Cast<APlayerMoneyManager>(UGameplayStatics::GetActorOfClass(GetWorld(), 
 	APlayerMoneyManager::StaticClass()));

@@ -8,6 +8,7 @@
 #include "Enemy/EnemyFinishLine.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/PlayerMoneyManager.h"
 
 void UCameraSwitchingUI::NativeConstruct()
 {
@@ -32,6 +33,9 @@ void UCameraSwitchingUI::NativeConstruct()
 	
 	FinishLineClass = Cast<AEnemyFinishLine>(UGameplayStatics::GetActorOfClass(GetWorld(),
 	AEnemyFinishLine::StaticClass()));
+	
+	MoneyManagerClass = Cast<APlayerMoneyManager>(UGameplayStatics::GetActorOfClass(GetWorld(),
+	APlayerMoneyManager::StaticClass()));
 }
 
 
@@ -90,6 +94,8 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	
 	//Starting Round
 	bIsRoundOver = false;
+
+	if (!MoneyManagerClass) return;
 	
 	//Creating win condition using round survived;
 	if (RoundsSurvived >= 10)
@@ -101,39 +107,33 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 		{
 			PC->WinScreenUI->AddToViewport();
 		} 
-		
-		return;
 	}
-	
-	if (!EnemySpawnerClass || !TowerClass)
+	else
 	{
-		TowerClass = Cast<ATowers>(UGameplayStatics::GetActorOfClass(GetWorld(), ATowers::StaticClass()));
+		MoneyManagerClass->AddToBudgetOnRoundWin();
+	
+		//Increasing number of enemies each round
+		NumberOfEnemiesPerRound += 5;
+	
+		//Increasing the number of enemies each round
+		Execute_CreateEnemyPool(EnemySpawnerClass, NumberOfEnemiesPerRound);
 		
-		return;
-	};
+		EnemySpawnerClass->StartRound(NumberOfEnemiesPerRound);
 	
-	//Increasing number of enemies each round
-	NumberOfEnemiesPerRound += 2;
+		//Start shooting bullets
+		TowerClass->AddToActiveBulletPool();
 	
-	//Increasing the number of enemies each round
-	Execute_CreateEnemyPool(EnemySpawnerClass, NumberOfEnemiesPerRound);
+		SetEnemiesCrossedLineText();
 	
-	//Start spawning enemies 
-	EnemySpawnerClass->SpawnFromEnemyPool();
+		//Resetting the finished enemy pool length to match the number of enemies spawned
+		EnemiesFinishedPool.Empty();
 	
-	//Start shooting bullets
-	TowerClass->AddToActiveBulletPool();
+		RoundsSurvived++;
 	
-	SetEnemiesCrossedLineText();
+		FText NewText = FText::FromString(FString::Printf(TEXT("Round Survived: %d/%d"), RoundsSurvived, 10));
 	
-	//Resetting the finished enemy pool length to match the number of enemies spawned
-	EnemiesFinishedPool.Empty();
-	
-	RoundsSurvived++;
-	
-	FText NewText = FText::FromString(FString::Printf(TEXT("Round Survived: %d/%d"), RoundsSurvived, 10));
-	
-	RoundsSurvivedText->SetText(NewText);
+		RoundsSurvivedText->SetText(NewText);
+	}
 }
 
 void UCameraSwitchingUI::SetEnemiesCrossedLineText()

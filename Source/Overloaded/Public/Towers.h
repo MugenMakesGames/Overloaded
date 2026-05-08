@@ -98,13 +98,13 @@ public:
 	void RotateTowardsEnemy(AActor* TargetEnemy, float DeltaTim);
 	
 	//Getting upgrade variables
-	UPROPERTY()
+	UPROPERTY(EditInstanceOnly, Category = "Tower Spawner")
 	float ShootingSpeed = 1.5f;
 	
-	UPROPERTY()
+	UPROPERTY(EditInstanceOnly, Category = "Tower Spawner")
 	float DeactivationSpeed = 2.5f;
 	
-	UPROPERTY()
+	UPROPERTY(EditInstanceOnly, Category = "Tower Spawner")
 	float RotationSpeed = 3.f;
 	
 	UPROPERTY()
