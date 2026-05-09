@@ -12,6 +12,7 @@
 
 class ATowerBulletHandler;
 class ANewOverloadPlayerController;
+class UBillboardComponent;
 
 USTRUCT(BlueprintType)
 struct FNumberOfUpgradesPerType
