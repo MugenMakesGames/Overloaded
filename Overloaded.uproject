@@ -57,7 +57,7 @@
 		},
 		{
 			"Name": "LevelSequenceEditor",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "MetaHumanSDK",
@@ -65,23 +65,23 @@
 		},
 		{
 			"Name": "AnimationData",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "ControlRig",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "ControlRigSpline",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "ControlRigModules",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "IKRig",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "CameraShakePreviewer",
@@ -96,8 +96,12 @@
 			"Enabled": false
 		},
 		{
+			"Name": "SequencerScripting",
+    			"Enabled": true	
+		},
+		{
 			"Name": "SequencerAnimTools",
-			"Enabled": false
+			"Enabled": true
 		}
 	]
 }
