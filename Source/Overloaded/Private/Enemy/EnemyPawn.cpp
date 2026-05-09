@@ -66,7 +66,7 @@ void AEnemyPawn::EnemyTakeDamage_Implementation(int32 DamageAmount, AEnemyPawn* 
 		CurrentEnemy->SetActorHiddenInGame(true);
 		CurrentEnemy->SetActorEnableCollision(false);
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, CurrentEnemy->GetName());
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, CurrentEnemy->GetName());
 		
 		if (EnemySpawningManagerClass && EnemySpawningManagerClass->Implements<UInteractionInterface>())
 		{

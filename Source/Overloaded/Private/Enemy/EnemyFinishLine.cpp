@@ -46,7 +46,7 @@ void AEnemyFinishLine::OnEnemyCrossedLine(UPrimitiveComponent* ThisComp, class A
 		
 		UpdateEnemiesCrossed();
 		
-		FText NewText = FText::FromString(FString::Printf(TEXT("Enemies Crossed: %d/%d"), FinishedEnemyPool.Num(), EnemiesSpawned));
+		FText NewText = FText::FromString(FString::Printf(TEXT("Enemies Crossed: %d/%d"), FinishedEnemyPool.Num(), MaxEnemiesCrossedLineTillLoss));
 			
 		Execute_SetEnemyCrossedLineText(PC->PlayerBudgetUI, NewText);
 	}
@@ -56,11 +56,8 @@ void AEnemyFinishLine::UpdateEnemiesCrossed()
 {
 	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
 	
-	//Setting the correct number of enemies that have crossed the line
-	Execute_GetNumberOfEnemiesSpawned(PC->CameraSwitchingUI, EnemiesSpawned);
-	
-	//You lose
-	if (FinishedEnemyPool.Num() == EnemiesSpawned)
+	//You lose if MaxEnemiesCrossedLineTillLoss enemies cross the line throughout the game
+	if (FinishedEnemyPool.Num() == MaxEnemiesCrossedLineTillLoss)
 	{
 		//Display loss widget
 		if (PC->LossScreenUI)
@@ -68,15 +65,11 @@ void AEnemyFinishLine::UpdateEnemiesCrossed()
 			PC->LossScreenUI->AddToViewport();
 		};
 	}
-	else
-	{
-		EnemySpawnerClass->ResetRound();
-	}
 }
 
-void AEnemyFinishLine::SetFinishedPool(TArray<AEnemyPawn*> FinishedPool)
+void AEnemyFinishLine::SetFinishedPool(TArray<AEnemyPawn*>& FinishedPool)
 {
-	FinishedEnemyPool = FinishedPool;
+	FinishedPool = FinishedEnemyPool;
 }
 
 

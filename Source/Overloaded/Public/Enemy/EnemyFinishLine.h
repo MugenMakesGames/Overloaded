@@ -40,6 +40,9 @@ public:
 	UPROPERTY()
 	int32 EnemiesSpawned;
 	
+	
+	const int32 MaxEnemiesCrossedLineTillLoss = 10;
+	
 	UFUNCTION()
 	void OnEnemyCrossedLine(class UPrimitiveComponent* ThisComp, class AActor* OtherActor,
 					class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
@@ -49,7 +52,7 @@ public:
 	void UpdateEnemiesCrossed();
 	
 	UFUNCTION()
-	void SetFinishedPool(TArray<AEnemyPawn*> FinishedPool);
+	void SetFinishedPool(TArray<AEnemyPawn*>& FinishedPool);
 	
 
 };

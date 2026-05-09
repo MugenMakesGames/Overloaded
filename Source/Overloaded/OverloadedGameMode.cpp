@@ -6,3 +6,15 @@ AOverloadedGameMode::AOverloadedGameMode()
 {
 	// stub
 }
+
+void AOverloadedGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	if (GEngine)
+	{
+		GEngine->bEnableOnScreenDebugMessages = false;
+		GEngine->bEnableOnScreenDebugMessagesDisplay = false;
+	}
+}
+

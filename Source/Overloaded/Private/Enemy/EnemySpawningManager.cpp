@@ -34,11 +34,17 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 
 	float SplineLength = EnemySpline->GetSplineLength();
 	
-	for (int i = 0; i < ActiveEnemyPawns.Num(); ++i)
+	for (int32 i = ActiveEnemyPawns.Num() - 1; i >= 0; --i)
 	{
 		AEnemyPawn* CurrentEnemy = ActiveEnemyPawns[i];
-
-		if (!CurrentEnemy) continue;
+		
+		//Removing any invalid enemy pawn from the pool
+		if (!IsValid(CurrentEnemy))
+		{
+			ActiveEnemyPawns.RemoveAt(i);
+			--i;
+			continue;
+		}
 
 		//Getting the enemy forward and having the DistanceAlongSpline reach 200 units along the spline in a second by multiplying it by delta time
 		CurrentEnemy->DistanceAlongSpline += EnemyMoveSpeed * DeltaTime;
@@ -112,8 +118,10 @@ void AEnemySpawningManager::StartRound(int32 NumberOfEnemies)
 void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy)
 {
 	if (!CurrentEnemy) return;
-
+	
 	ActiveEnemyPawns.Remove(CurrentEnemy);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple,FString::FromInt(ActiveEnemyPawns.Num()));
 
 	if (!EnemyPawnPool.Contains(CurrentEnemy))
 	{
@@ -124,11 +132,11 @@ void AEnemySpawningManager::DestroyEnemy_Implementation(AEnemyPawn* CurrentEnemy
 	}
 	
 	//Resetting the round
-	if (ActiveEnemyPawns.IsEmpty())
+	if (ActiveEnemyPawns.Num() <= 0 && EnemiesRemainingToSpawn <= 0)
 	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, TEXT("ALL ENEMIES ARE DESTROYED"));
+		
 		ResetRound();
-		
-		
 	}
 }
 
@@ -160,11 +168,23 @@ void AEnemySpawningManager::EnemyCrossedFinishLine_Implementation(class AEnemyPa
 	//Removing the current enemy pawn from the active pawns when they cross the finish line
 	if (ActiveEnemyPawns.Contains(CurrentEnemy))
 	{
+		ActiveEnemyPawns.Remove(CurrentEnemy);
+		
 		CurrentEnemy->SetActorEnableCollision(false);
 		CurrentEnemy->SetActorHiddenInGame(true);
 		
 		//Adding it to the finish pool
 		FinishedPool.Add(CurrentEnemy);
+
+		if (!EnemyPawnPool.Contains(CurrentEnemy))
+		{
+			EnemyPawnPool.Add(CurrentEnemy);
+		}
+
+		if (ActiveEnemyPawns.Num() <= 0 && EnemiesRemainingToSpawn <= 0)
+		{
+			ResetRound();
+		}
 	}
 }
 

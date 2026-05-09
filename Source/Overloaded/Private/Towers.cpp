@@ -192,7 +192,7 @@ void ATowers::UpgradeShootingSpeed_Implementation(float& NewShootingSpeed, float
 	NewShootingSpeed = CurrentTower->ShootingSpeed;
 	NewDeactivationSpeed = CurrentTower->DeactivationSpeed;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f|%f"), NewShootingSpeed, NewDeactivationSpeed));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f|%f"), NewShootingSpeed, NewDeactivationSpeed));
 }
 
 void ATowers::UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, ATowers* CurrentTower)
@@ -205,7 +205,7 @@ void ATowers::UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, A
 	
 	CurrentTower->EnemyDetectionRadius->SetSphereRadius(NewDetectionRadius);
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), NewDetectionRadius));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), NewDetectionRadius));
 }
 
 void ATowers::UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowers* CurrentTower)
@@ -214,7 +214,7 @@ void ATowers::UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowe
 	
 	NewRotationSpeed = CurrentTower->RotationSpeed;
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), RotationSpeed));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Radius: %f"), RotationSpeed));
 }
 
 void ATowers::TrackingUpgrades(ATowers* CurrentTower, FName UpgradeType)

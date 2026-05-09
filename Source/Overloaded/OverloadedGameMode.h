@@ -20,6 +20,8 @@ public:
 
 	/** Constructor */
 	AOverloadedGameMode();
+	
+	virtual void BeginPlay() override;
 };
 
 

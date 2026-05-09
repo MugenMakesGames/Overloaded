@@ -34,7 +34,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* BulletMeshComponent;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	class UProjectileMovementComponent* BulletProjectile;
 	
 	UFUNCTION()
@@ -43,7 +43,7 @@ public:
 	                const FHitResult& SweepResult);
 	
 	UPROPERTY(EditAnywhere)
-	float BulletSpeed = 2000.f;
+	float BulletSpeed = 10000.f;
 	
 	UPROPERTY()
 	int32 DamageAmount = 10;

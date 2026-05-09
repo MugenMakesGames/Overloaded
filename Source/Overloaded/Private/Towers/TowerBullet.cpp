@@ -27,8 +27,8 @@ ATowerBullet::ATowerBullet()
 	BulletProjectile = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("BulletProjectile"));
 	BulletProjectile->SetUpdatedComponent(RootComponent);
 	//Setting up the projectile speed
-	BulletProjectile->InitialSpeed = 1500.f;
-	BulletProjectile->MaxSpeed = 2000.f;
+	BulletProjectile->InitialSpeed = 4000.f;
+	BulletProjectile->MaxSpeed = 6000.f;
 	BulletProjectile->bRotationFollowsVelocity = true;
 }
 
@@ -54,7 +54,7 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 		//Applying damage to the enemy
 		Execute_EnemyTakeDamage(EnemyPawn, DamageAmount, EnemyPawn);
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, EnemyPawn->GetName());
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, EnemyPawn->GetName());
 		
 		//Deactivate the bullet if it hits the enemy
 		DeactivateBullet();

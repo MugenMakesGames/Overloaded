@@ -36,9 +36,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void GetCurrentTower(class ATowers*& CurrentTower);
 	
-	UFUNCTION(blueprintNativeEvent)
-	void GetNumberOfEnemiesSpawned(int32& GetEnemiesSpawned);
-	
 	UFUNCTION(BlueprintNativeEvent)
 	void SetBudgetText(const FText& NewText);
 	

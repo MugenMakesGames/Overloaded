@@ -97,7 +97,5 @@ public:
 	TArray<AEnemyPawn*> EnemiesFinishedPool;
 	
 	//Interface Functions
-	virtual void GetNumberOfEnemiesSpawned_Implementation(int32& GetEnemiesSpawned) override;
-	
 	virtual void IsRoundOver_Implementation(bool bIsRoundOver) override;
 };

@@ -126,7 +126,7 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 		SetEnemiesCrossedLineText();
 	
 		//Resetting the finished enemy pool length to match the number of enemies spawned
-		EnemiesFinishedPool.Empty();
+		//EnemiesFinishedPool.Empty();
 	
 		RoundsSurvived++;
 	
@@ -138,21 +138,16 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 
 void UCameraSwitchingUI::SetEnemiesCrossedLineText()
 {
+	if (!FinishLineClass) return;
+	
 	ANewOverloadPlayerController* PC = Cast<ANewOverloadPlayerController>(GetWorld()->GetFirstPlayerController());
 	
-	//Setting the text to reference the number of enemies being spawned at the start
-	FText Text = FText::FromString(FString::Printf(TEXT("Enemies Crossed: 0/%d"), NumberOfEnemiesPerRound));
+	FinishLineClass->SetFinishedPool(EnemiesFinishedPool);
+	
+	FText Text = FText::FromString(FString::Printf(TEXT("Enemies Crossed: %d/%d"),EnemiesFinishedPool.Num(), FinishLineClass->MaxEnemiesCrossedLineTillLoss));
 	
 	Execute_SetEnemyCrossedLineText(PC->PlayerBudgetUI, Text);
 
-	if (!FinishLineClass) return;
-	
-	FinishLineClass->SetFinishedPool(EnemiesFinishedPool);
-}
-
-void UCameraSwitchingUI::GetNumberOfEnemiesSpawned_Implementation(int32& GetEnemiesSpawned)
-{
-	GetEnemiesSpawned = NumberOfEnemiesPerRound;
 }
 
 void UCameraSwitchingUI::IsRoundOver_Implementation(bool bNewIsRoundOver)
