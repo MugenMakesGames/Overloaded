@@ -14,6 +14,7 @@ class AEnemyFinishLine;
 class ACameraSwitcher;
 class AEnemyPawn;
 class APlayerMoneyManager;
+class UAudioComponent;
 
 /**
  * 
@@ -98,4 +99,13 @@ public:
 	
 	//Interface Functions
 	virtual void IsRoundOver_Implementation(bool bIsRoundOver) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadwrite, Category = "Audio")
+	USoundBase* SwitchCamSound;
+	
+	UPROPERTY()
+	UAudioComponent* SwitchCamAudioComp;
+	
+	UFUNCTION()
+	void PlaySwitchCamSound();
 };

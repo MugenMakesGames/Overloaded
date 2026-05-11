@@ -51,6 +51,14 @@ public:
 	UFUNCTION()
 	void DeactivateBullet();
 	
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* EnemyHitSound;
+	
+	UPROPERTY()
+	UAudioComponent* EnemyHitSoundAudioComp;
+	
+	void PlayEnemyHitSound();
+	
 	//Interface functions
 	virtual void ActivateBullet_Implementation(const FVector& BulletLocation, const FRotator& BulletRotation) override;
 	

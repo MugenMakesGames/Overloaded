@@ -2,6 +2,8 @@
 
 
 #include "Widgets/TowerSelectUI.h"
+
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PlayerMoneyManager.h"
 
@@ -58,3 +60,4 @@ void UTowerSelectUI::SetSoldOutTextBlock_Implementation(const FText& NewText, FN
 		RotationSpeedText->SetText(NewText);
 	}
 }
+

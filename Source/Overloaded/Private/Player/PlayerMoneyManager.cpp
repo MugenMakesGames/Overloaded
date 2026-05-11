@@ -5,6 +5,8 @@
 
 #include "NewOverloadPlayerController.h"
 #include "Towers.h"
+#include "Components/AudioComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerMoneyManager::APlayerMoneyManager()
@@ -44,9 +46,14 @@ void APlayerMoneyManager::UpgradeShootingFrequency()
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
 	//When max number of upgrades to hit
-	if (NumberOfUpgrades == 1) return;
+	if (NumberOfUpgrades == 1)
+	{
+		PlaySoldOutSound();
+		
+		return;
+	};
 	
-	NumberOfUpgrades--;
+	PlayPurchaseSound();
 	
 	Execute_UpgradeShootingSpeed(CurrentTower, ShootingSpeed, DeactivationSpeed, CurrentTower);
 }
@@ -66,7 +73,14 @@ void APlayerMoneyManager::UpgradeRadius()
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
 	//When max number of upgrades to hit
-	if (NumberOfUpgrades == 1) return;
+	if (NumberOfUpgrades == 1)
+	{
+		PlaySoldOutSound();
+		
+		return;
+	};
+	
+	PlayPurchaseSound();
 	
 	NumberOfUpgrades--;
 	
@@ -88,7 +102,14 @@ void APlayerMoneyManager::UpgradeRotation()
 	int32& NumberOfUpgrades = CurrentTower->NumberOfUpgrades;
 	
 	//When max number of upgrades to hit
-	if (NumberOfUpgrades == 1) return;
+	if (NumberOfUpgrades == 1)
+	{
+		PlaySoldOutSound();
+		
+		return;
+	};
+	
+	PlayPurchaseSound();
 	
 	NumberOfUpgrades--;
 	
@@ -103,8 +124,6 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 	{
 		if (PlayerCurrentBudget >= 200)
 		{
-			//PLAYER BUY SOUND EFFECT
-			
 			//Towers cost 200 to buy and Upgrades cost 50
 			PlayerCurrentBudget -= 200;
 		
@@ -112,13 +131,15 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 		
 			Execute_SetBudgetText(PC->PlayerBudgetUI, NewBudgetText);
 		}
+		else if (PlayerCurrentBudget < 200)
+		{
+			PlaySoldOutSound();
+		}
 	}
 	else if (PurchaseType.IsEqual(TEXT("ShootingUpgrade")))
 	{
 		if (PlayerCurrentBudget >= 50)
 		{
-			//PLAYER BUY SOUND EFFECT
-			
 			PlayerCurrentBudget -= 50;
 			
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
@@ -127,13 +148,15 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			
 			UpgradeShootingFrequency();
 		}
+		else if (PlayerCurrentBudget < 50)
+		{
+			PlaySoldOutSound();
+		}
 	}
 	else if (PurchaseType.IsEqual(TEXT("RadiusUpgrade")))
 	{
 		if (PlayerCurrentBudget >= 50)
 		{
-			//PLAYER BUY SOUND EFFECT
-			
 			PlayerCurrentBudget -= 50;
 			
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
@@ -142,13 +165,15 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 		
 			UpgradeRadius();
 		}
+		else if (PlayerCurrentBudget < 50)
+		{
+			PlaySoldOutSound();
+		}
 	}
 	else if (PurchaseType.IsEqual(TEXT("RotationUpgrade")))
 	{
 		if (PlayerCurrentBudget >= 50)
 		{
-			//PLAYER BUY SOUND EFFECT
-			
 			PlayerCurrentBudget -= 50;
 			
 			FText NewBudgetText = FText::FromString(FString::Printf(TEXT("Your Budget: %d"), PlayerCurrentBudget));
@@ -157,6 +182,34 @@ void APlayerMoneyManager::SetBudget(FName PurchaseType)
 			
 			UpgradeRotation();
 		}
+		else if (PlayerCurrentBudget < 50)
+		{
+			PlaySoldOutSound();
+		}
+	}
+}
+
+void APlayerMoneyManager::PlayPurchaseSound()
+{
+	if (UpgradePurchaseSound)
+	{
+		UpgradePurchaseSoundAudioComp = UGameplayStatics::SpawnSound2D(this, UpgradePurchaseSound);
+	}
+}
+
+void APlayerMoneyManager::PlayClickSound()
+{
+	if (ClickSound)
+	{
+		ClickSoundAudioComp = UGameplayStatics::SpawnSound2D(this, ClickSound);
+	}
+}
+
+void APlayerMoneyManager::PlaySoldOutSound()
+{
+	if (UpgradeSoldOutSound)
+	{
+		UpgradeSoldOutAudioComp = UGameplayStatics::SpawnSound2D(this, UpgradeSoldOutSound);
 	}
 }
 

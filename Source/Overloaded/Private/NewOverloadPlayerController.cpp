@@ -103,6 +103,8 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 
 			if (!Spawner) return;
 			
+			MoneyManagerClass->PlayClickSound();
+			
 			if (TowerSpawners.Contains(Spawner) && TowerSpawners[Spawner] == true)
 			{
 				if (TowerSelectUI && TowerSelectUIClass)
@@ -133,6 +135,8 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 			{
 				if (MoneyManagerClass)
 				{
+					MoneyManagerClass->PlayPurchaseSound();
+					
 					MoneyManagerClass->SetBudget(TEXT("Tower"));
 					
 					//No more spawning towers
@@ -143,6 +147,7 @@ void ANewOverloadPlayerController::OnLeftMouseButtonClicked()
 						return;
 					}
 				}
+				
 				//Getting spawning location
 				SpawnLocation = Spawner->TowerSpawnLocation->GetComponentLocation();
 	

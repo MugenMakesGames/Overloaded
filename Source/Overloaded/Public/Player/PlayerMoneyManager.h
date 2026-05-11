@@ -24,7 +24,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	const int32 BudgetMaxPerRound = 3000;
-
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -59,5 +59,28 @@ public:
 	UFUNCTION()
 	void SetBudget(FName PurchaseType);
 	
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* UpgradeSoldOutSound;
+	
+	UPROPERTY()
+	UAudioComponent* UpgradeSoldOutAudioComp;
+	
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* ClickSound;
+	
+	UPROPERTY()
+	UAudioComponent* ClickSoundAudioComp;
+	
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* UpgradePurchaseSound;
+	
+	UPROPERTY()
+	UAudioComponent* UpgradePurchaseSoundAudioComp;
+	
+	void PlayPurchaseSound();
+	
+	void PlayClickSound();
+	
+	void PlaySoldOutSound();
 	
 };

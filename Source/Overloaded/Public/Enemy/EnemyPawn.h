@@ -29,7 +29,7 @@ protected:
 	
 	float EnemySplineLength;
 	
-	const int32 MaxHealth = 10;
+	const int32 MaxHealth = 20;
 	
 public:	
 	// Called every frame

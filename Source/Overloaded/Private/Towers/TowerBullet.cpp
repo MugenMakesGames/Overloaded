@@ -4,6 +4,7 @@
 #include "Towers/TowerBullet.h"
 #include "Enemy/EnemyPawn.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -56,6 +57,8 @@ void ATowerBullet::OnEnemyHit(class UPrimitiveComponent* ThisComp, class AActor*
 		
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, EnemyPawn->GetName());
 		
+		PlayEnemyHitSound();
+		
 		//Deactivate the bullet if it hits the enemy
 		DeactivateBullet();
 	}
@@ -88,4 +91,10 @@ void ATowerBullet::DeactivateBullet()
 	BulletProjectile->Deactivate();
 }
 
-
+void ATowerBullet::PlayEnemyHitSound()
+{
+	if (EnemyHitSound)
+	{
+		EnemyHitSoundAudioComp = UGameplayStatics::SpawnSound2D(this, EnemyHitSound);
+	}
+}

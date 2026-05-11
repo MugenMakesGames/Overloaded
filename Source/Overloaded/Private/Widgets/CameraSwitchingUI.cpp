@@ -5,6 +5,7 @@
 #include "CameraSwitcher.h"
 #include "NewOverloadPlayerController.h"
 #include "Towers.h"
+#include "Components/AudioComponent.h"
 #include "Enemy/EnemyFinishLine.h"
 #include "Enemy/EnemySpawningManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -46,6 +47,9 @@ void UCameraSwitchingUI::OnMainCamButtonClicked()
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
 	
+	//Playing SwitchCamSound
+	PlaySwitchCamSound();
+	
 	//Setting player camera's the active camera in the camera switcher actor 
 	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef);
 }
@@ -58,7 +62,10 @@ void UCameraSwitchingUI::OnSecondCamButtonClicked()
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
 	
-	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef);
+	//Playing SwitchCamSound
+	PlaySwitchCamSound();
+	
+	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef, 5.f);
 }
 
 void UCameraSwitchingUI::OnThirdCamButtonClicked()
@@ -69,18 +76,26 @@ void UCameraSwitchingUI::OnThirdCamButtonClicked()
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
 	
-	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef);
+	//Playing SwitchCamSound
+	PlaySwitchCamSound();
+	
+	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef, 5.f);
 }
 
 void UCameraSwitchingUI::OnFourthCamButtonClicked()
 {
 	if (!CameraSwitcherActorRef) return;
 	
+	//Audio
+	
 	CamID = 4;
 	
 	CameraSwitcherActorRef->SetCorrectCamActive(CamID);
 	
-	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef);
+	//Playing SwitchCamSound
+	PlaySwitchCamSound();
+	
+	GetOwningPlayer()->SetViewTargetWithBlend(CameraSwitcherActorRef, 5.f);
 }
 
 void UCameraSwitchingUI::OnStartRoundButtonClicked()
@@ -94,6 +109,8 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	
 	//Starting Round
 	bIsRoundOver = false;
+	
+	//Play start round audio?
 
 	if (!MoneyManagerClass) return;
 	
@@ -105,6 +122,7 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 		//Display Win Screen
 		if (PC->WinScreenUI)
 		{
+			//Win Sound?
 			PC->WinScreenUI->AddToViewport();
 		} 
 	}
@@ -153,5 +171,14 @@ void UCameraSwitchingUI::SetEnemiesCrossedLineText()
 void UCameraSwitchingUI::IsRoundOver_Implementation(bool bNewIsRoundOver)
 {
 	bIsRoundOver = bNewIsRoundOver;
+}
+
+void UCameraSwitchingUI::PlaySwitchCamSound()
+{
+	if (SwitchCamSound)
+	{
+		//Playing the sound using audio component for more control
+		SwitchCamAudioComp = UGameplayStatics::SpawnSound2D(this, SwitchCamSound);
+	}
 }
 

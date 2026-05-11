@@ -4,6 +4,7 @@
 #include "Towers.h"
 
 #include "NewOverloadPlayerController.h"
+#include "Components/AudioComponent.h"
 #include "Components/BillboardComponent.h"
 #include "Enemy/EnemyPawn.h"
 #include "Kismet/GameplayStatics.h"
@@ -79,6 +80,8 @@ void ATowers::AddToActiveBulletPool()
 	if (Bullet->Implements<UInteractionInterface>())
 	{
 		ShootBullet(Bullet);
+		
+		PlayShootingSound();
 	}
 }
 
@@ -322,5 +325,13 @@ void ATowers::SetTowerSelectText(ATowers* CurrentSelectedTower, ANewOverloadPlay
 		FText NewText = FText::FromString(TEXT("Sold Out"));
  			
 		Execute_SetSoldOutTextBlock(PC->TowerSelectUI, NewText, TEXT("RotationSpeedText"));
+	}
+}
+
+void ATowers::PlayShootingSound()
+{
+	if (ShootingSound)
+	{
+		ShootingSoundAudioComp = UGameplayStatics::SpawnSound2D(this, ShootingSound);
 	}
 }

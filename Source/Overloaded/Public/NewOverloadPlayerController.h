@@ -26,6 +26,11 @@ class OVERLOADED_API ANewOverloadPlayerController : public APlayerController, pu
 {
 	GENERATED_BODY()
 	
+protected:
+	
+	UPROPERTY()
+	ATowerSpawningManager* TowerSpawningClass;
+	
 public:
 	
 	ANewOverloadPlayerController();
@@ -35,9 +40,6 @@ public:
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* OverloadCharMappingContext;
-	
-	UPROPERTY(editAnywhere, Category = "Tower Spawning")
-	ATowerSpawningManager* TowerSpawningClass;
 	
 	UPROPERTY(EditAnywhere, Category = "Bullet Spawning")
 	TSubclassOf<class ATowerBullet> BulletClassTemp;

@@ -42,11 +42,12 @@ void AEnemySpawningManager::Tick(float DeltaTime)
 		if (!IsValid(CurrentEnemy))
 		{
 			ActiveEnemyPawns.RemoveAt(i);
+			//Starting at the beginning of the loop again so we get the same amount of enemies
 			--i;
 			continue;
 		}
 
-		//Getting the enemy forward and having the DistanceAlongSpline reach 200 units along the spline in a second by multiplying it by delta time
+		//Getting the enemy forward and having the DistanceAlongSpline reach the EnemyMoveSpeed number of units along the spline in a second by multiplying it by delta time
 		CurrentEnemy->DistanceAlongSpline += EnemyMoveSpeed * DeltaTime;
 		
 		//Make sure DistanceAlongSpline don't exceed the spline length

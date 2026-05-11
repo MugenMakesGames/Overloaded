@@ -13,6 +13,7 @@
 class ATowerBulletHandler;
 class ANewOverloadPlayerController;
 class UBillboardComponent;
+class UAudioComponent;
 
 USTRUCT(BlueprintType)
 struct FNumberOfUpgradesPerType
@@ -126,5 +127,14 @@ public:
 	virtual void UpgradeDetectionRadius_Implementation(float& NewDetectionRadius, ATowers* CurrentTower) override;
 	
 	virtual void UpgradeRotationSpeed_Implementation(float& NewRotationSpeed, ATowers* CurrentTower) override;
+	
+	UPROPERTY(editAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* ShootingSound;
+	
+	UPROPERTY()
+	UAudioComponent* ShootingSoundAudioComp;
+	
+	UFUNCTION()
+	void PlayShootingSound();
 };
 

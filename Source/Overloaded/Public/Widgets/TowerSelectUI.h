@@ -10,6 +10,8 @@
 #include "TowerSelectUI.generated.h"
 
 class APlayerMoneyManager;
+class UAudioComponent;
+
 /**
  * 
  */
