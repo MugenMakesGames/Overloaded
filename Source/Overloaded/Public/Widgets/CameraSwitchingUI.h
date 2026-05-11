@@ -47,7 +47,7 @@ private:
 	UPROPERTY()
 	class APlayerMoneyManager* MoneyManagerClass;
 	
-	int32 RoundsSurvived;
+	int32 RoundsSurvived = 0;
 	
 	bool bIsRoundOver = true;
 	

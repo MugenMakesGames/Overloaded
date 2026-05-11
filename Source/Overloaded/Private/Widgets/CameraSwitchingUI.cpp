@@ -109,8 +109,6 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 	
 	//Starting Round
 	bIsRoundOver = false;
-	
-	//Play start round audio?
 
 	if (!MoneyManagerClass) return;
 	
@@ -142,9 +140,6 @@ void UCameraSwitchingUI::OnStartRoundButtonClicked()
 		TowerClass->AddToActiveBulletPool();
 	
 		SetEnemiesCrossedLineText();
-	
-		//Resetting the finished enemy pool length to match the number of enemies spawned
-		//EnemiesFinishedPool.Empty();
 	
 		RoundsSurvived++;
 	
